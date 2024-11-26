@@ -1,6 +1,53 @@
 {
   "Fudge.ResourceFolder": {
     "name": "Resources",
-    "entries": []
+    "entries": [
+      {
+        "name": "Eumling",
+        "entries": [
+          {
+            "idResource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958"
+          },
+          {
+            "name": "Animations",
+            "entries": [
+              {
+                "idResource": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-11-26T10:12:05.438Z|84941"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-11-26T10:12:05.444Z|94426"
+              },
+              {
+                "idResource": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Map",
+        "entries": [
+          {
+            "idResource": "Graph|2024-11-26T10:13:50.337Z|26526"
+          }
+        ]
+      },
+      {
+        "name": "Environment",
+        "entries": [
+          {
+            "name": "LakeMap",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

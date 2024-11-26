@@ -1,1 +1,185 @@
-{}
+{
+  "GraphGLTF|2024-11-26T10:12:05.429Z|21958": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentAnimator": [
+          {
+            "ƒ.ComponentAnimator": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2024-11-26T10:12:05.444Z|94426",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958",
+      "type": "GraphGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "AnimationGLTF|2024-11-26T10:12:05.444Z|94426": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-11-26T10:12:05.444Z|94426",
+      "name": "IdleV1",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "AnimationGLTF|2024-11-26T10:12:05.429Z|70191": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
+      "name": "Fishing",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "AnimationGLTF|2024-11-26T10:12:05.438Z|84941": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-11-26T10:12:05.438Z|84941",
+      "name": "FishingCast",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "AnimationGLTF|2024-11-26T10:12:05.457Z|72466": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466",
+      "name": "Sit",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "Graph|2024-11-26T10:13:50.337Z|26526": {
+    "ƒ.Graph": {
+      "name": "LakeMap",
+      "active": true,
+      "components": {},
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "Lights",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.Node": {
+                  "name": "GL",
+                  "active": true,
+                  "components": {
+                    "ComponentLight": [
+                      {
+                        "ƒ.ComponentLight": {
+                          "pivot": {
+                            "translation": "[0, 2.6000000000000014, 0]",
+                            "rotation": "[130, 0, 1]",
+                            "scaling": "[1, 1, 1]"
+                          },
+                          "light": {
+                            "ƒ.LightAmbient": {
+                              "color": "[1, 1, 1, 1]",
+                              "intensity": 1
+                            }
+                          },
+                          "Component": {
+                            "active": true
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Eumling",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Environment",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Camera",
+            "active": true,
+            "components": {
+              "ComponentCamera": [
+                {
+                  "ƒ.ComponentCamera": {
+                    "backgroundColor": {
+                      "r": 0.792156862745098,
+                      "g": 0.9019607843137255,
+                      "b": 0.9098039215686274,
+                      "a": 1
+                    },
+                    "backgroundEnabled": true,
+                    "projection": "central",
+                    "fieldOfView": 50,
+                    "direction": "diagonal",
+                    "near": 0.1,
+                    "far": 2000,
+                    "aspect": 1.5273865414710486,
+                    "pivot": {
+                      "translation": "[0, 3, 14]",
+                      "rotation": "[10, 180, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2024-11-26T10:13:50.337Z|26526",
+      "type": "Graph"
+    }
+  },
+  "GraphGLTF|2024-11-26T10:21:39.316Z|39983": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {},
+      "idResource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983",
+      "type": "GraphGLTF",
+      "url": "Assets\\Environment\\LakeMap.glb"
+    }
+  }
+}
