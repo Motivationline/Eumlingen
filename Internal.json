@@ -65,6 +65,42 @@
       "children": [
         {
           "ƒ.Node": {
+            "name": "Camera",
+            "active": true,
+            "components": {
+              "ComponentCamera": [
+                {
+                  "ƒ.ComponentCamera": {
+                    "backgroundColor": {
+                      "r": 0.792156862745098,
+                      "g": 0.9019607843137255,
+                      "b": 0.9098039215686274,
+                      "a": 1
+                    },
+                    "backgroundEnabled": true,
+                    "projection": "central",
+                    "fieldOfView": 50,
+                    "direction": "diagonal",
+                    "near": 0.1,
+                    "far": 2000,
+                    "aspect": 1.863849765258216,
+                    "pivot": {
+                      "translation": "[0, 2.3999999999999995, 13]",
+                      "rotation": "[10, 180, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        },
+        {
+          "ƒ.Node": {
             "name": "Lights",
             "active": true,
             "components": {},
@@ -127,44 +163,14 @@
                   "deserializeFromSource": true,
                   "idSource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983"
                 }
+              },
+              {
+                "ƒ.GraphInstance": {
+                  "deserializeFromSource": true,
+                  "idSource": "Graph|2024-11-26T12:36:45.277Z|21342"
+                }
               }
             ]
-          }
-        },
-        {
-          "ƒ.Node": {
-            "name": "Camera",
-            "active": true,
-            "components": {
-              "ComponentCamera": [
-                {
-                  "ƒ.ComponentCamera": {
-                    "backgroundColor": {
-                      "r": 0.792156862745098,
-                      "g": 0.9019607843137255,
-                      "b": 0.9098039215686274,
-                      "a": 1
-                    },
-                    "backgroundEnabled": true,
-                    "projection": "central",
-                    "fieldOfView": 50,
-                    "direction": "diagonal",
-                    "near": 0.1,
-                    "far": 2000,
-                    "aspect": 1.5273865414710486,
-                    "pivot": {
-                      "translation": "[0, 3, 14]",
-                      "rotation": "[10, 180, 0]",
-                      "scaling": "[1, 1, 1]"
-                    },
-                    "Component": {
-                      "active": true
-                    }
-                  }
-                }
-              ]
-            },
-            "children": []
           }
         }
       ],
@@ -180,6 +186,142 @@
       "idResource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983",
       "type": "GraphGLTF",
       "url": "Assets\\Environment\\LakeMap.glb"
+    }
+  },
+  "TextureImage|2024-11-26T12:28:52.856Z|59640": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Environment\\Waterfall\\spritesheetSmall.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-11-26T12:28:52.856Z|59640",
+        "name": "Assets\\Environment\\Waterfall\\spritesheetSmall.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "AnimationSprite|2024-11-26T12:31:05.262Z|73408": {
+    "ƒ.AnimationSprite": {
+      "idResource": "AnimationSprite|2024-11-26T12:31:05.262Z|73408",
+      "idTexture": "TextureImage|2024-11-26T12:28:52.856Z|59640",
+      "frames": 4,
+      "wrapAfter": 2,
+      "start": "[0, 0]",
+      "size": "[256, 512]",
+      "next": "[256, 0]",
+      "wrap": "[0, 512]",
+      "Animation": {
+        "idResource": "AnimationSprite|2024-11-26T12:31:05.262Z|73408",
+        "name": "AnimationSprite",
+        "labels": {},
+        "events": {},
+        "framesPerSecond": 12,
+        "animationStructure": {}
+      }
+    }
+  },
+  "MeshSprite|2024-11-26T12:36:39.951Z|77599": {
+    "ƒ.MeshSprite": {
+      "idResource": "MeshSprite|2024-11-26T12:36:39.951Z|77599",
+      "name": "MeshSprite",
+      "type": "MeshSprite"
+    }
+  },
+  "Material|2024-11-26T12:37:13.424Z|33058": {
+    "ƒ.Material": {
+      "name": "ShaderLitTextured",
+      "idResource": "Material|2024-11-26T12:37:13.424Z|33058",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-11-26T12:28:52.856Z|59640"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "Graph|2024-11-26T12:36:45.277Z|21342": {
+    "ƒ.Graph": {
+      "name": "WaterFall",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[-6.996023178100586, 0.8046802878379822, -34.345149993896484]",
+                "rotation": "[-8.149437785755016, 0, 0]",
+                "scaling": "[2.448881149291992, 3.9182097911834717, 2.448881149291992]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "WaterMesh",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshSprite|2024-11-26T12:36:39.951Z|77599",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0.5]",
+                      "rotation": 0,
+                      "scaling": "[0.5, 0.5]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2024-11-26T12:37:13.424Z|33058"
+                  }
+                }
+              ],
+              "ComponentAnimator": [
+                {
+                  "ƒ.ComponentAnimator": {
+                    "Component": {
+                      "active": true
+                    },
+                    "idAnimation": "AnimationSprite|2024-11-26T12:31:05.262Z|73408",
+                    "playmode": "loop",
+                    "quantization": "discrete",
+                    "scale": 1,
+                    "scaleWithGameTime": true,
+                    "animateInEditor": true
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2024-11-26T12:36:45.277Z|21342",
+      "type": "Graph"
     }
   }
 }
