@@ -79,16 +79,40 @@
                     },
                     "backgroundEnabled": true,
                     "projection": "central",
-                    "fieldOfView": 50,
+                    "fieldOfView": 35,
                     "direction": "diagonal",
                     "near": 0.1,
                     "far": 2000,
                     "aspect": 1.863849765258216,
                     "pivot": {
-                      "translation": "[0, 2.3999999999999995, 13]",
+                      "translation": "[-2.7000000000000006, 2.6999999999999997, 14]",
                       "rotation": "[10, 180, 0]",
                       "scaling": "[1, 1, 1]"
                     },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentFog": [
+                {
+                  "ƒ.ComponentFog": {
+                    "color": "[1, 1, 1, 1]",
+                    "near": 45,
+                    "far": 113,
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentBloom": [
+                {
+                  "ƒ.ComponentBloom": {
+                    "threshold": 0.9500000000000001,
+                    "intensity": 1,
+                    "desaturateHighlights": 0.5,
                     "Component": {
                       "active": true
                     }
@@ -141,7 +165,22 @@
           "ƒ.Node": {
             "name": "Eumling",
             "active": true,
-            "components": {},
+            "components": {
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[-1.6398825645446777, 0, 1.3041834831237793]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
             "children": [
               {
                 "ƒ.GraphInstance": {
@@ -159,9 +198,27 @@
             "components": {},
             "children": [
               {
-                "ƒ.GraphInstance": {
-                  "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983"
+                "ƒ.Node": {
+                  "name": "Landscape",
+                  "active": true,
+                  "components": {},
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "Wrapper",
+                        "active": true,
+                        "components": {},
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -250,8 +307,8 @@
           {
             "ƒ.ComponentTransform": {
               "local": {
-                "translation": "[-6.996023178100586, 0.8046802878379822, -34.345149993896484]",
-                "rotation": "[-8.149437785755016, 0, 0]",
+                "translation": "[-7.096023082733154, 0.7044494152069092, -34.345149993896484]",
+                "rotation": "[-8.149438553298051, -19.382593588957636, 8.4307720854427e-8]",
                 "scaling": "[2.448881149291992, 3.9182097911834717, 2.448881149291992]"
               },
               "Component": {
