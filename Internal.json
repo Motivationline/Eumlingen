@@ -83,9 +83,9 @@
                     "direction": "diagonal",
                     "near": 0.1,
                     "far": 2000,
-                    "aspect": 1.863849765258216,
+                    "aspect": 1.5552447552447553,
                     "pivot": {
-                      "translation": "[-2.7000000000000006, 2.6999999999999997, 14]",
+                      "translation": "[-6.999999999999991, 2.6999999999999997, 14]",
                       "rotation": "[10, 180, 0]",
                       "scaling": "[1, 1, 1]"
                     },
@@ -226,6 +226,165 @@
                   "deserializeFromSource": true,
                   "idSource": "Graph|2024-11-26T12:36:45.277Z|21342"
                 }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "WaterSplashes",
+                  "active": true,
+                  "components": {},
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "Wrapper",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-6.981407642364502, -0.10510074347257614, -33.79949188232422]",
+                                  "rotation": "[-89.99999999999999, 0, 0]",
+                                  "scaling": "[4.390594959259033, 4.390594959259033, 4.390594959259033]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-11-27T09:28:53.890Z|04648"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Wrapper",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-4.3094000816345215, -0.13924653828144073, 6.165377140045166]",
+                                  "rotation": "[-89.99999999999999, 0, 0]",
+                                  "scaling": "[1.0977245569229126, 1.0977245569229126, 1.0977245569229126]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-11-27T09:28:53.890Z|04648"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Wrapper",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-3.133021354675293, -0.13924653828144073, 6.28632926940918]",
+                                  "rotation": "[-89.99999999999999, 0, 0]",
+                                  "scaling": "[1.2082955837249756, 1.2082955837249756, 1.2082955837249756]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-11-27T09:28:53.890Z|04648"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Wrapper",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-0.3211399018764496, -0.13991598784923553, 5.501702785491943]",
+                                  "rotation": "[-89.99999999999999, 0, 0]",
+                                  "scaling": "[1.2082955837249756, 1.2082955837249756, 1.2082955837249756]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-11-27T09:28:53.890Z|04648"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Wrapper",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[-8.272491455078125, -0.13991598784923553, 5.624769687652588]",
+                                  "rotation": "[-89.99999999999999, 0, 0]",
+                                  "scaling": "[1.2082955837249756, 1.2082955837249756, 1.2082955837249756]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2024-11-27T09:28:53.890Z|04648"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -286,7 +445,7 @@
   },
   "Material|2024-11-26T12:37:13.424Z|33058": {
     "ƒ.Material": {
-      "name": "ShaderLitTextured",
+      "name": "ShaderLitWaterFall",
       "idResource": "Material|2024-11-26T12:37:13.424Z|33058",
       "shader": "ShaderLitTextured",
       "coat": {
@@ -378,6 +537,120 @@
         }
       ],
       "idResource": "Graph|2024-11-26T12:36:45.277Z|21342",
+      "type": "Graph"
+    }
+  },
+  "TextureImage|2024-11-27T09:24:55.808Z|39525": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Environment\\Watersplash\\Watersplash.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2024-11-27T09:24:55.808Z|39525",
+        "name": "Assets\\Environment\\Watersplash\\Watersplash.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
+  },
+  "AnimationSprite|2024-11-27T09:26:14.568Z|49773": {
+    "ƒ.AnimationSprite": {
+      "idResource": "AnimationSprite|2024-11-27T09:26:14.568Z|49773",
+      "idTexture": "TextureImage|2024-11-27T09:24:55.808Z|39525",
+      "frames": 16,
+      "wrapAfter": 4,
+      "start": "[0, 0]",
+      "size": "[512, 512]",
+      "next": "[512, 0]",
+      "wrap": "[0, 512]",
+      "Animation": {
+        "idResource": "AnimationSprite|2024-11-27T09:26:14.568Z|49773",
+        "name": "AnimationSprite",
+        "labels": {},
+        "events": {},
+        "framesPerSecond": 12,
+        "animationStructure": {}
+      }
+    }
+  },
+  "Material|2024-11-27T09:28:11.815Z|82157": {
+    "ƒ.Material": {
+      "name": "ShaderLitWaterSplash",
+      "idResource": "Material|2024-11-27T09:28:11.815Z|82157",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2024-11-27T09:24:55.808Z|39525"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "Graph|2024-11-27T09:28:53.890Z|04648": {
+    "ƒ.Graph": {
+      "name": "WaterSplash",
+      "active": true,
+      "components": {},
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "Sprite",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshSprite|2024-11-26T12:36:39.951Z|77599",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0.25]",
+                      "rotation": 0,
+                      "scaling": "[0.25, 0.25]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2024-11-27T09:28:11.815Z|82157"
+                  }
+                }
+              ],
+              "ComponentAnimator": [
+                {
+                  "ƒ.ComponentAnimator": {
+                    "Component": {
+                      "active": true
+                    },
+                    "idAnimation": "AnimationSprite|2024-11-27T09:26:14.568Z|49773",
+                    "playmode": "loop",
+                    "quantization": "discrete",
+                    "scale": 1,
+                    "scaleWithGameTime": true,
+                    "animateInEditor": true
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2024-11-27T09:28:53.890Z|04648",
       "type": "Graph"
     }
   }
