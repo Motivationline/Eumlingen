@@ -43,6 +43,9 @@
             "entries": [
               {
                 "idResource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983"
+              },
+              {
+                "idResource": "MaterialGLTF|2024-11-28T09:30:37.072Z|09082"
               }
             ]
           },
@@ -85,6 +88,14 @@
                     "idResource": "Graph|2024-11-27T09:28:53.890Z|04648"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "Plank",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2024-11-28T09:29:37.473Z|65998"
               }
             ]
           }
