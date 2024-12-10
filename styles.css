@@ -1,3 +1,7 @@
+/* * {
+  touch-action: none;
+} */
+
 html, body {
   padding: 0px;
   margin: 0px;
@@ -13,4 +17,41 @@ dialog {
 canvas.fullscreen { 
   width: 100vw; 
   height: 100vh; 
+}
+
+canvas#game-canvas {
+  touch-action: auto;
+}
+
+div.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  touch-action: none;
+  pointer-events: none;
+}
+
+div.overlay.hidden {
+  display: none !important;
+}
+
+div.overlay.interactable * {
+  pointer-events: all;
+}
+
+#start-screen {
+  display: flex;
+  place-items: center;
+  align-items: stretch;
+}
+#start-screen button {
+  flex-grow: 1;
+  cursor: pointer;
+  margin: 1rem;
+  padding: 1rem;
+  background-color: aliceblue;
+  display: grid;
+  place-items: center;
 }

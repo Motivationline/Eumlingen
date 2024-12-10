@@ -26,14 +26,12 @@
 
 </head>
 <body>
-<!--Dialog shown at startup only-->
-<dialog>
-<p>FUDGE Autoview</p>
-<h1>Title (will be replaced by Autoview)</h1>
-<p>click to start</p>
-</dialog>
+<div id="start-screen" class="overlay interactable">
+    <button id="freecam" class="start-button">Freecam</button>
+    <button id="gameplay" class="start-button">Gameplay</button>
+</div>
 <!--Canvas for FUDGE to render to-->
-<canvas class="fullscreen">
+<canvas class="fullscreen" id="game-canvas">
 </canvas>
 </body>
 </html>

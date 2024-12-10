@@ -18,6 +18,13 @@
               "animateInEditor": true
             }
           }
+        ],
+        "EumlingMovement": [
+          {
+            "Script.EumlingMovement": {
+              "active": true
+            }
+          }
         ]
       },
       "idResource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958",

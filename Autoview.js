@@ -17,7 +17,7 @@
 
 var ƒ = FudgeCore;
 var ƒAid = FudgeAid;
-window.addEventListener("load", init);
+// window.addEventListener("load", init);
 
 // show dialog for startup, user interaction required e.g. for starting audio
 function init(_event)/* : void */ {
@@ -55,8 +55,9 @@ async function startInteractiveViewport(_graphId)/* : void */ {
   let cameraOrbit/* : ƒ.Node */ = ƒAid.Viewport.expandCameraToInteractiveOrbit(viewport);
 
   // hide the cursor when interacting, also suppressing right-click menu
-  canvas.addEventListener("mousedown", canvas.requestPointerLock);
-  canvas.addEventListener("mouseup", function () { document.exitPointerLock(); });
+  // canvas.addEventListener("mousedown", canvas.requestPointerLock);
+  // canvas.addEventListener("mouseup", function () { document.exitPointerLock(); });
+  canvas.addEventListener("contextmenu", function (_e) { _e.preventDefault(); });
 
   // setup audio
   let cmpListener/* : ƒ.ComponentAudioListener */ = new ƒ.ComponentAudioListener();
