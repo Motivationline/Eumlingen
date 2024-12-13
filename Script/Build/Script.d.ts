@@ -56,6 +56,7 @@ declare namespace Script {
     import ƒ = FudgeCore;
     abstract class UpdateScriptComponent extends ƒ.Component {
         constructor();
+        static updateAllInBranch(_branch: ƒ.Node): void;
         abstract start(): void;
         abstract update(): void;
     }

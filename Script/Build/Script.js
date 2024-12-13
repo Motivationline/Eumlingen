@@ -227,15 +227,7 @@ var Script;
     }
     function update(_event) {
         // runs updates of all updateable components
-        let event = new CustomEvent("update");
-        let branch = viewport.getBranch();
-        for (let node of branch) {
-            for (let component of node.getAllComponents()) {
-                if (component instanceof Script.UpdateScriptComponent) {
-                    component.dispatchEvent(event);
-                }
-            }
-        }
+        Script.UpdateScriptComponent.updateAllInBranch(viewport.getBranch());
         // ƒ.Physics.simulate();  // if physics is included and used
         viewport.draw();
         ƒ.AudioManager.default.update();
@@ -302,6 +294,18 @@ var Script;
                 return;
             this.addEventListener("update", this.start, { once: true });
             this.addEventListener("update", this.update);
+        }
+        // runs updates of all updateable components
+        static updateAllInBranch(_branch) {
+            let event = new CustomEvent("update");
+            for (let node of _branch) {
+                for (let component of node.getAllComponents()) {
+                    if (component instanceof UpdateScriptComponent) {
+                        if (component.active)
+                            component.dispatchEvent(event);
+                    }
+                }
+            }
         }
     }
     Script.UpdateScriptComponent = UpdateScriptComponent;

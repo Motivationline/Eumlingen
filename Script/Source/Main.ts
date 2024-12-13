@@ -18,15 +18,7 @@ namespace Script {
 
   function update(_event: Event): void {
     // runs updates of all updateable components
-    let event = new CustomEvent("update");
-    let branch = viewport.getBranch();
-    for (let node of branch) {
-      for (let component of node.getAllComponents()) {
-        if (component instanceof UpdateScriptComponent) {
-          component.dispatchEvent(event);
-        }
-      }
-    }
+    UpdateScriptComponent.updateAllInBranch(viewport.getBranch());
 
     // ƒ.Physics.simulate();  // if physics is included and used
     viewport.draw();

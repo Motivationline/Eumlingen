@@ -6,9 +6,9 @@ namespace Script {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
-            
+
         }
-    
+
         override start() {
             // console.log("start");
         };
