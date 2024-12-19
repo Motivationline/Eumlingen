@@ -1,0 +1,84 @@
+
+-- SRC - SOUND EFFECTS ---
+
+freesound.org 
+
+Downloaded on November 28th, 2024
+S: cafe atmos.wav by BeeProductive | License: Creative Commons 0
+S: crowd - bar 1 by canucklovingbrit | License: Creative Commons 0
+S: crowd int medium bar Ouagadougou, Burkina Faso, Africa.flac by kyles | License: Creative Commons 0
+S: Sheeps in open land by Bernardordl | License: Creative Commons 0
+S: sheep bells tinkling close2 EQed Mallorca, Spain.flac by kyles | License: Creative Commons 0
+S: Steps on wood.wav by mareyeslo | License: Creative Commons 0
+
+Downloaded on November 27th, 2024
+S: Deep Ambient Rumble by IanStarGem | License: Creative Commons 0
+S: [FX] ambient echo 0 by waveplaySFX | License: Creative Commons 0
+S: strang ambient noise with frogs and crickets.wav by Nadia4Sound | License: Creative Commons 0
+S: White Noise.wav by Andreas.Mustola | License: Creative Commons 0
+S: white noise build [134bpm] [2 bar] by deadrobotmusic | License: Creative Commons 0
+S: spaceywhitenoise.wav by johnnypanic | License: Attribution 4.0
+S: ForestDay_BW.66.wav by sonidosreales245 | License: Creative Commons 0
+S: breeze.wav by keweldog | License: Creative Commons 0
+S: gusts in a tree by bruno.auzet | License: Creative Commons 0
+S: Бульк by permsound | License: Creative Commons 0
+S: EarlySpringCreekPeepersMarch6th2016.WAV by kvgarlic | License: Creative Commons 0
+S: spring-water-stream-snow-walking.mp3 by Uplistener | License: Creative Commons 0
+S: Crab Orchard Grassy Bay water splashes MAY 3 2023.WAV by kvgarlic | License: Creative Commons 0
+S: Water_Paddle_heavy_029.wav by EpicWizard | License: Creative Commons 0
+S: waves ocean or lake lapping splashing deep sloshy tone on rocks Ganpati shrine on water India.flac by kyles | License: Creative Commons 0
+S: Water Splash in Lake 01.wav by vero.marengere | License: Creative Commons 0
+S: agua Jump1 by Alex_eapo | License: Creative Commons 0
+
+Downloaded on November 26th, 2024
+S: tap water on vase.wav by Yuval | License: Creative Commons 0
+S: Furin japanese wind chime.wav by ayustat2001 | License: Creative Commons 0
+S: Wind Chime 2 by fijiman | License: Creative Commons 0
+S: WindChimePadC1.wav by Sllarson | License: Creative Commons 0
+S: wind chimes post eq.flac by Streety | License: Creative Commons 0
+S: Wind chimes 3 (quiet) by giddster | License: Creative Commons 0
+S: wind chimes - single 01.wav by Anthousai | License: Creative Commons 0
+S: WINDlessCHIME.wav by jaava73 | License: Creative Commons 0
+S: Bell - Japanese, small by Vrymaa | License: Creative Commons 0
+S: Furin japanese wind chime.wav by ayustat2001 | License: Creative Commons 0
+
+Downloaded on November 25th, 2024
+S: Rustling foilage 1.wav by GUS_MAN | License: Creative Commons 0
+S: bushmovement.wav by j1987 | License: Creative Commons 0
+S: The Rustle of a Bush by Montacue | License: Creative Commons 0
+S: large leaves rustle in the wind sound effect by Garuda1982 | License: Creative Commons 0
+S: Forest, trees rustling in the wind.wav by arpeggio1980 | License: Creative Commons 0
+S: CP_Whipping_Wind_Storm_Medium01.aif by stewdio2003 | License: Creative Commons 0
+S: Medium Wind, Constant 2 by jackstraton | License: Creative Commons 0
+S: Altered 78rpm wind sound 1 by felixdembinski | License: Creative Commons 0
+S: the rush in the trees by 37735i6 | License: Creative Commons 0
+
+----
+
+For Forest ambient
+
+Maze of thousand fogs - Hannah
+Ver - 251124 - 18:09
+https://ultraabox.github.io/#u5N0BAMB%20-%20Maze%20of%20thousand%20fogsn931s0k02l00e0it1Aa7g0ij0br3O_U00000000000000000000000000i0o455554213T5v09ug6f0000qE5130Oald420H07000000000000h2E1c01nT1v0cu01f0000q0D1501ka7gd4a0A9F3B6Qa86ePaa74R0000E3c0bd63c76T7v0bu07f010m600q170Oa73bgd080HYw004000030000h0I4E0c0T3v0eu03f010tc00q9D011p60041la73bmd130SU0010508whhaa9hh0E2c0c0812T3v0eu03f010tc00q9D011p60040da73bmd130SU0010508whhaa9hh0E2c0c0812T3v0eu03f010tc00q9D011p60040Oa73bmd130SU0010508whhaa9hh0E2c0c0812T3v0iu03f031201680u500q0B1820Oadd230Sp99f9c9Vppbaa9gh0E1c0bcT3v0pu03f031201680u500q0B1820Oadd230Sp99f9c9Vppbaa9gh0E1c0bcT3v0pud6f010tc00q0B011p6000Oaad130SU0010508whhaa9hh0E2c0c0812T4v0pu04f1a0q35i0Oa4bvz8888onapap4oSBKSJJAArriiiiii07JCABrzrrrrrrr00YrkqHrsrrrrjr005zrAqzrjzrrqr1jRjrqGGrrzsrsA099ijrABJJJIAzrrtirqrqjqixzsrAjrqjiqaqqysttAJqjikikrizrHtBJJAzArzrIsRCITKSS099ijrAJS____Qg99habbCAYrDzh00E0c0T4v0pu04f1a0q35i0Oa4bvz8888onapap4oSBKSJJAArriiiiii07JCABrzrrrrrrr00YrkqHrsrrrrjr005zrAqzrjzrrqr1jRjrqGGrrzsrsA099ijrABJJJIAzrrtirqrqjqixzsrAjrqjiqaqqysttAJqjikikrizrHtBJJAzArzrIsRCITKSS099ijrAJS____Qg99habbCAYrDzh00E0c0T2v01u02f020u22j800qbL173a4600Oa0147d010w4h0E2c088baTav0pu0af0000q00d040E0c0b41440210c340000i00000000000000lDw000000043g09n20w00g01d09gs8w001818Qdm1Mwi8g408O0yhB1M1PwigPdnq9E19zeM000000000000040w8g0w0002g04000000000000i0000004w000000000040000p28CDjFAsGhF4qws7dtcm48IybjeVQN6yb87BYLEyQxqpja2Qxqhja2QxqgJq1waday0lgWtttds1Nhm87BYkwiw0kNt0rI4u2W8Tq9v17jWgW6kelEyPwWpUbeDkxsmhcK2cLk6nicKApt8OYCefEBZoUfi7DojKm86X5U7jDjE7jNRb43O-agpqon8I8mAuzyBk3hz51A8lgd654umlYy4XBy1KNu4AVNW1TYs6N0Wuex4F1r43hzNshO5F7vysUZbR0QoNgoVuE6b6y5pvwhvBgIgfbUF0WombhhE7EWs9kjHoQh2qZheJzEl3ifhQxO780lxdue_iC5gvhSc9HNTWkMGgDIo3nzLQmakweIojnzzQUA54VX60RUXZ5yB83ayoGsibjFME7E-mlcWueDQe3OZ0YLQapu8lgRYLzFYzl3zYLzFZ1lPFUUZbNbwRjduef4pNYWtgdvdu4tneDj5zh59u00F2yUl4kgfdpUL06zO8n87wG8IwqcRQNh0ny1Ua0kjQv100jFQ3FRayuzy408j_UUd02z05hU000
+
+
+----
+
+Just playing around figuring out instruments
+
+Two shrill instruments and dark brrrr 26112024-1055:
+https://tinyurl.com/2xs9bduh
+
+Super small Super Miriam cover (FAITH - the unholy trinity)
+https://tinyurl.com/2y4qoht7
+
+
+---------------
+Beepbox/Ultrabox - SFX Version control
+
+Teleport SFX - 25112024 - 2210 (Added footsteps)
+https://tinyurl.com/2669g2gl
+
+Teleport SFX - 251124 - 1430
+https://tinyurl.com/2yt4kpk9
+
