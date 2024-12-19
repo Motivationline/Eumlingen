@@ -1,7 +1,14 @@
 
 -- SRC - SOUND EFFECTS ---
 
-freesound.org 
+-- self made --
+
+EumlingSounds - Recorded by Lukas Scheuerle and Fyoriosity on 19.12.2024
+Using Audacity
+
+---
+
+-- freesound.org --
 
 Downloaded on November 28th, 2024
 S: cafe atmos.wav by BeeProductive | License: Creative Commons 0
