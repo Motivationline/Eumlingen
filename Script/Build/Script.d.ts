@@ -54,18 +54,35 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
+    interface UpdateEvent {
+        deltaTime: number;
+    }
     abstract class UpdateScriptComponent extends ƒ.Component {
         constructor();
         static updateAllInBranch(_branch: ƒ.Node): void;
-        abstract start(): void;
-        abstract update(): void;
+        abstract start(_e: CustomEvent<UpdateEvent>): void;
+        abstract update(_e: CustomEvent<UpdateEvent>): void;
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
     class EumlingMovement extends UpdateScriptComponent {
+        targetPosition: ƒ.Vector3;
+        removeWhenReached: boolean;
+        speed: number;
+        avgIdleTimeSeconds: number;
         constructor();
         start(): void;
-        update(): void;
+        update(_e: CustomEvent<UpdateEvent>): void;
+        private getPositionToWalkTo;
+    }
+}
+declare namespace Script {
+    class EumlingSpawner extends UpdateScriptComponent {
+        private eumling;
+        start(_e: CustomEvent<UpdateEvent>): void;
+        update(_e: CustomEvent<UpdateEvent>): void;
+        spawn: () => Promise<void>;
     }
 }
 declare namespace Script {
@@ -76,6 +93,16 @@ declare namespace Script {
         constructor();
         hndEvent: (_event: Event) => void;
         private switchMaterial;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class WalkableArea extends ƒ.Component {
+        width: number;
+        depth: number;
+        constructor();
+        getPositionInside(): ƒ.Vector3;
+        drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void;
     }
 }
 declare namespace Script {

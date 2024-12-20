@@ -18,13 +18,6 @@
               "animateInEditor": true
             }
           }
-        ],
-        "EumlingMovement": [
-          {
-            "Script.EumlingMovement": {
-              "active": true
-            }
-          }
         ]
       },
       "idResource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958",
@@ -62,6 +55,26 @@
       "name": "Sit",
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "MeshCube|2024-12-20T12:33:42.882Z|93243": {
+    "ƒ.MeshCube": {
+      "idResource": "MeshCube|2024-12-20T12:33:42.882Z|93243",
+      "name": "MeshCube",
+      "type": "MeshCube"
+    }
+  },
+  "Material|2024-12-20T12:33:52.056Z|05556": {
+    "ƒ.Material": {
+      "name": "ShaderLit",
+      "idResource": "Material|2024-12-20T12:33:52.056Z|05556",
+      "shader": "ShaderLit",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[1, 1, 1, 1]"
+        }
+      },
+      "alphaClip": 0.01
     }
   },
   "Graph|2024-11-26T10:13:50.337Z|26526": {
@@ -163,36 +176,6 @@
                     ]
                   },
                   "children": []
-                }
-              }
-            ]
-          }
-        },
-        {
-          "ƒ.Node": {
-            "name": "Eumling",
-            "active": true,
-            "components": {
-              "ComponentTransform": [
-                {
-                  "ƒ.ComponentTransform": {
-                    "local": {
-                      "translation": "[-1.6398825645446777, 0, 1.3041834831237793]",
-                      "rotation": "[0, 0, 0]",
-                      "scaling": "[1, 1, 1]"
-                    },
-                    "Component": {
-                      "active": true
-                    }
-                  }
-                }
-              ]
-            },
-            "children": [
-              {
-                "ƒ.GraphInstance": {
-                  "deserializeFromSource": true,
-                  "idSource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958"
                 }
               }
             ]
@@ -394,6 +377,78 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Walkarea",
+            "active": true,
+            "components": {
+              "WalkableArea": [
+                {
+                  "Script.WalkableArea": {
+                    "active": true,
+                    "width": 14,
+                    "depth": 8
+                  }
+                }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[-12.5, 0, -5]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "EumlingSpawner": [
+                {
+                  "Script.EumlingSpawner": {
+                    "active": true
+                  }
+                }
+              ],
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshCube|2024-12-20T12:33:42.882Z|93243",
+                    "pivot": {
+                      "translation": "[7, 0, 4]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[14, 0, 8]"
+                    },
+                    "Component": {
+                      "active": false
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": false
+                    },
+                    "idMaterial": "Material|2024-12-20T12:33:52.056Z|05556"
+                  }
+                }
+              ]
+            },
+            "children": []
           }
         }
       ],
@@ -685,6 +740,48 @@
       "name": "MatEnvironmentAtlas",
       "type": "MaterialGLTF",
       "url": "Assets\\Environment\\LakeMap.glb"
+    }
+  },
+  "Graph|2024-12-19T13:00:19.847Z|01650": {
+    "ƒ.Graph": {
+      "name": "Eumling",
+      "active": true,
+      "components": {
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "EumlingMovement": [
+          {
+            "Script.EumlingMovement": {
+              "active": true,
+              "removeWhenReached": true,
+              "speed": 1,
+              "avgIdleTimeSeconds": 5
+            }
+          }
+        ]
+      },
+      "children": [
+        {
+          "ƒ.GraphInstance": {
+            "deserializeFromSource": true,
+            "idSource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958"
+          }
+        }
+      ],
+      "idResource": "Graph|2024-12-19T13:00:19.847Z|01650",
+      "type": "Graph"
     }
   }
 }

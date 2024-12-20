@@ -1,5 +1,9 @@
 namespace Script {
     import ƒ = FudgeCore;
+    export interface UpdateEvent {
+        deltaTime: number,
+    }
+
     export abstract class UpdateScriptComponent extends ƒ.Component {
         constructor() {
             super();
@@ -12,7 +16,7 @@ namespace Script {
 
         // runs updates of all updateable components
         public static updateAllInBranch(_branch: ƒ.Node) {
-            let event = new CustomEvent("update");
+            let event = new CustomEvent<UpdateEvent>("update", {detail: {deltaTime: ƒ.Loop.timeFrameGame}});
             for (let node of _branch) {
                 for (let component of node.getAllComponents()) {
                     if (component instanceof UpdateScriptComponent) {
@@ -23,8 +27,8 @@ namespace Script {
             }
         }
 
-        abstract start(): void;
-        abstract update(): void;
+        abstract start(_e: CustomEvent<UpdateEvent>): void;
+        abstract update(_e: CustomEvent<UpdateEvent>): void;
 
     }
 }

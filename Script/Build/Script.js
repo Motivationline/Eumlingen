@@ -1,4 +1,11 @@
 "use strict";
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -25,13 +32,6 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     }
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
-};
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
 };
 var Script;
 (function (Script) {
@@ -282,6 +282,9 @@ var Script;
         for (let el of document.getElementsByClassName("start-button")) {
             el.addEventListener("click", startViewport);
         }
+        document.getElementById("eumlingSpawn").addEventListener("click", () => {
+            viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
+        });
     }
 })(Script || (Script = {}));
 var Script;
@@ -297,7 +300,7 @@ var Script;
         }
         // runs updates of all updateable components
         static updateAllInBranch(_branch) {
-            let event = new CustomEvent("update");
+            let event = new CustomEvent("update", { detail: { deltaTime: ƒ.Loop.timeFrameGame } });
             for (let node of _branch) {
                 for (let component of node.getAllComponents()) {
                     if (component instanceof UpdateScriptComponent) {
@@ -315,22 +318,108 @@ var Script;
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
 (function (Script) {
     var ƒ = FudgeCore;
-    class EumlingMovement extends Script.UpdateScriptComponent {
-        constructor() {
-            super();
-            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
-                return;
-        }
-        start() {
-            // console.log("start");
-        }
-        ;
-        update() {
-            // console.log("update");
-        }
-        ;
-    }
+    let EumlingMovement = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = Script.UpdateScriptComponent;
+        let _instanceExtraInitializers = [];
+        let _removeWhenReached_decorators;
+        let _removeWhenReached_initializers = [];
+        let _speed_decorators;
+        let _speed_initializers = [];
+        let _avgIdleTimeSeconds_decorators;
+        let _avgIdleTimeSeconds_initializers = [];
+        var EumlingMovement = class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _removeWhenReached_decorators = [ƒ.serialize(Boolean)];
+                _speed_decorators = [ƒ.serialize(Number)];
+                _avgIdleTimeSeconds_decorators = [ƒ.serialize(Number)];
+                __esDecorate(null, null, _removeWhenReached_decorators, { kind: "field", name: "removeWhenReached", static: false, private: false, access: { has: obj => "removeWhenReached" in obj, get: obj => obj.removeWhenReached, set: (obj, value) => { obj.removeWhenReached = value; } }, metadata: _metadata }, _removeWhenReached_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _speed_decorators, { kind: "field", name: "speed", static: false, private: false, access: { has: obj => "speed" in obj, get: obj => obj.speed, set: (obj, value) => { obj.speed = value; } }, metadata: _metadata }, _speed_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _avgIdleTimeSeconds_decorators, { kind: "field", name: "avgIdleTimeSeconds", static: false, private: false, access: { has: obj => "avgIdleTimeSeconds" in obj, get: obj => obj.avgIdleTimeSeconds, set: (obj, value) => { obj.avgIdleTimeSeconds = value; } }, metadata: _metadata }, _avgIdleTimeSeconds_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                EumlingMovement = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            constructor() {
+                super();
+                this.targetPosition = (__runInitializers(this, _instanceExtraInitializers), void 0);
+                this.removeWhenReached = __runInitializers(this, _removeWhenReached_initializers, true);
+                this.speed = __runInitializers(this, _speed_initializers, 1);
+                this.avgIdleTimeSeconds = __runInitializers(this, _avgIdleTimeSeconds_initializers, 0);
+                if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                    return;
+            }
+            start() {
+                // console.log("start");
+            }
+            ;
+            update(_e) {
+                if (this.targetPosition) {
+                    if (!this.targetPosition.equals(this.node.mtxWorld.translation, this.speed * 2)) {
+                        let difference = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
+                        difference.normalize((this.speed / 1000) * _e.detail.deltaTime);
+                        this.node.mtxLocal.translate(difference, false);
+                    }
+                    else if (this.removeWhenReached) {
+                        this.targetPosition = undefined;
+                    }
+                }
+                else {
+                    const standingTime = this.avgIdleTimeSeconds * 1000;
+                    if (Math.random() * standingTime < _e.detail.deltaTime) {
+                        this.targetPosition = this.getPositionToWalkTo();
+                        let diff = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
+                        this.node.mtxLocal.lookIn(diff, ƒ.Vector3.Y(1));
+                    }
+                }
+                // console.log("update");
+            }
+            ;
+            getPositionToWalkTo() {
+                let walkNode = this.node.getParent();
+                if (!walkNode)
+                    return undefined;
+                let wa = walkNode.getComponent(Script.WalkableArea);
+                if (!wa)
+                    return undefined;
+                return wa.getPositionInside();
+            }
+        };
+        return EumlingMovement = _classThis;
+    })();
     Script.EumlingMovement = EumlingMovement;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class EumlingSpawner extends Script.UpdateScriptComponent {
+        constructor() {
+            super(...arguments);
+            this.spawn = async () => {
+                let wa = this.node.getComponent(Script.WalkableArea);
+                if (!wa)
+                    return;
+                let newPos = wa.getPositionInside();
+                let instance = await ƒ.Project.createGraphInstance(this.eumling);
+                instance.mtxLocal.translation = ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation);
+                this.node.appendChild(instance);
+            };
+        }
+        start(_e) {
+            this.node.addEventListener("spawnEumling", this.spawn, true);
+            this.eumling = ƒ.Project.getResourcesByName("Eumling")[0];
+        }
+        update(_e) {
+        }
+    }
+    Script.EumlingSpawner = EumlingSpawner;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -379,6 +468,58 @@ var Script;
         };
     })();
     Script.ComponentChangeMaterial = ComponentChangeMaterial;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    let WalkableArea = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = ƒ.Component;
+        let _instanceExtraInitializers = [];
+        let _width_decorators;
+        let _width_initializers = [];
+        let _depth_decorators;
+        let _depth_initializers = [];
+        var WalkableArea = class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _width_decorators = [ƒ.serialize(Number)];
+                _depth_decorators = [ƒ.serialize(Number)];
+                __esDecorate(null, null, _width_decorators, { kind: "field", name: "width", static: false, private: false, access: { has: obj => "width" in obj, get: obj => obj.width, set: (obj, value) => { obj.width = value; } }, metadata: _metadata }, _width_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _depth_decorators, { kind: "field", name: "depth", static: false, private: false, access: { has: obj => "depth" in obj, get: obj => obj.depth, set: (obj, value) => { obj.depth = value; } }, metadata: _metadata }, _depth_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                WalkableArea = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            constructor() {
+                super();
+                this.width = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _width_initializers, 1));
+                this.depth = __runInitializers(this, _depth_initializers, 1);
+                if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                    return;
+            }
+            getPositionInside() {
+                return ƒ.Vector3.SUM(this.node.mtxWorld.translation, new ƒ.Vector3(this.width * Math.random(), 0, this.depth * Math.random()));
+            }
+            drawGizmos(_cmpCamera) {
+                const corners = [
+                    this.node.mtxWorld.translation,
+                    ƒ.Vector3.SUM(this.node.mtxWorld.translation, new ƒ.Vector3(this.width, 0, 0)),
+                    ƒ.Vector3.SUM(this.node.mtxWorld.translation, new ƒ.Vector3(this.width, 0, this.depth)),
+                    ƒ.Vector3.SUM(this.node.mtxWorld.translation, new ƒ.Vector3(0, 0, this.depth)),
+                ];
+                ƒ.Gizmos.drawLines([corners[0], corners[1], corners[1], corners[2], corners[2], corners[3], corners[3], corners[0]], this.node.mtxWorld, ƒ.Color.CSS("blue"));
+            }
+        };
+        return WalkableArea = _classThis;
+    })();
+    Script.WalkableArea = WalkableArea;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

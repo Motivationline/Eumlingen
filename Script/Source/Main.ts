@@ -82,5 +82,10 @@ namespace Script {
     for (let el of <HTMLCollectionOf<HTMLElement>>document.getElementsByClassName("start-button")) {
       el.addEventListener("click", startViewport);
     }
+    document.getElementById("eumlingSpawn").addEventListener("click", ()=> {
+      viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
+    })
   }
+
+
 }

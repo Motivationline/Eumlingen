@@ -37,8 +37,8 @@ div.overlay.hidden {
   display: none !important;
 }
 
-div.overlay.interactable * {
-  pointer-events: all;
+.interactable {
+  pointer-events: all !important;
 }
 
 #start-screen {
@@ -54,4 +54,10 @@ div.overlay.interactable * {
   background-color: aliceblue;
   display: grid;
   place-items: center;
+}
+
+#game-overlay {
+  display: flex;
+  place-items: end;
+  justify-content: center;
 }
