@@ -783,5 +783,17 @@
       "idResource": "Graph|2024-12-19T13:00:19.847Z|01650",
       "type": "Graph"
     }
+  },
+  "TextureImage|2025-01-09T13:04:05.947Z|87161": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Environment\\Atlas\\MapAtlas.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2025-01-09T13:04:05.947Z|87161",
+        "name": "Assets\\Environment\\Atlas\\MapAtlas.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
   }
 }
