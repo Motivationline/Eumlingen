@@ -77,12 +77,8 @@ var Script;
     (function (EVENT_POINTER) {
         /** A pointer enters the html element */
         EVENT_POINTER["START"] = "pointerstart";
-        /** A pointer starts being pressed / touched */
-        EVENT_POINTER["START_TOUCH"] = "pointerstarttouch";
         /** A pointer exits the html element */
         EVENT_POINTER["END"] = "pointerend";
-        /** A pointer ends being pressed / touched */
-        EVENT_POINTER["END_TOUCH"] = "pointerendtouch";
         /** A pointer changes, either its pressed/touched status or its position */
         EVENT_POINTER["CHANGE"] = "pointerchange";
         /** A pointer is pressed/touched for a longer time. NOT IMPLEMENTED YET */
@@ -92,116 +88,53 @@ var Script;
         constructor() {
             super(...arguments);
             this.pointers = new Map();
-            //assuming only one mouse exists at a time and touches only have positive ids
-            this.mouseId = -99;
-            this.hndTap = (_event) => {
-                let changedTouches = _event.changedTouches;
-                if (!changedTouches || changedTouches.length == 0)
-                    return;
-                for (let touch of changedTouches) {
-                    let existingPointer = this.getPointer(touch.identifier);
-                    if (!existingPointer)
-                        existingPointer = this.createPointerFromTouch(touch);
-                    existingPointer.currentX = touch.clientX;
-                    existingPointer.currentY = touch.clientY;
-                    this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
-                }
-            };
-            this.hndTapEnd = (_event) => {
-                let changedTouches = _event.changedTouches;
-                if (!changedTouches || changedTouches.length == 0)
-                    return;
-                for (let touch of changedTouches) {
-                    let existingPointer = this.getPointer(touch.identifier);
-                    if (existingPointer) {
-                        this.dispatchEvent(new CustomEvent(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
-                        this.dispatchEvent(new CustomEvent(EVENT_POINTER.END_TOUCH, { detail: { pointer: existingPointer } }));
-                        this.pointers.delete(touch.identifier);
-                    }
-                }
-            };
-            this.hndMouseEnter = (_event) => {
-                let existingPointer = this.getPointer(this.mouseId);
+            this.hndPointerDown = (_event) => {
+                let existingPointer = this.getPointer(_event.pointerId);
                 if (!existingPointer)
-                    existingPointer = this.createPointerFromMouse(_event);
+                    existingPointer = this.createPointerFromPointer(_event);
+                existingPointer.pressed = true;
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
+                this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
             };
-            this.hndMouseMove = (_event) => {
-                let existingPointer = this.getPointer(this.mouseId);
-                if (!existingPointer)
-                    existingPointer = this.createPointerFromMouse(_event);
-                existingPointer.currentX = _event.clientX;
-                existingPointer.currentY = _event.clientY;
-                this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
-            };
-            this.hndMouseLeave = (_event) => {
-                let existingPointer = this.getPointer(this.mouseId);
+            this.hndPointerUp = (_event) => {
+                let existingPointer = this.getPointer(_event.pointerId);
                 if (existingPointer) {
+                    this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
-                    this.dispatchEvent(new CustomEvent(EVENT_POINTER.END_TOUCH, { detail: { pointer: existingPointer } }));
                     this.pointers.delete(existingPointer.id);
                 }
             };
-            this.hndMouseDown = (_event) => {
-                let existingPointer = this.getPointer(this.mouseId);
+            this.hndPointerMove = (_event) => {
+                let existingPointer = this.getPointer(_event.pointerId);
                 if (!existingPointer)
-                    existingPointer = this.createPointerFromMouse(_event);
-                existingPointer.pressed = true;
-                this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
-                this.dispatchEvent(new CustomEvent(EVENT_POINTER.START_TOUCH, { detail: { pointer: existingPointer } }));
-            };
-            this.hndMouseUp = (_event) => {
-                let existingPointer = this.getPointer(this.mouseId);
-                if (!existingPointer)
-                    existingPointer = this.createPointerFromMouse(_event);
-                existingPointer.pressed = false;
-                this.dispatchEvent(new CustomEvent(EVENT_POINTER.END_TOUCH, { detail: { pointer: existingPointer } }));
+                    return;
+                existingPointer.currentX = _event.clientX;
+                existingPointer.currentY = _event.clientY;
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
             };
         }
         initialize(_element) {
             console.log("init");
-            _element.addEventListener("touchstart", this.hndTap);
-            _element.addEventListener("touchmove", this.hndTap);
-            _element.addEventListener("touchend", this.hndTapEnd);
-            _element.addEventListener("touchcancel", this.hndTapEnd);
-            _element.addEventListener("mouseenter", this.hndMouseEnter);
-            _element.addEventListener("mousemove", this.hndMouseMove);
-            _element.addEventListener("mouseleave", this.hndMouseLeave);
-            _element.addEventListener("mousedown", this.hndMouseDown);
-            _element.addEventListener("mouseup", this.hndMouseUp);
+            _element.addEventListener("pointerdown", this.hndPointerDown);
+            _element.addEventListener("pointerup", this.hndPointerUp);
+            _element.addEventListener("pointercancel", this.hndPointerUp);
+            _element.addEventListener("pointermove", this.hndPointerMove);
         }
         getPointer(_id) {
             return this.pointers.get(_id);
         }
-        createPointerFromTouch(_touch) {
+        createPointerFromPointer(_event) {
             let pointer = {
-                id: _touch.identifier,
-                currentX: _touch.clientX,
-                currentY: _touch.clientY,
-                startX: _touch.clientX,
-                startY: _touch.clientY,
-                startTime: ƒ.Time.game.get(),
-                pressed: true,
-                type: "touch",
-            };
-            this.pointers.set(_touch.identifier, pointer);
-            this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer } }));
-            this.dispatchEvent(new CustomEvent(EVENT_POINTER.START_TOUCH, { detail: { pointer } }));
-            return pointer;
-        }
-        createPointerFromMouse(_event) {
-            let pointer = {
-                id: this.mouseId,
+                id: _event.pointerId,
                 currentX: _event.clientX,
                 currentY: _event.clientY,
                 startX: _event.clientX,
                 startY: _event.clientY,
                 startTime: ƒ.Time.game.get(),
-                pressed: false,
-                type: "mouse",
+                pressed: true,
+                type: _event.pointerType,
             };
-            this.pointers.set(this.mouseId, pointer);
+            this.pointers.set(pointer.id, pointer);
             this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer } }));
             return pointer;
         }
@@ -253,29 +186,42 @@ var Script;
         camera = Script.findFirstCameraInGraph(graph);
         viewport.initialize("GameViewport", graph, camera, canvas);
         canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
-        // let gsdo = document.getElementById("game-side-detection")
-        // gsdo.classList.remove("hidden");
-        // gsdo.addEventListener("touchstart", moveCameraTouch);
-        // gsdo.addEventListener("touchend", moveCameraTouch);
-        // gsdo.addEventListener("touchmove", moveCameraTouch);
-        // gsdo.addEventListener("mousemove", moveCameraMouse);
         upInput.initialize(document.getElementById("game-canvas"));
-        // upInput.addEventListener(EVENT_POINTER.START, _e => console.log(EVENT_POINTER.START, (<CustomEvent>_e).detail))
-        // upInput.addEventListener(EVENT_POINTER.END, _e => console.log(EVENT_POINTER.END, (<CustomEvent>_e).detail))
-        // upInput.addEventListener(EVENT_POINTER.CHANGE, _e => console.log(EVENT_POINTER.CHANGE, (<CustomEvent>_e).detail))
+        // upInput.addEventListener(EVENT_POINTER.START, _e => console.log(EVENT_POINTER.START, (<CustomEvent>_e).detail, upInput.pointerList.length))
+        // upInput.addEventListener(EVENT_POINTER.END, _e => console.log(EVENT_POINTER.END, (<CustomEvent>_e).detail, upInput.pointerList.length))
+        // upInput.addEventListener(EVENT_POINTER.CHANGE, _e => console.log(EVENT_POINTER.CHANGE, (<CustomEvent>_e).detail, upInput.pointerList.length))
     }
+    let currentCameraSpeed = 0;
+    const maxCameraSpeed = 10;
+    const timeUntilFullSpeed = 2;
+    const cameraAcelleration = maxCameraSpeed / timeUntilFullSpeed;
+    const cameraBoundaryX = [-7, -2];
     function moveCamera(_pointers) {
-        let direction = 0;
+        let speed = 0;
         for (let pointer of _pointers) {
             if (pointer.currentX < window.innerWidth * 0.1) {
-                direction += 1;
+                speed -= 1;
             }
             else if (pointer.currentX > window.innerWidth * 0.9) {
-                direction -= 1;
+                speed += 1;
             }
         }
-        direction *= 0.1;
-        camera.mtxPivot.translateX(direction);
+        let timeScale = ƒ.Loop.timeFrameGame / 1000;
+        if (speed === 0) {
+            currentCameraSpeed = 0;
+            return;
+        }
+        currentCameraSpeed = Math.min(maxCameraSpeed, Math.max(0, cameraAcelleration * timeScale + currentCameraSpeed));
+        let step = speed * currentCameraSpeed * timeScale;
+        let currentX = camera.mtxPivot.translation.x;
+        let nextPos = currentX + step;
+        if (cameraBoundaryX[0] > nextPos) {
+            step = cameraBoundaryX[0] - currentX;
+        }
+        if (cameraBoundaryX[1] < nextPos) {
+            step = cameraBoundaryX[1] - currentX;
+        }
+        camera.mtxPivot.translateX(-step);
     }
     window.addEventListener("load", init);
     function init() {

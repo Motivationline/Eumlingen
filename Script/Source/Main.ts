@@ -24,7 +24,7 @@ namespace Script {
     viewport.draw();
     ƒ.AudioManager.default.update();
 
-    if(gameMode){
+    if (gameMode) {
       // console.log(upInput.pointerList.length);
       moveCamera(upInput.pointerList);
     }
@@ -50,30 +50,44 @@ namespace Script {
 
     canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
 
-    // let gsdo = document.getElementById("game-side-detection")
-    // gsdo.classList.remove("hidden");
-    // gsdo.addEventListener("touchstart", moveCameraTouch);
-    // gsdo.addEventListener("touchend", moveCameraTouch);
-    // gsdo.addEventListener("touchmove", moveCameraTouch);
-    // gsdo.addEventListener("mousemove", moveCameraMouse);
-
     upInput.initialize(document.getElementById("game-canvas"));
-    // upInput.addEventListener(EVENT_POINTER.START, _e => console.log(EVENT_POINTER.START, (<CustomEvent>_e).detail))
-    // upInput.addEventListener(EVENT_POINTER.END, _e => console.log(EVENT_POINTER.END, (<CustomEvent>_e).detail))
-    // upInput.addEventListener(EVENT_POINTER.CHANGE, _e => console.log(EVENT_POINTER.CHANGE, (<CustomEvent>_e).detail))
+    // upInput.addEventListener(EVENT_POINTER.START, _e => console.log(EVENT_POINTER.START, (<CustomEvent>_e).detail, upInput.pointerList.length))
+    // upInput.addEventListener(EVENT_POINTER.END, _e => console.log(EVENT_POINTER.END, (<CustomEvent>_e).detail, upInput.pointerList.length))
+    // upInput.addEventListener(EVENT_POINTER.CHANGE, _e => console.log(EVENT_POINTER.CHANGE, (<CustomEvent>_e).detail, upInput.pointerList.length))
   }
 
+  let currentCameraSpeed: number = 0;
+  const maxCameraSpeed: number = 10;
+  const timeUntilFullSpeed: number = 2;
+  const cameraAcelleration: number = maxCameraSpeed / timeUntilFullSpeed;
+  const cameraBoundaryX: [number, number] = [-7, -2];
   function moveCamera(_pointers: Pointer[]) {
-    let direction: number = 0;
+    let speed: number = 0;
     for (let pointer of _pointers) {
       if (pointer.currentX < window.innerWidth * 0.1) {
-        direction += 1;
+        speed -= 1;
       } else if (pointer.currentX > window.innerWidth * 0.9) {
-        direction -= 1;
+        speed += 1;
       }
     }
-    direction *= 0.1;
-    camera.mtxPivot.translateX(direction);
+    let timeScale = ƒ.Loop.timeFrameGame / 1000;
+    if (speed === 0) {
+      currentCameraSpeed = 0;
+      return;
+    }
+
+    currentCameraSpeed = Math.min(maxCameraSpeed, Math.max(0, cameraAcelleration * timeScale + currentCameraSpeed));
+
+    let step = speed * currentCameraSpeed * timeScale;
+    let currentX = camera.mtxPivot.translation.x;
+    let nextPos = currentX + step;
+    if (cameraBoundaryX[0] > nextPos) {
+      step = cameraBoundaryX[0] - currentX;
+    }
+    if (cameraBoundaryX[1] < nextPos) {
+      step = cameraBoundaryX[1] - currentX;
+    }
+    camera.mtxPivot.translateX(-step);
   }
 
 
@@ -82,7 +96,7 @@ namespace Script {
     for (let el of <HTMLCollectionOf<HTMLElement>>document.getElementsByClassName("start-button")) {
       el.addEventListener("click", startViewport);
     }
-    document.getElementById("eumlingSpawn").addEventListener("click", ()=> {
+    document.getElementById("eumlingSpawn").addEventListener("click", () => {
       viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     })
   }

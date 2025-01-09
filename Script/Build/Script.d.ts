@@ -16,17 +16,13 @@ declare namespace Script {
         currentY: number;
         startTime: number;
         pressed: boolean;
-        type: "mouse" | "touch";
+        type: string;
     }
     enum EVENT_POINTER {
         /** A pointer enters the html element */
         START = "pointerstart",
-        /** A pointer starts being pressed / touched */
-        START_TOUCH = "pointerstarttouch",
         /** A pointer exits the html element */
         END = "pointerend",
-        /** A pointer ends being pressed / touched */
-        END_TOUCH = "pointerendtouch",
         /** A pointer changes, either its pressed/touched status or its position */
         CHANGE = "pointerchange"
     }
@@ -35,18 +31,12 @@ declare namespace Script {
     }
     class UnifiedPointerInput extends EventTarget {
         private pointers;
-        private mouseId;
         initialize(_element: HTMLElement): void;
-        private hndTap;
-        private hndTapEnd;
-        private hndMouseEnter;
-        private hndMouseMove;
-        private hndMouseLeave;
-        private hndMouseDown;
-        private hndMouseUp;
+        private hndPointerDown;
+        private hndPointerUp;
+        private hndPointerMove;
         private getPointer;
-        private createPointerFromTouch;
-        private createPointerFromMouse;
+        private createPointerFromPointer;
         get pointerList(): Pointer[];
     }
 }
