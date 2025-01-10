@@ -17,6 +17,7 @@ declare namespace Script {
         startTime: number;
         pressed: boolean;
         type: string;
+        longTapTimeout: number;
     }
     enum EVENT_POINTER {
         /** A pointer enters the html element */
@@ -24,7 +25,9 @@ declare namespace Script {
         /** A pointer exits the html element */
         END = "pointerend",
         /** A pointer changes, either its pressed/touched status or its position */
-        CHANGE = "pointerchange"
+        CHANGE = "pointerchange",
+        /** A pointer is pressed/touched for a longer time. */
+        LONG = "pointerlong"
     }
     interface UnifiedPointerEvent {
         pointer: Pointer;

@@ -1,4 +1,11 @@
 "use strict";
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -25,13 +32,6 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     }
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
-};
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
 };
 var Script;
 (function (Script) {
@@ -81,9 +81,11 @@ var Script;
         EVENT_POINTER["END"] = "pointerend";
         /** A pointer changes, either its pressed/touched status or its position */
         EVENT_POINTER["CHANGE"] = "pointerchange";
-        /** A pointer is pressed/touched for a longer time. NOT IMPLEMENTED YET */
-        // LONG = "pointerlong",
+        /** A pointer is pressed/touched for a longer time. */
+        EVENT_POINTER["LONG"] = "pointerlong";
     })(EVENT_POINTER = Script.EVENT_POINTER || (Script.EVENT_POINTER = {}));
+    const timeUntilLongClickMS = 500;
+    const maxDistanceForLongClick = 20;
     class UnifiedPointerInput extends EventTarget {
         constructor() {
             super(...arguments);
@@ -101,6 +103,7 @@ var Script;
                 if (existingPointer) {
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
+                    clearTimeout(existingPointer.longTapTimeout);
                     this.pointers.delete(existingPointer.id);
                 }
             };
@@ -110,6 +113,10 @@ var Script;
                     return;
                 existingPointer.currentX = _event.clientX;
                 existingPointer.currentY = _event.clientY;
+                if (existingPointer.longTapTimeout && (Math.abs(existingPointer.currentX - existingPointer.startX) > maxDistanceForLongClick ||
+                    Math.abs(existingPointer.currentY - existingPointer.startY) > maxDistanceForLongClick)) {
+                    clearTimeout(existingPointer.longTapTimeout);
+                }
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
             };
         }
@@ -133,6 +140,9 @@ var Script;
                 startTime: ƒ.Time.game.get(),
                 pressed: true,
                 type: _event.pointerType,
+                longTapTimeout: setTimeout(() => {
+                    this.dispatchEvent(new CustomEvent(EVENT_POINTER.LONG, { detail: { pointer: pointer } }));
+                }, timeUntilLongClickMS),
             };
             this.pointers.set(pointer.id, pointer);
             this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer } }));
@@ -190,6 +200,7 @@ var Script;
         // upInput.addEventListener(EVENT_POINTER.START, _e => console.log(EVENT_POINTER.START, (<CustomEvent>_e).detail, upInput.pointerList.length))
         // upInput.addEventListener(EVENT_POINTER.END, _e => console.log(EVENT_POINTER.END, (<CustomEvent>_e).detail, upInput.pointerList.length))
         // upInput.addEventListener(EVENT_POINTER.CHANGE, _e => console.log(EVENT_POINTER.CHANGE, (<CustomEvent>_e).detail, upInput.pointerList.length))
+        // upInput.addEventListener(EVENT_POINTER.LONG, _e => console.log(EVENT_POINTER.LONG, (<CustomEvent>_e).detail, upInput.pointerList.length))
     }
     let currentCameraSpeed = 0;
     const maxCameraSpeed = 10;
@@ -271,15 +282,13 @@ var Script;
         let _classExtraInitializers = [];
         let _classThis;
         let _classSuper = Script.UpdateScriptComponent;
+        let _instanceExtraInitializers = [];
         let _removeWhenReached_decorators;
         let _removeWhenReached_initializers = [];
-        let _removeWhenReached_extraInitializers = [];
         let _speed_decorators;
         let _speed_initializers = [];
-        let _speed_extraInitializers = [];
         let _avgIdleTimeSeconds_decorators;
         let _avgIdleTimeSeconds_initializers = [];
-        let _avgIdleTimeSeconds_extraInitializers = [];
         var EumlingMovement = class extends _classSuper {
             static { _classThis = this; }
             static {
@@ -287,9 +296,9 @@ var Script;
                 _removeWhenReached_decorators = [ƒ.serialize(Boolean)];
                 _speed_decorators = [ƒ.serialize(Number)];
                 _avgIdleTimeSeconds_decorators = [ƒ.serialize(Number)];
-                __esDecorate(null, null, _removeWhenReached_decorators, { kind: "field", name: "removeWhenReached", static: false, private: false, access: { has: obj => "removeWhenReached" in obj, get: obj => obj.removeWhenReached, set: (obj, value) => { obj.removeWhenReached = value; } }, metadata: _metadata }, _removeWhenReached_initializers, _removeWhenReached_extraInitializers);
-                __esDecorate(null, null, _speed_decorators, { kind: "field", name: "speed", static: false, private: false, access: { has: obj => "speed" in obj, get: obj => obj.speed, set: (obj, value) => { obj.speed = value; } }, metadata: _metadata }, _speed_initializers, _speed_extraInitializers);
-                __esDecorate(null, null, _avgIdleTimeSeconds_decorators, { kind: "field", name: "avgIdleTimeSeconds", static: false, private: false, access: { has: obj => "avgIdleTimeSeconds" in obj, get: obj => obj.avgIdleTimeSeconds, set: (obj, value) => { obj.avgIdleTimeSeconds = value; } }, metadata: _metadata }, _avgIdleTimeSeconds_initializers, _avgIdleTimeSeconds_extraInitializers);
+                __esDecorate(null, null, _removeWhenReached_decorators, { kind: "field", name: "removeWhenReached", static: false, private: false, access: { has: obj => "removeWhenReached" in obj, get: obj => obj.removeWhenReached, set: (obj, value) => { obj.removeWhenReached = value; } }, metadata: _metadata }, _removeWhenReached_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _speed_decorators, { kind: "field", name: "speed", static: false, private: false, access: { has: obj => "speed" in obj, get: obj => obj.speed, set: (obj, value) => { obj.speed = value; } }, metadata: _metadata }, _speed_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _avgIdleTimeSeconds_decorators, { kind: "field", name: "avgIdleTimeSeconds", static: false, private: false, access: { has: obj => "avgIdleTimeSeconds" in obj, get: obj => obj.avgIdleTimeSeconds, set: (obj, value) => { obj.avgIdleTimeSeconds = value; } }, metadata: _metadata }, _avgIdleTimeSeconds_initializers, _instanceExtraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 EumlingMovement = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -297,10 +306,10 @@ var Script;
             }
             constructor() {
                 super();
+                this.targetPosition = (__runInitializers(this, _instanceExtraInitializers), void 0);
                 this.removeWhenReached = __runInitializers(this, _removeWhenReached_initializers, true);
-                this.speed = (__runInitializers(this, _removeWhenReached_extraInitializers), __runInitializers(this, _speed_initializers, 1));
-                this.avgIdleTimeSeconds = (__runInitializers(this, _speed_extraInitializers), __runInitializers(this, _avgIdleTimeSeconds_initializers, 0));
-                __runInitializers(this, _avgIdleTimeSeconds_extraInitializers);
+                this.speed = __runInitializers(this, _speed_initializers, 1);
+                this.avgIdleTimeSeconds = __runInitializers(this, _avgIdleTimeSeconds_initializers, 0);
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                     return;
             }
@@ -379,15 +388,15 @@ var Script;
         let _classExtraInitializers = [];
         let _classThis;
         let _classSuper = ƒ.ComponentScript;
+        let _instanceExtraInitializers = [];
         let _changeMaterial_decorators;
         let _changeMaterial_initializers = [];
-        let _changeMaterial_extraInitializers = [];
         var ComponentChangeMaterial = class extends _classSuper {
             static { _classThis = this; }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
                 _changeMaterial_decorators = [FudgeCore.serialize(FudgeCore.Material)];
-                __esDecorate(null, null, _changeMaterial_decorators, { kind: "field", name: "changeMaterial", static: false, private: false, access: { has: obj => "changeMaterial" in obj, get: obj => obj.changeMaterial, set: (obj, value) => { obj.changeMaterial = value; } }, metadata: _metadata }, _changeMaterial_initializers, _changeMaterial_extraInitializers);
+                __esDecorate(null, null, _changeMaterial_decorators, { kind: "field", name: "changeMaterial", static: false, private: false, access: { has: obj => "changeMaterial" in obj, get: obj => obj.changeMaterial, set: (obj, value) => { obj.changeMaterial = value; } }, metadata: _metadata }, _changeMaterial_initializers, _instanceExtraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 ComponentChangeMaterial = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -395,9 +404,9 @@ var Script;
             static { this.iSubclass = ƒ.Component.registerSubclass(ComponentChangeMaterial); }
             constructor() {
                 super();
-                this.changeMaterial = __runInitializers(this, _changeMaterial_initializers, null);
+                this.changeMaterial = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _changeMaterial_initializers, null));
                 // Activate the functions of this component as response to events
-                this.hndEvent = (__runInitializers(this, _changeMaterial_extraInitializers), (_event) => {
+                this.hndEvent = (_event) => {
                     switch (_event.type) {
                         case "componentAdd" /* ƒ.EVENT.COMPONENT_ADD */:
                             break;
@@ -409,7 +418,7 @@ var Script;
                             this.switchMaterial();
                             break;
                     }
-                });
+                };
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                     return;
                 // Listen to this component being added to or removed from a node
@@ -442,20 +451,19 @@ var Script;
         let _classExtraInitializers = [];
         let _classThis;
         let _classSuper = ƒ.Component;
+        let _instanceExtraInitializers = [];
         let _width_decorators;
         let _width_initializers = [];
-        let _width_extraInitializers = [];
         let _depth_decorators;
         let _depth_initializers = [];
-        let _depth_extraInitializers = [];
         var WalkableArea = class extends _classSuper {
             static { _classThis = this; }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
                 _width_decorators = [ƒ.serialize(Number)];
                 _depth_decorators = [ƒ.serialize(Number)];
-                __esDecorate(null, null, _width_decorators, { kind: "field", name: "width", static: false, private: false, access: { has: obj => "width" in obj, get: obj => obj.width, set: (obj, value) => { obj.width = value; } }, metadata: _metadata }, _width_initializers, _width_extraInitializers);
-                __esDecorate(null, null, _depth_decorators, { kind: "field", name: "depth", static: false, private: false, access: { has: obj => "depth" in obj, get: obj => obj.depth, set: (obj, value) => { obj.depth = value; } }, metadata: _metadata }, _depth_initializers, _depth_extraInitializers);
+                __esDecorate(null, null, _width_decorators, { kind: "field", name: "width", static: false, private: false, access: { has: obj => "width" in obj, get: obj => obj.width, set: (obj, value) => { obj.width = value; } }, metadata: _metadata }, _width_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _depth_decorators, { kind: "field", name: "depth", static: false, private: false, access: { has: obj => "depth" in obj, get: obj => obj.depth, set: (obj, value) => { obj.depth = value; } }, metadata: _metadata }, _depth_initializers, _instanceExtraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 WalkableArea = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -463,9 +471,8 @@ var Script;
             }
             constructor() {
                 super();
-                this.width = __runInitializers(this, _width_initializers, 1);
-                this.depth = (__runInitializers(this, _width_extraInitializers), __runInitializers(this, _depth_initializers, 1));
-                __runInitializers(this, _depth_extraInitializers);
+                this.width = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _width_initializers, 1));
+                this.depth = __runInitializers(this, _depth_initializers, 1);
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                     return;
             }

@@ -9,6 +9,7 @@ namespace Script {
         startTime: number,
         pressed: boolean,
         type: string,
+        longTapTimeout: number,
     }
     export enum EVENT_POINTER {
         /** A pointer enters the html element */
@@ -17,12 +18,14 @@ namespace Script {
         END = "pointerend",
         /** A pointer changes, either its pressed/touched status or its position */
         CHANGE = "pointerchange",
-        /** A pointer is pressed/touched for a longer time. NOT IMPLEMENTED YET */
-        // LONG = "pointerlong",
+        /** A pointer is pressed/touched for a longer time. */
+        LONG = "pointerlong",
     }
     export interface UnifiedPointerEvent {
         pointer: Pointer,
     }
+    const timeUntilLongClickMS = 500;
+    const maxDistanceForLongClick = 20;
     export class UnifiedPointerInput extends EventTarget {
         private pointers: Map<number, Pointer> = new Map();
 
@@ -34,7 +37,7 @@ namespace Script {
             _element.addEventListener("pointermove", <EventListener>this.hndPointerMove);
         }
 
-        
+
         private hndPointerDown = (_event: PointerEvent) => {
             let existingPointer = this.getPointer(_event.pointerId);
             if (!existingPointer)
@@ -48,6 +51,7 @@ namespace Script {
             if (existingPointer) {
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
+                clearTimeout(existingPointer.longTapTimeout);
                 this.pointers.delete(existingPointer.id);
             }
         }
@@ -57,9 +61,17 @@ namespace Script {
                 return;
             existingPointer.currentX = _event.clientX;
             existingPointer.currentY = _event.clientY;
+            if (
+                existingPointer.longTapTimeout && (
+                    Math.abs(existingPointer.currentX - existingPointer.startX) > maxDistanceForLongClick ||
+                    Math.abs(existingPointer.currentY - existingPointer.startY) > maxDistanceForLongClick
+                )
+            ) {
+                clearTimeout(existingPointer.longTapTimeout);
+            }
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
         }
-        
+
         private getPointer(_id: number): Pointer | undefined {
             return this.pointers.get(_id);
         }
@@ -74,6 +86,9 @@ namespace Script {
                 startTime: ƒ.Time.game.get(),
                 pressed: true,
                 type: _event.pointerType,
+                longTapTimeout: setTimeout(() => {
+                    this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.LONG, { detail: { pointer: pointer } }));
+                }, timeUntilLongClickMS),
             }
             this.pointers.set(pointer.id, pointer);
 
