@@ -397,9 +397,9 @@
                                   {
                                     "ƒ.ComponentTransform": {
                                       "local": {
-                                        "translation": "[-9.672691345214844, -0.015732955187559128, -6.698598384857178]",
-                                        "rotation": "[1.009698569125679e-13, -89.54879048712927, -7.723170043049027]",
-                                        "scaling": "[4, 4, 4]"
+                                        "translation": "[-7.674798488616943, 1.7194761037826538, -8.530717849731445]",
+                                        "rotation": "[-2.2066090170563944e-7, -85.43835736649368, 6.5466526404065855]",
+                                        "scaling": "[1, 1, 1]"
                                       },
                                       "Component": {
                                         "active": true
@@ -413,6 +413,36 @@
                                   "ƒ.GraphInstance": {
                                     "deserializeFromSource": true,
                                     "idSource": "GraphGLTF|2025-01-09T13:10:04.533Z|78961"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "ƒ.Node": {
+                              "name": "Monument2",
+                              "active": true,
+                              "components": {
+                                "ComponentTransform": [
+                                  {
+                                    "ƒ.ComponentTransform": {
+                                      "local": {
+                                        "translation": "[-2.536552906036377, -0.15047197043895721, 5.3606038093566895]",
+                                        "rotation": "[0, -81.21995366793581, -11.31777696779826]",
+                                        "scaling": "[1, 1, 1]"
+                                      },
+                                      "Component": {
+                                        "active": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "children": [
+                                {
+                                  "ƒ.GraphInstance": {
+                                    "deserializeFromSource": true,
+                                    "idSource": "GraphGLTF|2025-01-10T11:23:09.621Z|21884"
                                   }
                                 }
                               ]
@@ -878,7 +908,7 @@
           {
             "Script.ComponentChangeMaterial": {
               "active": false,
-              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+              "changeMaterial": "Material|2025-01-09T13:07:17.000Z|89754"
             }
           }
         ]
@@ -886,6 +916,25 @@
       "idResource": "GraphGLTF|2025-01-09T13:10:04.533Z|78961",
       "type": "GraphGLTF",
       "url": "Assets\\Environment\\StoneVariation1.glb"
+    }
+  },
+  "GraphGLTF|2025-01-10T11:23:09.621Z|21884": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-10T11:23:09.621Z|21884",
+      "type": "GraphGLTF",
+      "url": "Assets\\Environment\\StoneVariation2.glb"
     }
   }
 }

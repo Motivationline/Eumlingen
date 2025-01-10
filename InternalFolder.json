@@ -112,7 +112,20 @@
             "name": "Stones",
             "entries": [
               {
-                "idResource": "GraphGLTF|2025-01-09T13:10:04.533Z|78961"
+                "name": "Stone1",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-09T13:10:04.533Z|78961"
+                  }
+                ]
+              },
+              {
+                "name": "Stone2",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-10T11:23:09.621Z|21884"
+                  }
+                ]
               }
             ]
           }

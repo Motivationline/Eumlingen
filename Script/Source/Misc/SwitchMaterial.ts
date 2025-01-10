@@ -35,15 +35,11 @@ namespace Script {
         }
 
         private switchMaterial() {
-            console.log(this.changeMaterial);
-            console.log(this.node.name);
-            // console.log(this.node.getChild(0).getComponent(ƒ.ComponentMaterial));
             for (const node of this.node) {
                 if (node.getComponent(ƒ.ComponentMaterial) != null) {
                     node.getComponent(ƒ.ComponentMaterial).material = this.changeMaterial;
                 }
             }
-            return;
         }
     }
 }
