@@ -91,6 +91,7 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     class WalkableArea extends ƒ.Component {
+        static readonly iSubclass: number;
         width: number;
         depth: number;
         constructor();

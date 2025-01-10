@@ -467,8 +467,8 @@ var Script;
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 WalkableArea = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
             }
+            static { this.iSubclass = ƒ.Component.registerSubclass(WalkableArea); }
             constructor() {
                 super();
                 this.width = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _width_initializers, 1));
@@ -486,7 +486,10 @@ var Script;
                     ƒ.Vector3.SUM(this.node.mtxWorld.translation, new ƒ.Vector3(this.width, 0, this.depth)),
                     ƒ.Vector3.SUM(this.node.mtxWorld.translation, new ƒ.Vector3(0, 0, this.depth)),
                 ];
-                ƒ.Gizmos.drawLines([corners[0], corners[1], corners[1], corners[2], corners[2], corners[3], corners[3], corners[0]], this.node.mtxWorld, ƒ.Color.CSS("blue"));
+                ƒ.Gizmos.drawLines([corners[0], corners[1], corners[1], corners[2], corners[2], corners[3], corners[3], corners[0]], ƒ.Matrix4x4.IDENTITY(), ƒ.Color.CSS("blue"));
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
             }
         };
         return WalkableArea = _classThis;
