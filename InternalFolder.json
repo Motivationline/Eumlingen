@@ -48,10 +48,13 @@
                 "idResource": "GraphGLTF|2024-11-26T10:21:39.316Z|39983"
               },
               {
-                "idResource": "MaterialGLTF|2024-11-28T09:30:37.072Z|09082"
+                "idResource": "TextureImage|2025-01-09T13:04:05.947Z|87161"
               },
               {
-                "idResource": "TextureImage|2025-01-09T13:04:05.947Z|87161"
+                "idResource": "Material|2025-01-09T13:06:46.915Z|96856"
+              },
+              {
+                "idResource": "Material|2025-01-09T13:07:17.000Z|89754"
               }
             ]
           },
@@ -102,6 +105,14 @@
             "entries": [
               {
                 "idResource": "GraphGLTF|2024-11-28T09:29:37.473Z|65998"
+              }
+            ]
+          },
+          {
+            "name": "Stones",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-09T13:10:04.533Z|78961"
               }
             ]
           }

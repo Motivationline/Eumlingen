@@ -1,11 +1,4 @@
 "use strict";
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
-};
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -32,6 +25,13 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     }
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
+};
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
 };
 var Script;
 (function (Script) {
@@ -271,13 +271,15 @@ var Script;
         let _classExtraInitializers = [];
         let _classThis;
         let _classSuper = Script.UpdateScriptComponent;
-        let _instanceExtraInitializers = [];
         let _removeWhenReached_decorators;
         let _removeWhenReached_initializers = [];
+        let _removeWhenReached_extraInitializers = [];
         let _speed_decorators;
         let _speed_initializers = [];
+        let _speed_extraInitializers = [];
         let _avgIdleTimeSeconds_decorators;
         let _avgIdleTimeSeconds_initializers = [];
+        let _avgIdleTimeSeconds_extraInitializers = [];
         var EumlingMovement = class extends _classSuper {
             static { _classThis = this; }
             static {
@@ -285,9 +287,9 @@ var Script;
                 _removeWhenReached_decorators = [ƒ.serialize(Boolean)];
                 _speed_decorators = [ƒ.serialize(Number)];
                 _avgIdleTimeSeconds_decorators = [ƒ.serialize(Number)];
-                __esDecorate(null, null, _removeWhenReached_decorators, { kind: "field", name: "removeWhenReached", static: false, private: false, access: { has: obj => "removeWhenReached" in obj, get: obj => obj.removeWhenReached, set: (obj, value) => { obj.removeWhenReached = value; } }, metadata: _metadata }, _removeWhenReached_initializers, _instanceExtraInitializers);
-                __esDecorate(null, null, _speed_decorators, { kind: "field", name: "speed", static: false, private: false, access: { has: obj => "speed" in obj, get: obj => obj.speed, set: (obj, value) => { obj.speed = value; } }, metadata: _metadata }, _speed_initializers, _instanceExtraInitializers);
-                __esDecorate(null, null, _avgIdleTimeSeconds_decorators, { kind: "field", name: "avgIdleTimeSeconds", static: false, private: false, access: { has: obj => "avgIdleTimeSeconds" in obj, get: obj => obj.avgIdleTimeSeconds, set: (obj, value) => { obj.avgIdleTimeSeconds = value; } }, metadata: _metadata }, _avgIdleTimeSeconds_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _removeWhenReached_decorators, { kind: "field", name: "removeWhenReached", static: false, private: false, access: { has: obj => "removeWhenReached" in obj, get: obj => obj.removeWhenReached, set: (obj, value) => { obj.removeWhenReached = value; } }, metadata: _metadata }, _removeWhenReached_initializers, _removeWhenReached_extraInitializers);
+                __esDecorate(null, null, _speed_decorators, { kind: "field", name: "speed", static: false, private: false, access: { has: obj => "speed" in obj, get: obj => obj.speed, set: (obj, value) => { obj.speed = value; } }, metadata: _metadata }, _speed_initializers, _speed_extraInitializers);
+                __esDecorate(null, null, _avgIdleTimeSeconds_decorators, { kind: "field", name: "avgIdleTimeSeconds", static: false, private: false, access: { has: obj => "avgIdleTimeSeconds" in obj, get: obj => obj.avgIdleTimeSeconds, set: (obj, value) => { obj.avgIdleTimeSeconds = value; } }, metadata: _metadata }, _avgIdleTimeSeconds_initializers, _avgIdleTimeSeconds_extraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 EumlingMovement = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -295,10 +297,10 @@ var Script;
             }
             constructor() {
                 super();
-                this.targetPosition = (__runInitializers(this, _instanceExtraInitializers), void 0);
                 this.removeWhenReached = __runInitializers(this, _removeWhenReached_initializers, true);
-                this.speed = __runInitializers(this, _speed_initializers, 1);
-                this.avgIdleTimeSeconds = __runInitializers(this, _avgIdleTimeSeconds_initializers, 0);
+                this.speed = (__runInitializers(this, _removeWhenReached_extraInitializers), __runInitializers(this, _speed_initializers, 1));
+                this.avgIdleTimeSeconds = (__runInitializers(this, _speed_extraInitializers), __runInitializers(this, _avgIdleTimeSeconds_initializers, 0));
+                __runInitializers(this, _avgIdleTimeSeconds_extraInitializers);
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                     return;
             }
@@ -371,23 +373,31 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     let ComponentChangeMaterial = (() => {
-        let _classSuper = ƒ.Component;
-        let _instanceExtraInitializers = [];
+        var _a;
+        let _classDecorators = [(_a = FudgeCore).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = ƒ.ComponentScript;
         let _changeMaterial_decorators;
         let _changeMaterial_initializers = [];
-        return class ComponentChangeMaterial extends _classSuper {
+        let _changeMaterial_extraInitializers = [];
+        var ComponentChangeMaterial = class extends _classSuper {
+            static { _classThis = this; }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
-                _changeMaterial_decorators = [FudgeCore.type(FudgeCore.Material)];
-                __esDecorate(null, null, _changeMaterial_decorators, { kind: "field", name: "changeMaterial", static: false, private: false, access: { has: obj => "changeMaterial" in obj, get: obj => obj.changeMaterial, set: (obj, value) => { obj.changeMaterial = value; } }, metadata: _metadata }, _changeMaterial_initializers, _instanceExtraInitializers);
-                if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                _changeMaterial_decorators = [FudgeCore.serialize(FudgeCore.Material)];
+                __esDecorate(null, null, _changeMaterial_decorators, { kind: "field", name: "changeMaterial", static: false, private: false, access: { has: obj => "changeMaterial" in obj, get: obj => obj.changeMaterial, set: (obj, value) => { obj.changeMaterial = value; } }, metadata: _metadata }, _changeMaterial_initializers, _changeMaterial_extraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                ComponentChangeMaterial = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             }
             static { this.iSubclass = ƒ.Component.registerSubclass(ComponentChangeMaterial); }
             constructor() {
                 super();
-                this.changeMaterial = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _changeMaterial_initializers, null));
+                this.changeMaterial = __runInitializers(this, _changeMaterial_initializers, null);
                 // Activate the functions of this component as response to events
-                this.hndEvent = (_event) => {
+                this.hndEvent = (__runInitializers(this, _changeMaterial_extraInitializers), (_event) => {
                     switch (_event.type) {
                         case "componentAdd" /* ƒ.EVENT.COMPONENT_ADD */:
                             break;
@@ -399,19 +409,30 @@ var Script;
                             this.switchMaterial();
                             break;
                     }
-                };
-                // if (ƒ.Project.mode == ƒ.MODE.EDITOR)
-                //     return;
+                });
+                if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                    return;
                 // Listen to this component being added to or removed from a node
                 this.addEventListener("componentAdd" /* ƒ.EVENT.COMPONENT_ADD */, this.hndEvent);
                 this.addEventListener("componentRemove" /* ƒ.EVENT.COMPONENT_REMOVE */, this.hndEvent);
                 this.addEventListener("nodeDeserialized" /* ƒ.EVENT.NODE_DESERIALIZED */, this.hndEvent);
             }
             switchMaterial() {
-                console.log(this.node.getChild(0).getComponent(ƒ.ComponentMaterial));
+                console.log(this.changeMaterial);
+                console.log(this.node.name);
+                // console.log(this.node.getChild(0).getComponent(ƒ.ComponentMaterial));
+                for (const node of this.node) {
+                    if (node.getComponent(ƒ.ComponentMaterial) != null) {
+                        node.getComponent(ƒ.ComponentMaterial).material = this.changeMaterial;
+                    }
+                }
                 return;
             }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
         };
+        return ComponentChangeMaterial = _classThis;
     })();
     Script.ComponentChangeMaterial = ComponentChangeMaterial;
 })(Script || (Script = {}));
@@ -425,19 +446,20 @@ var Script;
         let _classExtraInitializers = [];
         let _classThis;
         let _classSuper = ƒ.Component;
-        let _instanceExtraInitializers = [];
         let _width_decorators;
         let _width_initializers = [];
+        let _width_extraInitializers = [];
         let _depth_decorators;
         let _depth_initializers = [];
+        let _depth_extraInitializers = [];
         var WalkableArea = class extends _classSuper {
             static { _classThis = this; }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
                 _width_decorators = [ƒ.serialize(Number)];
                 _depth_decorators = [ƒ.serialize(Number)];
-                __esDecorate(null, null, _width_decorators, { kind: "field", name: "width", static: false, private: false, access: { has: obj => "width" in obj, get: obj => obj.width, set: (obj, value) => { obj.width = value; } }, metadata: _metadata }, _width_initializers, _instanceExtraInitializers);
-                __esDecorate(null, null, _depth_decorators, { kind: "field", name: "depth", static: false, private: false, access: { has: obj => "depth" in obj, get: obj => obj.depth, set: (obj, value) => { obj.depth = value; } }, metadata: _metadata }, _depth_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _width_decorators, { kind: "field", name: "width", static: false, private: false, access: { has: obj => "width" in obj, get: obj => obj.width, set: (obj, value) => { obj.width = value; } }, metadata: _metadata }, _width_initializers, _width_extraInitializers);
+                __esDecorate(null, null, _depth_decorators, { kind: "field", name: "depth", static: false, private: false, access: { has: obj => "depth" in obj, get: obj => obj.depth, set: (obj, value) => { obj.depth = value; } }, metadata: _metadata }, _depth_initializers, _depth_extraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 WalkableArea = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -445,8 +467,9 @@ var Script;
             }
             constructor() {
                 super();
-                this.width = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _width_initializers, 1));
-                this.depth = __runInitializers(this, _depth_initializers, 1);
+                this.width = __runInitializers(this, _width_initializers, 1);
+                this.depth = (__runInitializers(this, _width_extraInitializers), __runInitializers(this, _depth_initializers, 1));
+                __runInitializers(this, _depth_extraInitializers);
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                     return;
             }

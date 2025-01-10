@@ -77,7 +77,7 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    class ComponentChangeMaterial extends ƒ.Component {
+    class ComponentChangeMaterial extends ƒ.ComponentScript {
         static readonly iSubclass: number;
         changeMaterial: ƒ.Material;
         constructor();

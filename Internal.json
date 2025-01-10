@@ -375,6 +375,54 @@
                     }
                   ]
                 }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "Decorations",
+                  "active": true,
+                  "components": {},
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "Monument",
+                        "active": true,
+                        "components": {},
+                        "children": [
+                          {
+                            "ƒ.Node": {
+                              "name": "Monument1",
+                              "active": true,
+                              "components": {
+                                "ComponentTransform": [
+                                  {
+                                    "ƒ.ComponentTransform": {
+                                      "local": {
+                                        "translation": "[-9.672691345214844, -0.015732955187559128, -6.698598384857178]",
+                                        "rotation": "[1.009698569125679e-13, -89.54879048712927, -7.723170043049027]",
+                                        "scaling": "[4, 4, 4]"
+                                      },
+                                      "Component": {
+                                        "active": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "children": [
+                                {
+                                  "ƒ.GraphInstance": {
+                                    "deserializeFromSource": true,
+                                    "idSource": "GraphGLTF|2025-01-09T13:10:04.533Z|78961"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -724,7 +772,8 @@
         "ComponentChangeMaterial": [
           {
             "Script.ComponentChangeMaterial": {
-              "active": true
+              "active": true,
+              "changeMaterial": null
             }
           }
         ]
@@ -732,14 +781,6 @@
       "idResource": "GraphGLTF|2024-11-28T09:29:37.473Z|65998",
       "type": "GraphGLTF",
       "url": "Assets\\Environment\\Plank.glb"
-    }
-  },
-  "MaterialGLTF|2024-11-28T09:30:37.072Z|09082": {
-    "ƒ.MaterialGLTF": {
-      "idResource": "MaterialGLTF|2024-11-28T09:30:37.072Z|09082",
-      "name": "MatEnvironmentAtlas",
-      "type": "MaterialGLTF",
-      "url": "Assets\\Environment\\LakeMap.glb"
     }
   },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
@@ -794,6 +835,57 @@
         "mipmap": "CRISP",
         "wrap": "REPEAT"
       }
+    }
+  },
+  "Material|2025-01-09T13:06:46.915Z|96856": {
+    "ƒ.Material": {
+      "name": "ShaderLitMapAtlas",
+      "idResource": "Material|2025-01-09T13:06:46.915Z|96856",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2025-01-09T13:04:05.947Z|87161"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "Material|2025-01-09T13:07:17.000Z|89754": {
+    "ƒ.Material": {
+      "name": "ShaderPhongMapAtlas",
+      "idResource": "Material|2025-01-09T13:07:17.000Z|89754",
+      "shader": "ShaderPhongTextured",
+      "coat": {
+        "ƒ.CoatRemissiveTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2025-01-09T13:04:05.947Z|87161",
+          "diffuse": 1,
+          "specular": 0,
+          "intensity": 0.7,
+          "metallic": 0
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
+  "GraphGLTF|2025-01-09T13:10:04.533Z|78961": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": false,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-09T13:10:04.533Z|78961",
+      "type": "GraphGLTF",
+      "url": "Assets\\Environment\\StoneVariation1.glb"
     }
   }
 }

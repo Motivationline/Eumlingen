@@ -1,17 +1,17 @@
 namespace Script {
     import ƒ = FudgeCore;
 
-
-    export class ComponentChangeMaterial extends ƒ.Component {
+    @FudgeCore.serialize
+    export class ComponentChangeMaterial extends ƒ.ComponentScript {
         public static readonly iSubclass: number = ƒ.Component.registerSubclass(ComponentChangeMaterial);
-        @FudgeCore.type(FudgeCore.Material)
+        @FudgeCore.serialize(FudgeCore.Material)
         public changeMaterial: ƒ.Material = null;
 
         constructor() {
             super();
 
-            // if (ƒ.Project.mode == ƒ.MODE.EDITOR)
-            //     return;
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
 
             // Listen to this component being added to or removed from a node
             this.addEventListener(ƒ.EVENT.COMPONENT_ADD, this.hndEvent);
@@ -35,7 +35,14 @@ namespace Script {
         }
 
         private switchMaterial() {
-            console.log(this.node.getChild(0).getComponent(ƒ.ComponentMaterial));
+            console.log(this.changeMaterial);
+            console.log(this.node.name);
+            // console.log(this.node.getChild(0).getComponent(ƒ.ComponentMaterial));
+            for (const node of this.node) {
+                if (node.getComponent(ƒ.ComponentMaterial) != null) {
+                    node.getComponent(ƒ.ComponentMaterial).material = this.changeMaterial;
+                }
+            }
             return;
         }
     }
