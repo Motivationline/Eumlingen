@@ -72,6 +72,7 @@ namespace Script {
                 )
             ) {
                 clearTimeout(existingPointer.longTapTimeout);
+                existingPointer.short = false;
             }
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
         }

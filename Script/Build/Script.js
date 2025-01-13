@@ -119,6 +119,7 @@ var Script;
                 if (existingPointer.longTapTimeout && (Math.abs(existingPointer.currentX - existingPointer.startX) > maxDistanceForLongClick ||
                     Math.abs(existingPointer.currentY - existingPointer.startY) > maxDistanceForLongClick)) {
                     clearTimeout(existingPointer.longTapTimeout);
+                    existingPointer.short = false;
                 }
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
             };
