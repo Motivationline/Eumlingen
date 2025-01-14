@@ -936,5 +936,21 @@
       "type": "GraphGLTF",
       "url": "Assets\\Environment\\StoneVariation2.glb"
     }
+  },
+  "AnimationGLTF|2025-01-14T09:33:32.705Z|59264": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
+      "name": "ClickBlockout",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "AnimationGLTF|2025-01-14T09:33:32.756Z|47103": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
+      "name": "WalkV1",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
   }
 }
