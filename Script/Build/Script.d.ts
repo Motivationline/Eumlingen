@@ -50,6 +50,9 @@ declare namespace Script {
     import ƒ = FudgeCore;
     let viewport: ƒ.Viewport;
     const upInput: UnifiedPointerInput;
+    let eumlingCameraActive: boolean;
+    const eumlingCamera: ƒ.ComponentCamera;
+    const eumlingViewport: ƒ.Viewport;
 }
 declare namespace Script {
     import ƒ = FudgeCore;
@@ -103,6 +106,15 @@ declare namespace Script {
         hndEvent: (_event: Event) => void;
         private switchMaterial;
     }
+}
+declare namespace Script {
+    interface LayerOptions {
+        onAdd: (_element: HTMLElement) => void;
+        onRemove: (_element: HTMLElement) => void;
+    }
+    export function showLayer(_layer: HTMLElement, _options: Partial<LayerOptions>): void;
+    export function removeTopLayer(): void;
+    export {};
 }
 declare namespace Script {
     import ƒ = FudgeCore;

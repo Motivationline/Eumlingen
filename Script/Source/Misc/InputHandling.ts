@@ -15,10 +15,11 @@ namespace Script {
         if (_e.detail.pointer.used) return;
         let pickedNode = findFrontPickedObject(_e);
         if (!pickedNode) return;
-        
+
         let eumlingData = pickedNode.getComponent(EumlingData);
-        if(!eumlingData) return;
-        alert(`You clicked on ${eumlingData.name}`);
+        if (eumlingData) {
+            showEumling(eumlingData);
+        }
     }
 
     function findFrontPickedObject(_e: CustomEvent<UnifiedPointerEvent>): ƒ.Node | undefined {
@@ -39,5 +40,13 @@ namespace Script {
         let pick = node.getComponent(ƒ.ComponentPick);
         if (pick) return node;
         return findPickableNodeInTree(node.getParent());
+    }
+
+    function showEumling(data: EumlingData) {
+        data.node.addComponent(eumlingCamera);
+        eumlingViewport.setBranch(data.node);
+        let infoOverlay = document.getElementById("eumling-info-overlay");
+        (<HTMLElement>infoOverlay.querySelector("#eumling-name")).innerText = data.name;
+        showLayer(infoOverlay, { onRemove: () => { eumlingCameraActive = false; }, onAdd: () => { eumlingCameraActive = true } });
     }
 }

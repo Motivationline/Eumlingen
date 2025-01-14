@@ -1,7 +1,6 @@
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
 
 namespace Script {
-    import ƒ = FudgeCore;
     export class EumlingData extends UpdateScriptComponent {
         static names: string[] = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst"]
         name: string = "";

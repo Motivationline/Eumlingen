@@ -8,6 +8,7 @@ namespace Script {
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
 
   export const upInput = new UnifiedPointerInput();
+  export let eumlingCameraActive: boolean = false;
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
@@ -21,9 +22,14 @@ namespace Script {
     UpdateScriptComponent.updateAllInBranch(viewport.getBranch());
 
     // ƒ.Physics.simulate();  // if physics is included and used
-    viewport.draw();
+    // viewport.draw();
     ƒ.AudioManager.default.update();
-
+    
+    if (eumlingCameraActive) {
+      eumlingViewport.draw();
+    } else {
+      viewport.draw();
+    }
     if (gameMode) {
       // console.log(upInput.pointerList.length);
       moveCamera(upInput.pointerList);
@@ -32,6 +38,8 @@ namespace Script {
 
   let camera: ƒ.ComponentCamera;
   let gameMode: boolean = false;
+  export const eumlingCamera: ƒ.ComponentCamera = new ƒ.ComponentCamera();
+  export const eumlingViewport = new ƒ.Viewport();
   async function startViewport(_event: MouseEvent) {
     document.getElementById("start-screen").remove();
     let graphId/* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView")
@@ -42,7 +50,7 @@ namespace Script {
     gameMode = true;
     await ƒ.Project.loadResourcesFromHTML();
     let graph: ƒ.Graph = <ƒ.Graph>ƒ.Project.resources[graphId];
-    let canvas = document.querySelector("canvas");
+    let canvas = <HTMLCanvasElement>document.getElementById("game-canvas");
     let viewport = new ƒ.Viewport();
     camera = findFirstCameraInGraph(graph);
 
@@ -55,6 +63,12 @@ namespace Script {
     // upInput.addEventListener(EVENT_POINTER.END, _e => console.log(EVENT_POINTER.END, (<CustomEvent>_e).detail, upInput.pointerList.length))
     // upInput.addEventListener(EVENT_POINTER.CHANGE, _e => console.log(EVENT_POINTER.CHANGE, (<CustomEvent>_e).detail, upInput.pointerList.length))
     // upInput.addEventListener(EVENT_POINTER.LONG, _e => console.log(EVENT_POINTER.LONG, (<CustomEvent>_e).detail, upInput.pointerList.length))
+
+    eumlingViewport.initialize("EumlingViewport", null, eumlingCamera, <HTMLCanvasElement>document.getElementById("eumling-canvas"));
+    eumlingCamera.mtxPivot.translateZ(3);
+    eumlingCamera.mtxPivot.translateY(1);
+    eumlingCamera.mtxPivot.rotateY(180);
+    eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
   }
 
   let currentCameraSpeed: number = 0;

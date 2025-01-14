@@ -167,6 +167,7 @@ var Script;
     ƒ.Debug.info("Main Program Template running!");
     document.addEventListener("interactiveViewportStarted", start);
     Script.upInput = new Script.UnifiedPointerInput();
+    Script.eumlingCameraActive = false;
     function start(_event) {
         Script.viewport = _event.detail;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
@@ -176,8 +177,14 @@ var Script;
         // runs updates of all updateable components
         Script.UpdateScriptComponent.updateAllInBranch(Script.viewport.getBranch());
         // ƒ.Physics.simulate();  // if physics is included and used
-        Script.viewport.draw();
+        // viewport.draw();
         ƒ.AudioManager.default.update();
+        if (Script.eumlingCameraActive) {
+            Script.eumlingViewport.draw();
+        }
+        else {
+            Script.viewport.draw();
+        }
         if (gameMode) {
             // console.log(upInput.pointerList.length);
             moveCamera(Script.upInput.pointerList);
@@ -185,6 +192,8 @@ var Script;
     }
     let camera;
     let gameMode = false;
+    Script.eumlingCamera = new ƒ.ComponentCamera();
+    Script.eumlingViewport = new ƒ.Viewport();
     async function startViewport(_event) {
         document.getElementById("start-screen").remove();
         let graphId /* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView");
@@ -195,7 +204,7 @@ var Script;
         gameMode = true;
         await ƒ.Project.loadResourcesFromHTML();
         let graph = ƒ.Project.resources[graphId];
-        let canvas = document.querySelector("canvas");
+        let canvas = document.getElementById("game-canvas");
         let viewport = new ƒ.Viewport();
         camera = Script.findFirstCameraInGraph(graph);
         viewport.initialize("GameViewport", graph, camera, canvas);
@@ -205,6 +214,11 @@ var Script;
         // upInput.addEventListener(EVENT_POINTER.END, _e => console.log(EVENT_POINTER.END, (<CustomEvent>_e).detail, upInput.pointerList.length))
         // upInput.addEventListener(EVENT_POINTER.CHANGE, _e => console.log(EVENT_POINTER.CHANGE, (<CustomEvent>_e).detail, upInput.pointerList.length))
         // upInput.addEventListener(EVENT_POINTER.LONG, _e => console.log(EVENT_POINTER.LONG, (<CustomEvent>_e).detail, upInput.pointerList.length))
+        Script.eumlingViewport.initialize("EumlingViewport", null, Script.eumlingCamera, document.getElementById("eumling-canvas"));
+        Script.eumlingCamera.mtxPivot.translateZ(3);
+        Script.eumlingCamera.mtxPivot.translateY(1);
+        Script.eumlingCamera.mtxPivot.rotateY(180);
+        Script.eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
     }
     let currentCameraSpeed = 0;
     const maxCameraSpeed = 10;
@@ -422,9 +436,9 @@ var Script;
         if (!pickedNode)
             return;
         let eumlingData = pickedNode.getComponent(Script.EumlingData);
-        if (!eumlingData)
-            return;
-        alert(`You clicked on ${eumlingData.name}`);
+        if (eumlingData) {
+            showEumling(eumlingData);
+        }
     }
     function findFrontPickedObject(_e) {
         const picks = ƒ.Picker.pickViewport(Script.viewport, new ƒ.Vector2(_e.detail.pointer.currentX, _e.detail.pointer.currentY));
@@ -445,6 +459,13 @@ var Script;
         if (pick)
             return node;
         return findPickableNodeInTree(node.getParent());
+    }
+    function showEumling(data) {
+        data.node.addComponent(Script.eumlingCamera);
+        Script.eumlingViewport.setBranch(data.node);
+        let infoOverlay = document.getElementById("eumling-info-overlay");
+        infoOverlay.querySelector("#eumling-name").innerText = data.name;
+        Script.showLayer(infoOverlay, { onRemove: () => { Script.eumlingCameraActive = false; }, onAdd: () => { Script.eumlingCameraActive = true; } });
     }
 })(Script || (Script = {}));
 var Script;
@@ -509,6 +530,43 @@ var Script;
         return ComponentChangeMaterial = _classThis;
     })();
     Script.ComponentChangeMaterial = ComponentChangeMaterial;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    const activeLayers = [];
+    function showLayer(_layer, _options) {
+        hideTopLayer();
+        activeLayers.push([_layer, _options]);
+        showTopLayer();
+    }
+    Script.showLayer = showLayer;
+    function removeTopLayer() {
+        hideTopLayer();
+        activeLayers.pop();
+    }
+    Script.removeTopLayer = removeTopLayer;
+    function showTopLayer() {
+        if (activeLayers.length == 0)
+            return;
+        let [layer, options] = activeLayers[activeLayers.length - 1];
+        layer.classList.remove("hidden");
+        if (options.onAdd)
+            options.onAdd(layer);
+    }
+    function hideTopLayer() {
+        if (activeLayers.length == 0)
+            return;
+        let [layer, options] = activeLayers[activeLayers.length - 1];
+        layer.classList.add("hidden");
+        if (options.onRemove)
+            options.onRemove(layer);
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".close-button").forEach(b => {
+            b.innerHTML = "x";
+            b.addEventListener("click", removeTopLayer);
+        });
+    });
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
