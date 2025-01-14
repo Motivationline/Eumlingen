@@ -81,6 +81,8 @@ var Script;
         EVENT_POINTER["END"] = "pointerend";
         /** A pointer changes, either its pressed/touched status or its position */
         EVENT_POINTER["CHANGE"] = "pointerchange";
+        /** A pointer is pressed and released faster than the threshold for a long tap */
+        EVENT_POINTER["SHORT"] = "pointershort";
         /** A pointer is pressed/touched for a longer time. */
         EVENT_POINTER["LONG"] = "pointerlong";
     })(EVENT_POINTER = Script.EVENT_POINTER || (Script.EVENT_POINTER = {}));
@@ -94,7 +96,6 @@ var Script;
                 let existingPointer = this.getPointer(_event.pointerId);
                 if (!existingPointer)
                     existingPointer = this.createPointerFromPointer(_event);
-                existingPointer.pressed = true;
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
             };
@@ -103,6 +104,8 @@ var Script;
                 if (existingPointer) {
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
+                    if (existingPointer.short)
+                        this.dispatchEvent(new CustomEvent(EVENT_POINTER.SHORT, { detail: { pointer: existingPointer } }));
                     clearTimeout(existingPointer.longTapTimeout);
                     this.pointers.delete(existingPointer.id);
                 }
@@ -116,6 +119,7 @@ var Script;
                 if (existingPointer.longTapTimeout && (Math.abs(existingPointer.currentX - existingPointer.startX) > maxDistanceForLongClick ||
                     Math.abs(existingPointer.currentY - existingPointer.startY) > maxDistanceForLongClick)) {
                     clearTimeout(existingPointer.longTapTimeout);
+                    existingPointer.short = false;
                 }
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
             };
@@ -138,10 +142,11 @@ var Script;
                 startX: _event.clientX,
                 startY: _event.clientY,
                 startTime: ƒ.Time.game.get(),
-                pressed: true,
                 type: _event.pointerType,
+                short: true,
                 longTapTimeout: setTimeout(() => {
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.LONG, { detail: { pointer: pointer } }));
+                    pointer.short = false;
                 }, timeUntilLongClickMS),
             };
             this.pointers.set(pointer.id, pointer);
@@ -160,23 +165,22 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     ƒ.Debug.info("Main Program Template running!");
-    let viewport;
     document.addEventListener("interactiveViewportStarted", start);
-    const upInput = new Script.UnifiedPointerInput();
+    Script.upInput = new Script.UnifiedPointerInput();
     function start(_event) {
-        viewport = _event.detail;
+        Script.viewport = _event.detail;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
     function update(_event) {
         // runs updates of all updateable components
-        Script.UpdateScriptComponent.updateAllInBranch(viewport.getBranch());
+        Script.UpdateScriptComponent.updateAllInBranch(Script.viewport.getBranch());
         // ƒ.Physics.simulate();  // if physics is included and used
-        viewport.draw();
+        Script.viewport.draw();
         ƒ.AudioManager.default.update();
         if (gameMode) {
             // console.log(upInput.pointerList.length);
-            moveCamera(upInput.pointerList);
+            moveCamera(Script.upInput.pointerList);
         }
     }
     let camera;
@@ -196,7 +200,7 @@ var Script;
         camera = Script.findFirstCameraInGraph(graph);
         viewport.initialize("GameViewport", graph, camera, canvas);
         canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
-        upInput.initialize(document.getElementById("game-canvas"));
+        Script.upInput.initialize(document.getElementById("game-canvas"));
         // upInput.addEventListener(EVENT_POINTER.START, _e => console.log(EVENT_POINTER.START, (<CustomEvent>_e).detail, upInput.pointerList.length))
         // upInput.addEventListener(EVENT_POINTER.END, _e => console.log(EVENT_POINTER.END, (<CustomEvent>_e).detail, upInput.pointerList.length))
         // upInput.addEventListener(EVENT_POINTER.CHANGE, _e => console.log(EVENT_POINTER.CHANGE, (<CustomEvent>_e).detail, upInput.pointerList.length))
@@ -211,9 +215,11 @@ var Script;
         let speed = 0;
         for (let pointer of _pointers) {
             if (pointer.currentX < window.innerWidth * 0.1) {
+                pointer.used = true;
                 speed -= 1;
             }
             else if (pointer.currentX > window.innerWidth * 0.9) {
+                pointer.used = true;
                 speed += 1;
             }
         }
@@ -240,7 +246,7 @@ var Script;
             el.addEventListener("click", startViewport);
         }
         document.getElementById("eumlingSpawn").addEventListener("click", () => {
-            viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
+            Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
         });
     }
 })(Script || (Script = {}));
@@ -269,6 +275,24 @@ var Script;
         }
     }
     Script.UpdateScriptComponent = UpdateScriptComponent;
+})(Script || (Script = {}));
+/// <reference path="../Plugins/UpdateScriptComponent.ts" />
+var Script;
+/// <reference path="../Plugins/UpdateScriptComponent.ts" />
+(function (Script) {
+    class EumlingData extends Script.UpdateScriptComponent {
+        constructor() {
+            super(...arguments);
+            this.name = "";
+        }
+        static { this.names = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst"]; }
+        start(_e) {
+            this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
+        }
+        update(_e) {
+        }
+    }
+    Script.EumlingData = EumlingData;
 })(Script || (Script = {}));
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
 var Script;
@@ -377,6 +401,51 @@ var Script;
         }
     }
     Script.EumlingSpawner = EumlingSpawner;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    Script.upInput.addEventListener(Script.EVENT_POINTER.LONG, longTap);
+    Script.upInput.addEventListener(Script.EVENT_POINTER.SHORT, shortTap);
+    function longTap(_e) {
+        if (_e.detail.pointer.used)
+            return;
+        let pickedNode = findFrontPickedObject(_e);
+        if (!pickedNode)
+            return;
+        pickedNode.activate(false);
+    }
+    function shortTap(_e) {
+        if (_e.detail.pointer.used)
+            return;
+        let pickedNode = findFrontPickedObject(_e);
+        if (!pickedNode)
+            return;
+        let eumlingData = pickedNode.getComponent(Script.EumlingData);
+        if (!eumlingData)
+            return;
+        alert(`You clicked on ${eumlingData.name}`);
+    }
+    function findFrontPickedObject(_e) {
+        const picks = ƒ.Picker.pickViewport(Script.viewport, new ƒ.Vector2(_e.detail.pointer.currentX, _e.detail.pointer.currentY));
+        let pickedNodes = [];
+        for (let pick of picks) {
+            let pickedNode = findPickableNodeInTree(pick.node);
+            if (!pickedNode)
+                continue;
+            pickedNodes.push(pickedNode);
+        }
+        pickedNodes.sort((a, b) => a.mtxWorld.translation.z - b.mtxWorld.translation.z);
+        return pickedNodes.pop();
+    }
+    function findPickableNodeInTree(node) {
+        if (!node)
+            return undefined;
+        let pick = node.getComponent(ƒ.ComponentPick);
+        if (pick)
+            return node;
+        return findPickableNodeInTree(node.getParent());
+    }
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

@@ -7,9 +7,10 @@ namespace Script {
         currentX: number,
         currentY: number,
         startTime: number,
-        pressed: boolean,
         type: string,
         longTapTimeout: number,
+        short: boolean,
+        used?: boolean,
     }
     export enum EVENT_POINTER {
         /** A pointer enters the html element */
@@ -18,6 +19,8 @@ namespace Script {
         END = "pointerend",
         /** A pointer changes, either its pressed/touched status or its position */
         CHANGE = "pointerchange",
+        /** A pointer is pressed and released faster than the threshold for a long tap */
+        SHORT = "pointershort",
         /** A pointer is pressed/touched for a longer time. */
         LONG = "pointerlong",
     }
@@ -42,7 +45,6 @@ namespace Script {
             let existingPointer = this.getPointer(_event.pointerId);
             if (!existingPointer)
                 existingPointer = this.createPointerFromPointer(_event);
-            existingPointer.pressed = true;
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
         }
@@ -51,6 +53,8 @@ namespace Script {
             if (existingPointer) {
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
+                if (existingPointer.short)
+                    this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.SHORT, { detail: { pointer: existingPointer } }));
                 clearTimeout(existingPointer.longTapTimeout);
                 this.pointers.delete(existingPointer.id);
             }
@@ -68,6 +72,7 @@ namespace Script {
                 )
             ) {
                 clearTimeout(existingPointer.longTapTimeout);
+                existingPointer.short = false;
             }
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
         }
@@ -84,10 +89,11 @@ namespace Script {
                 startX: _event.clientX,
                 startY: _event.clientY,
                 startTime: ƒ.Time.game.get(),
-                pressed: true,
                 type: _event.pointerType,
+                short: true,
                 longTapTimeout: setTimeout(() => {
                     this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.LONG, { detail: { pointer: pointer } }));
+                    pointer.short = false;
                 }, timeUntilLongClickMS),
             }
             this.pointers.set(pointer.id, pointer);

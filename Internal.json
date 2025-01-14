@@ -841,6 +841,21 @@
               "avgIdleTimeSeconds": 5
             }
           }
+        ],
+        "ComponentPick": [
+          {
+            "ƒ.ComponentPick": {
+              "active": true,
+              "pick": "camera"
+            }
+          }
+        ],
+        "EumlingData": [
+          {
+            "Script.EumlingData": {
+              "active": true
+            }
+          }
         ]
       },
       "children": [

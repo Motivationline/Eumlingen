@@ -4,10 +4,10 @@ namespace Script {
   import ƒ = FudgeCore;
   ƒ.Debug.info("Main Program Template running!");
 
-  let viewport: ƒ.Viewport;
+  export let viewport: ƒ.Viewport;
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
 
-  const upInput = new UnifiedPointerInput();
+  export const upInput = new UnifiedPointerInput();
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
@@ -66,8 +66,10 @@ namespace Script {
     let speed: number = 0;
     for (let pointer of _pointers) {
       if (pointer.currentX < window.innerWidth * 0.1) {
+        pointer.used = true;
         speed -= 1;
       } else if (pointer.currentX > window.innerWidth * 0.9) {
+        pointer.used = true;
         speed += 1;
       }
     }

@@ -15,9 +15,10 @@ declare namespace Script {
         currentX: number;
         currentY: number;
         startTime: number;
-        pressed: boolean;
         type: string;
         longTapTimeout: number;
+        short: boolean;
+        used?: boolean;
     }
     enum EVENT_POINTER {
         /** A pointer enters the html element */
@@ -26,6 +27,8 @@ declare namespace Script {
         END = "pointerend",
         /** A pointer changes, either its pressed/touched status or its position */
         CHANGE = "pointerchange",
+        /** A pointer is pressed and released faster than the threshold for a long tap */
+        SHORT = "pointershort",
         /** A pointer is pressed/touched for a longer time. */
         LONG = "pointerlong"
     }
@@ -44,6 +47,9 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
+    let viewport: ƒ.Viewport;
+    const upInput: UnifiedPointerInput;
 }
 declare namespace Script {
     import ƒ = FudgeCore;
@@ -55,6 +61,14 @@ declare namespace Script {
         static updateAllInBranch(_branch: ƒ.Node): void;
         abstract start(_e: CustomEvent<UpdateEvent>): void;
         abstract update(_e: CustomEvent<UpdateEvent>): void;
+    }
+}
+declare namespace Script {
+    class EumlingData extends UpdateScriptComponent {
+        static names: string[];
+        name: string;
+        start(_e: CustomEvent<UpdateEvent>): void;
+        update(_e: CustomEvent<UpdateEvent>): void;
     }
 }
 declare namespace Script {
@@ -77,6 +91,8 @@ declare namespace Script {
         update(_e: CustomEvent<UpdateEvent>): void;
         spawn: () => Promise<void>;
     }
+}
+declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
