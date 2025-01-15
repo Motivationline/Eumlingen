@@ -542,7 +542,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[12.55479907989502, 0.5, 4.766234874725342]",
+                                  "translation": "[12.55479907989502, 0.2, 4.766234874725342]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -572,7 +572,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[8.084463119506836, 0.5, 6.349684238433838]",
+                                  "translation": "[8.084463119506836, 0.20000000000000004, 6.349684238433838]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -1076,7 +1076,7 @@
           {
             "ƒ.ComponentMaterial": {
               "sortForAlpha": false,
-              "clrPrimary": "[1, 1, 1, 1]",
+              "clrPrimary": "[0.47843137254901963, 0.3764705882352941, 0, 1]",
               "clrSecondary": "[1, 1, 1, 1]",
               "pivot": {
                 "translation": "[0, 0]",
