@@ -4,9 +4,9 @@
       "name": "Scene",
       "active": true,
       "components": {
-        "ComponentAnimator": [
+        "ComponentAnimation": [
           {
-            "ƒ.ComponentAnimator": {
+            "ƒ.ComponentAnimation": {
               "Component": {
                 "active": true
               },
@@ -656,9 +656,9 @@
                   }
                 }
               ],
-              "ComponentAnimator": [
+              "ComponentAnimation": [
                 {
-                  "ƒ.ComponentAnimator": {
+                  "ƒ.ComponentAnimation": {
                     "Component": {
                       "active": true
                     },
@@ -770,9 +770,9 @@
                   }
                 }
               ],
-              "ComponentAnimator": [
+              "ComponentAnimation": [
                 {
-                  "ƒ.ComponentAnimator": {
+                  "ƒ.ComponentAnimation": {
                     "Component": {
                       "active": true
                     },
