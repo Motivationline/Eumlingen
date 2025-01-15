@@ -813,6 +813,22 @@
       "url": "Assets\\Environment\\Plank.glb"
     }
   },
+  "AnimationGLTF|2025-01-14T09:33:32.756Z|47103": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
+      "name": "WalkV1",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "AnimationGLTF|2025-01-14T09:33:32.705Z|59264": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
+      "name": "ClickBlockout",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
     "ƒ.Graph": {
       "name": "Eumling",
@@ -838,7 +854,10 @@
               "active": true,
               "removeWhenReached": true,
               "speed": 1,
-              "avgIdleTimeSeconds": 5
+              "idleTimeMSMin": 1000,
+              "idleTimeMSMax": 5000,
+              "sitTimeMSMin": 5000,
+              "sitTimeMSMax": 10000
             }
           }
         ],
@@ -963,18 +982,18 @@
       "url": "Assets\\Environment\\StoneVariation2.glb"
     }
   },
-  "AnimationGLTF|2025-01-14T09:33:32.705Z|59264": {
+  "AnimationGLTF|2025-01-15T14:56:23.841Z|15808": {
     "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
-      "name": "ClickBlockout",
+      "idResource": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808",
+      "name": "InteractingBlockingPolishingV1",
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb"
     }
   },
-  "AnimationGLTF|2025-01-14T09:33:32.756Z|47103": {
+  "AnimationGLTF|2025-01-15T14:56:23.860Z|47654": {
     "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
-      "name": "WalkV1",
+      "idResource": "AnimationGLTF|2025-01-15T14:56:23.860Z|47654",
+      "name": "WalkV2",
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb"
     }
