@@ -526,7 +526,77 @@
                 }
               ]
             },
-            "children": []
+            "children": [
+              {
+                "ƒ.Node": {
+                  "name": "Workbenches",
+                  "active": true,
+                  "components": {},
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "W1",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[12.55479907989502, 0.5, 4.766234874725342]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2025-01-15T14:48:41.922Z|40103"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "W2",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[8.084463119506836, 0.5, 6.349684238433838]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2025-01-15T14:48:41.922Z|40103"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ],
@@ -813,6 +883,22 @@
       "url": "Assets\\Environment\\Plank.glb"
     }
   },
+  "AnimationGLTF|2025-01-14T09:33:32.756Z|47103": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
+      "name": "WalkV1",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "AnimationGLTF|2025-01-14T09:33:32.705Z|59264": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
+      "name": "ClickBlockout",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
     "ƒ.Graph": {
       "name": "Eumling",
@@ -838,7 +924,10 @@
               "active": true,
               "removeWhenReached": true,
               "speed": 1,
-              "avgIdleTimeSeconds": 5
+              "idleTimeMSMin": 1000,
+              "idleTimeMSMax": 5000,
+              "sitTimeMSMin": 5000,
+              "sitTimeMSMax": 10000
             }
           }
         ],
@@ -963,20 +1052,63 @@
       "url": "Assets\\Environment\\StoneVariation2.glb"
     }
   },
-  "AnimationGLTF|2025-01-14T09:33:32.705Z|59264": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
-      "name": "ClickBlockout",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
-    }
-  },
-  "AnimationGLTF|2025-01-14T09:33:32.756Z|47103": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
-      "name": "WalkV1",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+  "Graph|2025-01-15T14:48:41.922Z|40103": {
+    "ƒ.Graph": {
+      "name": "Workbench",
+      "active": true,
+      "components": {
+        "ComponentMesh": [
+          {
+            "ƒ.ComponentMesh": {
+              "idMesh": "MeshCube|2024-12-20T12:33:42.882Z|93243",
+              "pivot": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[0.5, 0.5, 0.5]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "ComponentMaterial": [
+          {
+            "ƒ.ComponentMaterial": {
+              "sortForAlpha": false,
+              "clrPrimary": "[1, 1, 1, 1]",
+              "clrSecondary": "[1, 1, 1, 1]",
+              "pivot": {
+                "translation": "[0, 0]",
+                "rotation": 0,
+                "scaling": "[1, 1]"
+              },
+              "Component": {
+                "active": true
+              },
+              "idMaterial": "Material|2024-12-20T12:33:52.056Z|05556"
+            }
+          }
+        ],
+        "ComponentPick": [
+          {
+            "ƒ.ComponentPick": {
+              "active": true,
+              "pick": "camera"
+            }
+          }
+        ],
+        "Workbench": [
+          {
+            "Script.Workbench": {
+              "active": true
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2025-01-15T14:48:41.922Z|40103",
+      "type": "Graph"
     }
   }
 }

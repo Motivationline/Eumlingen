@@ -27,8 +27,8 @@ namespace Script {
             }
         }
 
-        abstract start(_e: CustomEvent<UpdateEvent>): void;
-        abstract update(_e: CustomEvent<UpdateEvent>): void;
+        start?(_e: CustomEvent<UpdateEvent>): void;
+        update?(_e: CustomEvent<UpdateEvent>): void;
 
     }
 }

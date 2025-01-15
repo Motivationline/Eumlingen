@@ -5,7 +5,7 @@ namespace Script {
     }
     const activeLayers: [HTMLElement, Partial<LayerOptions>][] = [];
 
-    export function showLayer(_layer: HTMLElement, _options: Partial<LayerOptions>) {
+    export function showLayer(_layer: HTMLElement, _options: Partial<LayerOptions> = {}) {
         hideTopLayer();
         activeLayers.push([_layer, _options]);
         showTopLayer();
@@ -21,14 +21,15 @@ namespace Script {
         let [layer, options] = activeLayers[activeLayers.length - 1];
         layer.classList.remove("hidden");
         if (options.onAdd) options.onAdd(layer);
-
+        layer.style.zIndex = "1000";
     }
-
+    
     function hideTopLayer() {
         if (activeLayers.length == 0) return;
         let [layer, options] = activeLayers[activeLayers.length - 1];
         layer.classList.add("hidden");
         if (options.onRemove) options.onRemove(layer);
+        layer.style.zIndex = "";
     }
 
     document.addEventListener("DOMContentLoaded", () => {

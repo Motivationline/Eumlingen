@@ -29,8 +29,6 @@ canvas#eumling-canvas {
 
 #eumling-info-overlay {
   background-color: rgba(255, 255, 255, 0.2);
-  touch-action: auto;
-  pointer-events: all;
   backdrop-filter: blur(40px);
 }
 
@@ -47,8 +45,16 @@ div.overlay {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+div.overlay:not(.no-interact) {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(40px);
+}
+div.overlay.no-interact {
   touch-action: none;
   pointer-events: none;
+  background: transparent;
 }
 
 div.overlay.hidden {

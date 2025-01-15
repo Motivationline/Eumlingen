@@ -3,7 +3,7 @@ namespace Script {
     import ƒ = FudgeCore;
     @ƒ.serialize
     export class EumlingMovement extends UpdateScriptComponent {
-        targetPosition: ƒ.Vector3;
+        private targetPosition: ƒ.Vector3;
         @ƒ.serialize(Boolean)
         removeWhenReached: boolean = true;
         @ƒ.serialize(Number)

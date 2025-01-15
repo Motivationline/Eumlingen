@@ -1,55 +1,68 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<title>Eumlingen</title>
-<meta charset="utf-8" />
-<link rel="stylesheet" href="styles.css" />
+    <title>Eumlingen</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="styles.css" />
 
-<!--Editor settings of this project-->
-<meta type="settings" autoview="Graph|2024-11-26T10:13:50.337Z|26526" project="{'name':'Eumlingen','graphAutoView':'Graph|2024-11-26T10:13:50.337Z|26526'}" />
+    <!--Editor settings of this project-->
+    <meta type="settings" autoview="Graph|2024-11-26T10:13:50.337Z|26526"
+        project="{'name':'Eumlingen','graphAutoView':'Graph|2024-11-26T10:13:50.337Z|26526'}" />
 
-<!--Activate the following line to include the FUDGE-version of Oimo-Physics. You may want to download a local copy to work offline and be independent from future changes!-->
-<!--<script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/OimoPhysics.js"></script>-->
+    <!--Activate the following line to include the FUDGE-version of Oimo-Physics. You may want to download a local copy to work offline and be independent from future changes!-->
+    <!--<script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/OimoPhysics.js"></script>-->
 
-<!--Load FUDGE. You may want to download local copies to work offline and be independent from future changes! Developers working on FUDGE itself may want to create symlinks-->
-<script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeCore.js"></script>
-<script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeAid.js"></script>
+    <!--Load FUDGE. You may want to download local copies to work offline and be independent from future changes! Developers working on FUDGE itself may want to create symlinks-->
+    <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeCore.js"></script>
+    <script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/FudgeAid.js"></script>
 
-<!--Link internal resources. The editor only loads the first, but at runtime, multiple files can contribute-->
-<link type="resources" src="Internal.json" />
+    <!--Link internal resources. The editor only loads the first, but at runtime, multiple files can contribute-->
+    <link type="resources" src="Internal.json" />
 
-<!--Load custom scripts-->
-<script type="text/javascript" src="Script/Build/Script.js" editor="true"></script>
+    <!--Load custom scripts-->
+    <script type="text/javascript" src="Script/Build/Script.js" editor="true"></script>
 
-<!--Load Autoview script-->
-<script type="text/javascript" src="Autoview.js"></script>
+    <!--Load Autoview script-->
+    <script type="text/javascript" src="Autoview.js"></script>
 
 </head>
-<body>
-<div id="start-screen" class="overlay interactable">
-    <button id="freecam" class="start-button">Freecam</button>
-    <button id="gameplay" class="start-button">Gameplay</button>
-</div>
-<div id="game-overlay" class="overlay">
-    <button id="eumlingSpawn" class="interactable">Spawn Eumling</button>
-    <span>short tap for info, long tap to remove Eumling</span>
-</div>
-<div id="eumling-info-overlay" class="overlay hidden">
-    <div id="eumling-info-overlay-wrapper">
-        <canvas id="eumling-canvas">
-</canvas>
-        <div>
-            <div>
-                Name: <span id="eumling-name">blabla</span>
 
+<body>
+    <div id="start-screen" class="overlay">
+        <button id="freecam" class="start-button">Freecam</button>
+        <button id="gameplay" class="start-button">Gameplay</button>
+    </div>
+    <div id="game-overlay" class="overlay no-interact">
+        <button id="eumlingSpawn" class="interactable">Spawn Eumling</button>
+        <span>short tap for info, long tap to remove Eumling</span>
+    </div>
+    <div id="eumling-info-overlay" class="overlay hidden">
+        <div id="eumling-info-overlay-wrapper">
+            <canvas id="eumling-canvas">
+            </canvas>
+            <div>
+                <div>
+                    Name: <span id="eumling-name">blabla</span>
+
+                </div>
             </div>
         </div>
+        <div class="close-button">
+        </div>
     </div>
-    <div class="close-button">
-</div>
-</div>
-<!--Canvas for FUDGE to render to-->
-<canvas class="fullscreen" id="game-canvas">
-</canvas>
+    <div id="workbench-info-overlay" class="overlay hidden">
+        <div id="workbench-info-overlay-wrapper">
+            <div class="workbench-option"><span>Option 1</span><img src="" alt=""></div>
+            <div class="workbench-option"><span>Option 2</span><img src="" alt=""></div>
+            <div class="workbench-option"><span>Option 3</span><img src="" alt=""></div>
+        </div>
+        <div class="close-button">
+        </div>
+    </div>
+    <!--Canvas for FUDGE to render to-->
+    <canvas class="fullscreen" id="game-canvas">
+    </canvas>
 </body>
+
 </html>

@@ -62,8 +62,8 @@ declare namespace Script {
     abstract class UpdateScriptComponent extends ƒ.Component {
         constructor();
         static updateAllInBranch(_branch: ƒ.Node): void;
-        abstract start(_e: CustomEvent<UpdateEvent>): void;
-        abstract update(_e: CustomEvent<UpdateEvent>): void;
+        start?(_e: CustomEvent<UpdateEvent>): void;
+        update?(_e: CustomEvent<UpdateEvent>): void;
     }
 }
 declare namespace Script {
@@ -95,17 +95,19 @@ declare namespace Script {
     }
 }
 declare namespace Script {
-    class EumlingData extends UpdateScriptComponent {
+    class EumlingData extends UpdateScriptComponent implements Clickable {
         static names: string[];
         name: string;
+        traits: Set<TRAIT>;
         start(_e: CustomEvent<UpdateEvent>): void;
-        update(_e: CustomEvent<UpdateEvent>): void;
+        shortTap(_pointer: Pointer): void;
+        longTap(_pointer: Pointer): void;
+        private showSelf;
     }
 }
 declare namespace Script {
-    import ƒ = FudgeCore;
     class EumlingMovement extends UpdateScriptComponent {
-        targetPosition: ƒ.Vector3;
+        private targetPosition;
         removeWhenReached: boolean;
         speed: number;
         idleTimeMSMin: number;
@@ -131,6 +133,22 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    enum TRAIT {
+        ANIMAL_LOVER = 0,
+        SOCIAL = 1,
+        NATURE_CONNECTION = 2,
+        ORGANIZED = 3,
+        ARTISTIC = 4,
+        BODY_STRENGTH = 5,
+        FINE_MOTOR_SKILLS = 6,
+        PATIENCE = 7
+    }
+}
+declare namespace Script {
+    interface Clickable {
+        shortTap?(_pointer: Pointer): void;
+        longTap?(_pointer: Pointer): void;
+    }
 }
 declare namespace Script {
     import ƒ = FudgeCore;
@@ -147,7 +165,7 @@ declare namespace Script {
         onAdd: (_element: HTMLElement) => void;
         onRemove: (_element: HTMLElement) => void;
     }
-    export function showLayer(_layer: HTMLElement, _options: Partial<LayerOptions>): void;
+    export function showLayer(_layer: HTMLElement, _options?: Partial<LayerOptions>): void;
     export function removeTopLayer(): void;
     export {};
 }
@@ -165,4 +183,35 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     function findFirstCameraInGraph(_graph: ƒ.Node): ƒ.ComponentCamera;
+    function randEnumValue<T extends object>(enumObj: T): T[keyof T];
+}
+declare namespace Script {
+    interface Category {
+        id: CATEGORY;
+        subcategories: Subcategory[];
+    }
+    interface Subcategory {
+        id: SUBCATEGORY;
+        preferredTraits: TRAIT[];
+    }
+    enum CATEGORY {
+        NATURE = 0,
+        CRAFT = 1
+    }
+    enum SUBCATEGORY {
+        ANIMALS = 0,
+        FARMING = 1,
+        GARDENING = 2,
+        MATERIAL_EXTRACTION = 3,
+        PRODUCTION = 4,
+        PROCESSING = 5
+    }
+    class Workbench extends UpdateScriptComponent implements Clickable {
+        static categories: Category[];
+        private category;
+        private subcategory;
+        shortTap(_pointer: Pointer): void;
+        longTap(_pointer: Pointer): void;
+        displayWorkbenchInfo(): void;
+    }
 }

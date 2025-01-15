@@ -399,12 +399,28 @@ var Script;
         constructor() {
             super(...arguments);
             this.name = "";
+            this.traits = new Set();
         }
         static { this.names = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst"]; }
         start(_e) {
             this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
+            while (this.traits.size < 2) {
+                this.traits.add(Script.randEnumValue(Script.TRAIT));
+            }
         }
-        update(_e) {
+        shortTap(_pointer) {
+            this.showSelf();
+        }
+        longTap(_pointer) {
+            this.node.activate(false);
+        }
+        showSelf() {
+            this.node.addComponent(Script.eumlingCamera);
+            Script.eumlingViewport.setBranch(this.node);
+            let infoOverlay = document.getElementById("eumling-info-overlay");
+            infoOverlay.querySelector("#eumling-name").innerText = this.name;
+            Script.showLayer(infoOverlay, { onRemove: () => { Script.eumlingCameraActive = false; }, onAdd: () => { Script.eumlingCameraActive = true; } });
+            this.node.getComponent(Script.EumlingAnimator).overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON);
         }
     }
     Script.EumlingData = EumlingData;
@@ -584,6 +600,20 @@ var Script;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
+    let TRAIT;
+    (function (TRAIT) {
+        TRAIT[TRAIT["ANIMAL_LOVER"] = 0] = "ANIMAL_LOVER";
+        TRAIT[TRAIT["SOCIAL"] = 1] = "SOCIAL";
+        TRAIT[TRAIT["NATURE_CONNECTION"] = 2] = "NATURE_CONNECTION";
+        TRAIT[TRAIT["ORGANIZED"] = 3] = "ORGANIZED";
+        TRAIT[TRAIT["ARTISTIC"] = 4] = "ARTISTIC";
+        TRAIT[TRAIT["BODY_STRENGTH"] = 5] = "BODY_STRENGTH";
+        TRAIT[TRAIT["FINE_MOTOR_SKILLS"] = 6] = "FINE_MOTOR_SKILLS";
+        TRAIT[TRAIT["PATIENCE"] = 7] = "PATIENCE";
+    })(TRAIT = Script.TRAIT || (Script.TRAIT = {}));
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
     var ƒ = FudgeCore;
     Script.upInput.addEventListener(Script.EVENT_POINTER.LONG, longTap);
     Script.upInput.addEventListener(Script.EVENT_POINTER.SHORT, shortTap);
@@ -593,7 +623,9 @@ var Script;
         let pickedNode = findFrontPickedObject(_e);
         if (!pickedNode)
             return;
-        pickedNode.activate(false);
+        pickedNode.getAllComponents()
+            .filter(c => !!c.longTap && c.isActive)
+            .forEach(c => c.longTap(_e.detail.pointer));
     }
     function shortTap(_e) {
         if (_e.detail.pointer.used)
@@ -601,10 +633,9 @@ var Script;
         let pickedNode = findFrontPickedObject(_e);
         if (!pickedNode)
             return;
-        let eumlingData = pickedNode.getComponent(Script.EumlingData);
-        if (eumlingData) {
-            showEumling(eumlingData);
-        }
+        pickedNode.getAllComponents()
+            .filter(c => !!c.shortTap && c.isActive)
+            .forEach(c => c.shortTap(_e.detail.pointer));
     }
     function findFrontPickedObject(_e) {
         const picks = ƒ.Picker.pickViewport(Script.viewport, new ƒ.Vector2(_e.detail.pointer.currentX, _e.detail.pointer.currentY));
@@ -625,14 +656,6 @@ var Script;
         if (pick)
             return node;
         return findPickableNodeInTree(node.getParent());
-    }
-    function showEumling(data) {
-        data.node.addComponent(Script.eumlingCamera);
-        Script.eumlingViewport.setBranch(data.node);
-        let infoOverlay = document.getElementById("eumling-info-overlay");
-        infoOverlay.querySelector("#eumling-name").innerText = data.name;
-        Script.showLayer(infoOverlay, { onRemove: () => { Script.eumlingCameraActive = false; }, onAdd: () => { Script.eumlingCameraActive = true; } });
-        data.node.getComponent(Script.EumlingAnimator).overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON);
     }
 })(Script || (Script = {}));
 var Script;
@@ -701,7 +724,7 @@ var Script;
 var Script;
 (function (Script) {
     const activeLayers = [];
-    function showLayer(_layer, _options) {
+    function showLayer(_layer, _options = {}) {
         hideTopLayer();
         activeLayers.push([_layer, _options]);
         showTopLayer();
@@ -719,6 +742,7 @@ var Script;
         layer.classList.remove("hidden");
         if (options.onAdd)
             options.onAdd(layer);
+        layer.style.zIndex = "1000";
     }
     function hideTopLayer() {
         if (activeLayers.length == 0)
@@ -727,6 +751,7 @@ var Script;
         layer.classList.add("hidden");
         if (options.onRemove)
             options.onRemove(layer);
+        layer.style.zIndex = "";
     }
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".close-button").forEach(b => {
@@ -805,5 +830,66 @@ var Script;
         return undefined;
     }
     Script.findFirstCameraInGraph = findFirstCameraInGraph;
+    function randEnumValue(enumObj) {
+        const enumValues = Object.values(enumObj);
+        const index = Math.floor(Math.random() * enumValues.length);
+        return enumValues[index];
+    }
+    Script.randEnumValue = randEnumValue;
+})(Script || (Script = {}));
+/// <reference path="../Eumlings/Traits.ts" />
+var Script;
+/// <reference path="../Eumlings/Traits.ts" />
+(function (Script) {
+    let CATEGORY;
+    (function (CATEGORY) {
+        CATEGORY[CATEGORY["NATURE"] = 0] = "NATURE";
+        CATEGORY[CATEGORY["CRAFT"] = 1] = "CRAFT";
+    })(CATEGORY = Script.CATEGORY || (Script.CATEGORY = {}));
+    let SUBCATEGORY;
+    (function (SUBCATEGORY) {
+        SUBCATEGORY[SUBCATEGORY["ANIMALS"] = 0] = "ANIMALS";
+        SUBCATEGORY[SUBCATEGORY["FARMING"] = 1] = "FARMING";
+        SUBCATEGORY[SUBCATEGORY["GARDENING"] = 2] = "GARDENING";
+        SUBCATEGORY[SUBCATEGORY["MATERIAL_EXTRACTION"] = 3] = "MATERIAL_EXTRACTION";
+        SUBCATEGORY[SUBCATEGORY["PRODUCTION"] = 4] = "PRODUCTION";
+        SUBCATEGORY[SUBCATEGORY["PROCESSING"] = 5] = "PROCESSING";
+    })(SUBCATEGORY = Script.SUBCATEGORY || (Script.SUBCATEGORY = {}));
+    class Workbench extends Script.UpdateScriptComponent {
+        constructor() {
+            super(...arguments);
+            this.category = undefined;
+            this.subcategory = undefined;
+        }
+        static { this.categories = [
+            {
+                id: CATEGORY.NATURE,
+                subcategories: [
+                    { id: SUBCATEGORY.ANIMALS, preferredTraits: [Script.TRAIT.ANIMAL_LOVER, Script.TRAIT.SOCIAL] },
+                    { id: SUBCATEGORY.FARMING, preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.GARDENING, preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ARTISTIC] },
+                ]
+            },
+            {
+                id: CATEGORY.CRAFT,
+                subcategories: [
+                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, preferredTraits: [Script.TRAIT.BODY_STRENGTH, Script.TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.PRODUCTION, preferredTraits: [Script.TRAIT.FINE_MOTOR_SKILLS, Script.TRAIT.PATIENCE] },
+                    { id: SUBCATEGORY.PROCESSING, preferredTraits: [Script.TRAIT.ARTISTIC, Script.TRAIT.FINE_MOTOR_SKILLS] },
+                ]
+            },
+        ]; }
+        shortTap(_pointer) {
+            this.displayWorkbenchInfo();
+        }
+        longTap(_pointer) {
+            this.displayWorkbenchInfo();
+        }
+        displayWorkbenchInfo() {
+            const overlay = document.getElementById("workbench-info-overlay");
+            Script.showLayer(overlay);
+        }
+    }
+    Script.Workbench = Workbench;
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

@@ -7,8 +7,9 @@ namespace Script {
         if (_e.detail.pointer.used) return;
         let pickedNode = findFrontPickedObject(_e);
         if (!pickedNode) return;
-        pickedNode.activate(false);
-
+        pickedNode.getAllComponents()
+            .filter(c => !!(<Clickable>c).longTap && c.isActive)
+            .forEach(c => (<Clickable>c).longTap(_e.detail.pointer));
     }
 
     function shortTap(_e: CustomEvent<UnifiedPointerEvent>) {
@@ -16,10 +17,9 @@ namespace Script {
         let pickedNode = findFrontPickedObject(_e);
         if (!pickedNode) return;
 
-        let eumlingData = pickedNode.getComponent(EumlingData);
-        if (eumlingData) {
-            showEumling(eumlingData);
-        }
+        pickedNode.getAllComponents()
+            .filter(c => !!(<Clickable>c).shortTap && c.isActive)
+            .forEach(c => (<Clickable>c).shortTap(_e.detail.pointer));
     }
 
     function findFrontPickedObject(_e: CustomEvent<UnifiedPointerEvent>): ƒ.Node | undefined {
@@ -42,13 +42,8 @@ namespace Script {
         return findPickableNodeInTree(node.getParent());
     }
 
-    function showEumling(data: EumlingData) {
-        data.node.addComponent(eumlingCamera);
-        eumlingViewport.setBranch(data.node);
-        let infoOverlay = document.getElementById("eumling-info-overlay");
-        (<HTMLElement>infoOverlay.querySelector("#eumling-name")).innerText = data.name;
-        showLayer(infoOverlay, { onRemove: () => { eumlingCameraActive = false; }, onAdd: () => { eumlingCameraActive = true } });
-
-        data.node.getComponent(EumlingAnimator).overlayAnimation(EumlingAnimator.ANIMATIONS.CLICKED_ON);
+    export interface Clickable {
+        shortTap?(_pointer: Pointer): void;
+        longTap?(_pointer: Pointer): void;
     }
 }
