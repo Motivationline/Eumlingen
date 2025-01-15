@@ -2,7 +2,7 @@
 
 namespace Script {
     export class EumlingData extends UpdateScriptComponent implements Clickable {
-        static names: string[] = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst"]
+        static names: string[] = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst", "Aluni", "Lyraen", "Nivrel", "Elvaris", "Sylin", "Veyla", "Auren", "Liriel", "Riva", "Moraen", "Tynel", "Lymra", "Ondis", "Floren", "Nymra", "Aeris", "Erya", "Thyra", "Nyra", "Velin", "Fenya", "Arion", "Sylva", "Caelis", "Plenna", "Quira", "Lumel", "Flimra", "Vonae", "Tivra", "Elna", "Myrel"]
         name: string = "";
         traits: Set<TRAIT> = new Set<TRAIT>();
         start(_e: CustomEvent<UpdateEvent>): void {
