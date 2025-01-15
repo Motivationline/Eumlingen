@@ -10,6 +10,8 @@ namespace Script {
         speed: number = 1;
         @ƒ.serialize(Number)
         avgIdleTimeSeconds: number = 0;
+
+        private animator: EumlingAnimator;
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -18,7 +20,7 @@ namespace Script {
         }
 
         override start() {
-            // console.log("start");
+            this.animator = this.node.getComponent(EumlingAnimator);
         };
         override update(_e: CustomEvent<UpdateEvent>) {
             if (this.targetPosition) {
@@ -26,15 +28,19 @@ namespace Script {
                     let difference = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
                     difference.normalize((this.speed / 1000) * _e.detail.deltaTime);
                     this.node.mtxLocal.translate(difference, false);
-                } else if (this.removeWhenReached) {
-                    this.targetPosition = undefined;
-                }
+                } else {
+                    if (this.removeWhenReached) {
+                        this.targetPosition = undefined;
+                    }
+                    this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.IDLE, 200);
+                } 
             } else {
                 const standingTime: number = this.avgIdleTimeSeconds * 1000;
                 if (Math.random() * standingTime < _e.detail.deltaTime){
                     this.targetPosition = this.getPositionToWalkTo();
                     let diff = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
                     this.node.mtxLocal.lookIn(diff, ƒ.Vector3.Y(1));
+                    this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WALK, 100);
                 }
             }
             // console.log("update");
@@ -46,6 +52,10 @@ namespace Script {
             let wa = walkNode.getComponent(WalkableArea);
             if (!wa) return undefined;
             return wa.getPositionInside();
+        }
+
+        public pickUp(){
+            
         }
     }
 }

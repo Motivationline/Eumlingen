@@ -67,6 +67,30 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
+    class EumlingAnimator extends UpdateScriptComponent {
+        idle: ƒ.Animation;
+        walk: ƒ.Animation;
+        clickedOn: ƒ.Animation;
+        sit: ƒ.Animation;
+        activeAnimation: EumlingAnimator.ANIMATIONS;
+        private animations;
+        private animTransition;
+        private cmpAnim;
+        start(_e: CustomEvent<UpdateEvent>): void;
+        update(_e: CustomEvent<UpdateEvent>): void;
+        transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
+    }
+    namespace EumlingAnimator {
+        enum ANIMATIONS {
+            IDLE = 0,
+            WALK = 1,
+            CLICKED_ON = 2,
+            SIT = 3
+        }
+    }
+}
+declare namespace Script {
     class EumlingData extends UpdateScriptComponent {
         static names: string[];
         name: string;
@@ -81,10 +105,12 @@ declare namespace Script {
         removeWhenReached: boolean;
         speed: number;
         avgIdleTimeSeconds: number;
+        private animator;
         constructor();
         start(): void;
         update(_e: CustomEvent<UpdateEvent>): void;
         private getPositionToWalkTo;
+        pickUp(): void;
     }
 }
 declare namespace Script {

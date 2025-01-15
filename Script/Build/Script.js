@@ -1,11 +1,4 @@
 "use strict";
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
-};
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -32,6 +25,13 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     }
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
+};
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
 };
 var Script;
 (function (Script) {
@@ -294,6 +294,87 @@ var Script;
 var Script;
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
 (function (Script) {
+    var ƒ = FudgeCore;
+    let EumlingAnimator = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = Script.UpdateScriptComponent;
+        let _instanceExtraInitializers = [];
+        let _idle_decorators;
+        let _idle_initializers = [];
+        let _walk_decorators;
+        let _walk_initializers = [];
+        let _clickedOn_decorators;
+        let _clickedOn_initializers = [];
+        let _sit_decorators;
+        let _sit_initializers = [];
+        var EumlingAnimator = class extends _classSuper {
+            static { _classThis = this; }
+            constructor() {
+                super(...arguments);
+                this.idle = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _idle_initializers, void 0));
+                this.walk = __runInitializers(this, _walk_initializers, void 0);
+                this.clickedOn = __runInitializers(this, _clickedOn_initializers, void 0);
+                this.sit = __runInitializers(this, _sit_initializers, void 0);
+                this.activeAnimation = EumlingAnimator.ANIMATIONS.IDLE;
+                this.animations = new Map();
+            }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _idle_decorators = [ƒ.serialize(ƒ.Animation)];
+                _walk_decorators = [ƒ.serialize(ƒ.Animation)];
+                _clickedOn_decorators = [ƒ.serialize(ƒ.Animation)];
+                _sit_decorators = [ƒ.serialize(ƒ.Animation)];
+                __esDecorate(null, null, _idle_decorators, { kind: "field", name: "idle", static: false, private: false, access: { has: obj => "idle" in obj, get: obj => obj.idle, set: (obj, value) => { obj.idle = value; } }, metadata: _metadata }, _idle_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _walk_decorators, { kind: "field", name: "walk", static: false, private: false, access: { has: obj => "walk" in obj, get: obj => obj.walk, set: (obj, value) => { obj.walk = value; } }, metadata: _metadata }, _walk_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _clickedOn_decorators, { kind: "field", name: "clickedOn", static: false, private: false, access: { has: obj => "clickedOn" in obj, get: obj => obj.clickedOn, set: (obj, value) => { obj.clickedOn = value; } }, metadata: _metadata }, _clickedOn_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _sit_decorators, { kind: "field", name: "sit", static: false, private: false, access: { has: obj => "sit" in obj, get: obj => obj.sit, set: (obj, value) => { obj.sit = value; } }, metadata: _metadata }, _sit_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                EumlingAnimator = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            start(_e) {
+                this.animations.set(EumlingAnimator.ANIMATIONS.IDLE, new ƒ.AnimationNodeAnimation(this.idle));
+                this.animations.set(EumlingAnimator.ANIMATIONS.WALK, new ƒ.AnimationNodeAnimation(this.walk));
+                this.animations.set(EumlingAnimator.ANIMATIONS.CLICKED_ON, new ƒ.AnimationNodeAnimation(this.clickedOn));
+                this.animations.set(EumlingAnimator.ANIMATIONS.SIT, new ƒ.AnimationNodeAnimation(this.sit));
+                this.animTransition = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.IDLE));
+                this.cmpAnim = new ƒ.ComponentAnimationGraph(this.animTransition);
+                let importedScene = this.node.getChild(0);
+                importedScene.getComponent(ƒ.ComponentAnimation).activate(false);
+                importedScene.addComponent(this.cmpAnim);
+            }
+            update(_e) {
+                // throw new Error("Method not implemented.");
+            }
+            transitionToAnimation(_anim, _time = 300) {
+                let anim = this.animations.get(_anim);
+                if (!anim)
+                    return;
+                this.animTransition.transit(anim, _time);
+            }
+        };
+        return EumlingAnimator = _classThis;
+    })();
+    Script.EumlingAnimator = EumlingAnimator;
+    (function (EumlingAnimator) {
+        let ANIMATIONS;
+        (function (ANIMATIONS) {
+            ANIMATIONS[ANIMATIONS["IDLE"] = 0] = "IDLE";
+            ANIMATIONS[ANIMATIONS["WALK"] = 1] = "WALK";
+            ANIMATIONS[ANIMATIONS["CLICKED_ON"] = 2] = "CLICKED_ON";
+            ANIMATIONS[ANIMATIONS["SIT"] = 3] = "SIT";
+        })(ANIMATIONS = EumlingAnimator.ANIMATIONS || (EumlingAnimator.ANIMATIONS = {}));
+    })(EumlingAnimator = Script.EumlingAnimator || (Script.EumlingAnimator = {}));
+})(Script || (Script = {}));
+/// <reference path="../Plugins/UpdateScriptComponent.ts" />
+var Script;
+/// <reference path="../Plugins/UpdateScriptComponent.ts" />
+(function (Script) {
     class EumlingData extends Script.UpdateScriptComponent {
         constructor() {
             super(...arguments);
@@ -352,7 +433,7 @@ var Script;
                     return;
             }
             start() {
-                // console.log("start");
+                this.animator = this.node.getComponent(Script.EumlingAnimator);
             }
             ;
             update(_e) {
@@ -362,8 +443,11 @@ var Script;
                         difference.normalize((this.speed / 1000) * _e.detail.deltaTime);
                         this.node.mtxLocal.translate(difference, false);
                     }
-                    else if (this.removeWhenReached) {
-                        this.targetPosition = undefined;
+                    else {
+                        if (this.removeWhenReached) {
+                            this.targetPosition = undefined;
+                        }
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 200);
                     }
                 }
                 else {
@@ -372,6 +456,7 @@ var Script;
                         this.targetPosition = this.getPositionToWalkTo();
                         let diff = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
                         this.node.mtxLocal.lookIn(diff, ƒ.Vector3.Y(1));
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WALK, 100);
                     }
                 }
                 // console.log("update");
@@ -385,6 +470,8 @@ var Script;
                 if (!wa)
                     return undefined;
                 return wa.getPositionInside();
+            }
+            pickUp() {
             }
         };
         return EumlingMovement = _classThis;

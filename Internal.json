@@ -856,6 +856,17 @@
               "active": true
             }
           }
+        ],
+        "EumlingAnimator": [
+          {
+            "Script.EumlingAnimator": {
+              "active": true,
+              "idle": "AnimationGLTF|2024-11-26T10:12:05.444Z|94426",
+              "walk": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
+              "clickedOn": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
+              "sit": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466"
+            }
+          }
         ]
       },
       "children": [
