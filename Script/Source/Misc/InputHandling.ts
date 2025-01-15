@@ -48,5 +48,7 @@ namespace Script {
         let infoOverlay = document.getElementById("eumling-info-overlay");
         (<HTMLElement>infoOverlay.querySelector("#eumling-name")).innerText = data.name;
         showLayer(infoOverlay, { onRemove: () => { eumlingCameraActive = false; }, onAdd: () => { eumlingCameraActive = true } });
+
+        data.node.getComponent(EumlingAnimator).overlayAnimation(EumlingAnimator.ANIMATIONS.CLICKED_ON);
     }
 }

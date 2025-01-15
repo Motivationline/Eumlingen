@@ -75,18 +75,22 @@ declare namespace Script {
         sit: ƒ.Animation;
         activeAnimation: EumlingAnimator.ANIMATIONS;
         private animations;
-        private animTransition;
+        private animPlaying;
+        private animOverlay;
         private cmpAnim;
         start(_e: CustomEvent<UpdateEvent>): void;
         update(_e: CustomEvent<UpdateEvent>): void;
         transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
+        private timeout;
+        overlayAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
     }
     namespace EumlingAnimator {
         enum ANIMATIONS {
-            IDLE = 0,
-            WALK = 1,
-            CLICKED_ON = 2,
-            SIT = 3
+            EMPTY = 0,
+            IDLE = 1,
+            WALK = 2,
+            CLICKED_ON = 3,
+            SIT = 4
         }
     }
 }
@@ -104,8 +108,13 @@ declare namespace Script {
         targetPosition: ƒ.Vector3;
         removeWhenReached: boolean;
         speed: number;
-        avgIdleTimeSeconds: number;
+        idleTimeMSMin: number;
+        idleTimeMSMax: number;
+        sitTimeMSMin: number;
+        sitTimeMSMax: number;
+        private state;
         private animator;
+        private nextSwapTimestamp;
         constructor();
         start(): void;
         update(_e: CustomEvent<UpdateEvent>): void;

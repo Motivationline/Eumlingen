@@ -321,6 +321,7 @@ var Script;
                 this.sit = __runInitializers(this, _sit_initializers, void 0);
                 this.activeAnimation = EumlingAnimator.ANIMATIONS.IDLE;
                 this.animations = new Map();
+                this.timeout = undefined;
             }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
@@ -338,12 +339,15 @@ var Script;
                 __runInitializers(_classThis, _classExtraInitializers);
             }
             start(_e) {
+                this.animations.set(EumlingAnimator.ANIMATIONS.EMPTY, new ƒ.AnimationNodeAnimation());
                 this.animations.set(EumlingAnimator.ANIMATIONS.IDLE, new ƒ.AnimationNodeAnimation(this.idle));
                 this.animations.set(EumlingAnimator.ANIMATIONS.WALK, new ƒ.AnimationNodeAnimation(this.walk));
-                this.animations.set(EumlingAnimator.ANIMATIONS.CLICKED_ON, new ƒ.AnimationNodeAnimation(this.clickedOn));
-                this.animations.set(EumlingAnimator.ANIMATIONS.SIT, new ƒ.AnimationNodeAnimation(this.sit));
-                this.animTransition = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.IDLE));
-                this.cmpAnim = new ƒ.ComponentAnimationGraph(this.animTransition);
+                this.animations.set(EumlingAnimator.ANIMATIONS.CLICKED_ON, new ƒ.AnimationNodeAnimation(this.clickedOn, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
+                this.animations.set(EumlingAnimator.ANIMATIONS.SIT, new ƒ.AnimationNodeAnimation(this.sit, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
+                this.animPlaying = new ƒ.AnimationNodeTransition(this.animations.get(this.activeAnimation));
+                this.animOverlay = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY));
+                let rootAnim = new ƒ.AnimationNodeBlend([this.animPlaying, this.animOverlay]);
+                this.cmpAnim = new ƒ.ComponentAnimationGraph(rootAnim);
                 let importedScene = this.node.getChild(0);
                 importedScene.getComponent(ƒ.ComponentAnimation).activate(false);
                 importedScene.addComponent(this.cmpAnim);
@@ -355,7 +359,22 @@ var Script;
                 let anim = this.animations.get(_anim);
                 if (!anim)
                     return;
-                this.animTransition.transit(anim, _time);
+                this.animPlaying.transit(anim, _time);
+                this.activeAnimation = _anim;
+            }
+            overlayAnimation(_anim, _time = 100) {
+                let anim = this.animations.get(_anim);
+                if (!anim)
+                    return;
+                this.animOverlay.transit(anim, _time);
+                if (this.timeout !== undefined) {
+                    this.timeout.clear();
+                    this.timeout = undefined;
+                }
+                this.timeout = new ƒ.Timer(ƒ.Time.game, anim.animation.totalTime, 1, () => {
+                    this.timeout = undefined;
+                    this.animOverlay.transit(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY), 100);
+                });
             }
         };
         return EumlingAnimator = _classThis;
@@ -364,10 +383,11 @@ var Script;
     (function (EumlingAnimator) {
         let ANIMATIONS;
         (function (ANIMATIONS) {
-            ANIMATIONS[ANIMATIONS["IDLE"] = 0] = "IDLE";
-            ANIMATIONS[ANIMATIONS["WALK"] = 1] = "WALK";
-            ANIMATIONS[ANIMATIONS["CLICKED_ON"] = 2] = "CLICKED_ON";
-            ANIMATIONS[ANIMATIONS["SIT"] = 3] = "SIT";
+            ANIMATIONS[ANIMATIONS["EMPTY"] = 0] = "EMPTY";
+            ANIMATIONS[ANIMATIONS["IDLE"] = 1] = "IDLE";
+            ANIMATIONS[ANIMATIONS["WALK"] = 2] = "WALK";
+            ANIMATIONS[ANIMATIONS["CLICKED_ON"] = 3] = "CLICKED_ON";
+            ANIMATIONS[ANIMATIONS["SIT"] = 4] = "SIT";
         })(ANIMATIONS = EumlingAnimator.ANIMATIONS || (EumlingAnimator.ANIMATIONS = {}));
     })(EumlingAnimator = Script.EumlingAnimator || (Script.EumlingAnimator = {}));
 })(Script || (Script = {}));
@@ -406,18 +426,30 @@ var Script;
         let _removeWhenReached_initializers = [];
         let _speed_decorators;
         let _speed_initializers = [];
-        let _avgIdleTimeSeconds_decorators;
-        let _avgIdleTimeSeconds_initializers = [];
+        let _idleTimeMSMin_decorators;
+        let _idleTimeMSMin_initializers = [];
+        let _idleTimeMSMax_decorators;
+        let _idleTimeMSMax_initializers = [];
+        let _sitTimeMSMin_decorators;
+        let _sitTimeMSMin_initializers = [];
+        let _sitTimeMSMax_decorators;
+        let _sitTimeMSMax_initializers = [];
         var EumlingMovement = class extends _classSuper {
             static { _classThis = this; }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
                 _removeWhenReached_decorators = [ƒ.serialize(Boolean)];
                 _speed_decorators = [ƒ.serialize(Number)];
-                _avgIdleTimeSeconds_decorators = [ƒ.serialize(Number)];
+                _idleTimeMSMin_decorators = [ƒ.serialize(Number)];
+                _idleTimeMSMax_decorators = [ƒ.serialize(Number)];
+                _sitTimeMSMin_decorators = [ƒ.serialize(Number)];
+                _sitTimeMSMax_decorators = [ƒ.serialize(Number)];
                 __esDecorate(null, null, _removeWhenReached_decorators, { kind: "field", name: "removeWhenReached", static: false, private: false, access: { has: obj => "removeWhenReached" in obj, get: obj => obj.removeWhenReached, set: (obj, value) => { obj.removeWhenReached = value; } }, metadata: _metadata }, _removeWhenReached_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _speed_decorators, { kind: "field", name: "speed", static: false, private: false, access: { has: obj => "speed" in obj, get: obj => obj.speed, set: (obj, value) => { obj.speed = value; } }, metadata: _metadata }, _speed_initializers, _instanceExtraInitializers);
-                __esDecorate(null, null, _avgIdleTimeSeconds_decorators, { kind: "field", name: "avgIdleTimeSeconds", static: false, private: false, access: { has: obj => "avgIdleTimeSeconds" in obj, get: obj => obj.avgIdleTimeSeconds, set: (obj, value) => { obj.avgIdleTimeSeconds = value; } }, metadata: _metadata }, _avgIdleTimeSeconds_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _idleTimeMSMin_decorators, { kind: "field", name: "idleTimeMSMin", static: false, private: false, access: { has: obj => "idleTimeMSMin" in obj, get: obj => obj.idleTimeMSMin, set: (obj, value) => { obj.idleTimeMSMin = value; } }, metadata: _metadata }, _idleTimeMSMin_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _idleTimeMSMax_decorators, { kind: "field", name: "idleTimeMSMax", static: false, private: false, access: { has: obj => "idleTimeMSMax" in obj, get: obj => obj.idleTimeMSMax, set: (obj, value) => { obj.idleTimeMSMax = value; } }, metadata: _metadata }, _idleTimeMSMax_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _sitTimeMSMin_decorators, { kind: "field", name: "sitTimeMSMin", static: false, private: false, access: { has: obj => "sitTimeMSMin" in obj, get: obj => obj.sitTimeMSMin, set: (obj, value) => { obj.sitTimeMSMin = value; } }, metadata: _metadata }, _sitTimeMSMin_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _sitTimeMSMax_decorators, { kind: "field", name: "sitTimeMSMax", static: false, private: false, access: { has: obj => "sitTimeMSMax" in obj, get: obj => obj.sitTimeMSMax, set: (obj, value) => { obj.sitTimeMSMax = value; } }, metadata: _metadata }, _sitTimeMSMax_initializers, _instanceExtraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 EumlingMovement = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -428,38 +460,72 @@ var Script;
                 this.targetPosition = (__runInitializers(this, _instanceExtraInitializers), void 0);
                 this.removeWhenReached = __runInitializers(this, _removeWhenReached_initializers, true);
                 this.speed = __runInitializers(this, _speed_initializers, 1);
-                this.avgIdleTimeSeconds = __runInitializers(this, _avgIdleTimeSeconds_initializers, 0);
+                this.idleTimeMSMin = __runInitializers(this, _idleTimeMSMin_initializers, 1000);
+                this.idleTimeMSMax = __runInitializers(this, _idleTimeMSMax_initializers, 5000);
+                this.sitTimeMSMin = __runInitializers(this, _sitTimeMSMin_initializers, 5000);
+                this.sitTimeMSMax = __runInitializers(this, _sitTimeMSMax_initializers, 10000);
+                this.state = STATE.IDLE;
+                this.nextSwapTimestamp = 0;
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                     return;
             }
             start() {
                 this.animator = this.node.getComponent(Script.EumlingAnimator);
+                this.nextSwapTimestamp = ƒ.Time.game.get() + this.idleTimeMSMin;
             }
             ;
             update(_e) {
-                if (this.targetPosition) {
-                    if (!this.targetPosition.equals(this.node.mtxWorld.translation, this.speed * 2)) {
-                        let difference = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
-                        difference.normalize((this.speed / 1000) * _e.detail.deltaTime);
-                        this.node.mtxLocal.translate(difference, false);
-                    }
-                    else {
-                        if (this.removeWhenReached) {
-                            this.targetPosition = undefined;
+                let now = ƒ.Time.game.get();
+                switch (this.state) {
+                    case STATE.IDLE:
+                        {
+                            if (now > this.nextSwapTimestamp) {
+                                if (Math.random() < 0.3) {
+                                    this.state = STATE.SIT;
+                                    this.nextSwapTimestamp = now + this.sitTimeMSMin + Math.random() * (this.sitTimeMSMax - this.sitTimeMSMin);
+                                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.SIT, 100);
+                                }
+                                else {
+                                    this.targetPosition = this.getPositionToWalkTo();
+                                    if (!this.targetPosition)
+                                        break;
+                                    this.state = STATE.WALK;
+                                    let diff = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
+                                    this.node.mtxLocal.lookIn(diff, ƒ.Vector3.Y(1));
+                                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WALK, 100);
+                                }
+                            }
                         }
-                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 200);
-                    }
+                        break;
+                    case STATE.SIT:
+                        {
+                            if (now > this.nextSwapTimestamp) {
+                                this.state = STATE.IDLE;
+                                this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
+                                this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 300);
+                            }
+                        }
+                        break;
+                    case STATE.WALK:
+                        {
+                            if (!this.targetPosition.equals(this.node.mtxWorld.translation, this.speed * 2)) {
+                                let difference = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
+                                difference.normalize((this.speed / 1000) * _e.detail.deltaTime);
+                                this.node.mtxLocal.translate(difference, false);
+                            }
+                            else {
+                                if (this.removeWhenReached) {
+                                    this.targetPosition = undefined;
+                                }
+                                this.state = STATE.IDLE;
+                                this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
+                                this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 200);
+                            }
+                        }
+                        break;
+                    case STATE.WORK:
+                        break;
                 }
-                else {
-                    const standingTime = this.avgIdleTimeSeconds * 1000;
-                    if (Math.random() * standingTime < _e.detail.deltaTime) {
-                        this.targetPosition = this.getPositionToWalkTo();
-                        let diff = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
-                        this.node.mtxLocal.lookIn(diff, ƒ.Vector3.Y(1));
-                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WALK, 100);
-                    }
-                }
-                // console.log("update");
             }
             ;
             getPositionToWalkTo() {
@@ -469,7 +535,13 @@ var Script;
                 let wa = walkNode.getComponent(Script.WalkableArea);
                 if (!wa)
                     return undefined;
-                return wa.getPositionInside();
+                for (let i = 0; i < 10; i++) {
+                    let newPos = wa.getPositionInside();
+                    if (ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation).magnitudeSquared > 3) {
+                        return newPos;
+                    }
+                }
+                return undefined;
             }
             pickUp() {
             }
@@ -477,6 +549,13 @@ var Script;
         return EumlingMovement = _classThis;
     })();
     Script.EumlingMovement = EumlingMovement;
+    let STATE;
+    (function (STATE) {
+        STATE[STATE["IDLE"] = 0] = "IDLE";
+        STATE[STATE["SIT"] = 1] = "SIT";
+        STATE[STATE["WALK"] = 2] = "WALK";
+        STATE[STATE["WORK"] = 3] = "WORK";
+    })(STATE || (STATE = {}));
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -553,6 +632,7 @@ var Script;
         let infoOverlay = document.getElementById("eumling-info-overlay");
         infoOverlay.querySelector("#eumling-name").innerText = data.name;
         Script.showLayer(infoOverlay, { onRemove: () => { Script.eumlingCameraActive = false; }, onAdd: () => { Script.eumlingCameraActive = true; } });
+        data.node.getComponent(Script.EumlingAnimator).overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON);
     }
 })(Script || (Script = {}));
 var Script;
