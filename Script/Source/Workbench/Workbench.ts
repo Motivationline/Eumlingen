@@ -139,6 +139,7 @@ namespace Script {
                 let found = cat.subcategories.find(c => c.id === _id);
                 if (found) return found;
             }
+            return undefined;
         }
     }
 

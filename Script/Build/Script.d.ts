@@ -19,6 +19,7 @@ declare namespace Script {
         longTapTimeout: number;
         short: boolean;
         used?: boolean;
+        ended?: boolean;
     }
     enum EVENT_POINTER {
         /** A pointer enters the html element */
@@ -51,6 +52,7 @@ declare namespace Script {
     let viewport: ƒ.Viewport;
     const upInput: UnifiedPointerInput;
     let eumlingCameraActive: boolean;
+    const gravity: number;
     const eumlingCamera: ƒ.ComponentCamera;
     const eumlingViewport: ƒ.Viewport;
 }
@@ -101,12 +103,11 @@ declare namespace Script {
         traits: Set<TRAIT>;
         start(_e: CustomEvent<UpdateEvent>): void;
         shortTap(_pointer: Pointer): void;
-        longTap(_pointer: Pointer): void;
         private showSelf;
     }
 }
 declare namespace Script {
-    class EumlingMovement extends UpdateScriptComponent {
+    class EumlingMovement extends UpdateScriptComponent implements Clickable {
         private targetPosition;
         removeWhenReached: boolean;
         speed: number;
@@ -117,11 +118,16 @@ declare namespace Script {
         private state;
         private animator;
         private nextSwapTimestamp;
+        private pointer;
+        private walkArea;
+        private fallSpeed;
         constructor();
         start(): void;
         update(_e: CustomEvent<UpdateEvent>): void;
+        private setState;
         private getPositionToWalkTo;
-        pickUp(): void;
+        private findPickPosition;
+        longTap(_pointer: Pointer): void;
     }
 }
 declare namespace Script {
@@ -177,6 +183,11 @@ declare namespace Script {
         depth: number;
         constructor();
         getPositionInside(): ƒ.Vector3;
+        get minX(): number;
+        get maxX(): number;
+        get Y(): number;
+        get minZ(): number;
+        get maxZ(): number;
         drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void;
     }
 }

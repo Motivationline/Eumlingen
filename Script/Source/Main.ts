@@ -9,6 +9,7 @@ namespace Script {
 
   export const upInput = new UnifiedPointerInput();
   export let eumlingCameraActive: boolean = false;
+  export const gravity: number = 1;
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;

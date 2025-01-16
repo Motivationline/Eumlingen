@@ -17,10 +17,6 @@ namespace Script {
             this.showSelf();
         }
 
-        longTap(_pointer: Pointer): void {
-            this.node.activate(false);
-        }
-
         private showSelf() {
             this.node.addComponent(eumlingCamera);
             eumlingViewport.setBranch(this.node);

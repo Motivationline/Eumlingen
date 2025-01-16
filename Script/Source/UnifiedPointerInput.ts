@@ -11,6 +11,7 @@ namespace Script {
         longTapTimeout: number,
         short: boolean,
         used?: boolean,
+        ended?: boolean,
     }
     export enum EVENT_POINTER {
         /** A pointer enters the html element */
@@ -56,6 +57,7 @@ namespace Script {
                 if (existingPointer.short)
                     this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.SHORT, { detail: { pointer: existingPointer } }));
                 clearTimeout(existingPointer.longTapTimeout);
+                existingPointer.ended = true;
                 this.pointers.delete(existingPointer.id);
             }
         }

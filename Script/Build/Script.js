@@ -107,6 +107,7 @@ var Script;
                     if (existingPointer.short)
                         this.dispatchEvent(new CustomEvent(EVENT_POINTER.SHORT, { detail: { pointer: existingPointer } }));
                     clearTimeout(existingPointer.longTapTimeout);
+                    existingPointer.ended = true;
                     this.pointers.delete(existingPointer.id);
                 }
             };
@@ -168,6 +169,7 @@ var Script;
     document.addEventListener("interactiveViewportStarted", start);
     Script.upInput = new Script.UnifiedPointerInput();
     Script.eumlingCameraActive = false;
+    Script.gravity = 1;
     function start(_event) {
         Script.viewport = _event.detail;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
@@ -411,9 +413,6 @@ var Script;
         shortTap(_pointer) {
             this.showSelf();
         }
-        longTap(_pointer) {
-            this.node.activate(false);
-        }
         showSelf() {
             this.node.addComponent(Script.eumlingCamera);
             Script.eumlingViewport.setBranch(this.node);
@@ -482,12 +481,15 @@ var Script;
                 this.sitTimeMSMax = __runInitializers(this, _sitTimeMSMax_initializers, 10000);
                 this.state = STATE.IDLE;
                 this.nextSwapTimestamp = 0;
+                this.fallSpeed = 0;
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                     return;
             }
             start() {
                 this.animator = this.node.getComponent(Script.EumlingAnimator);
                 this.nextSwapTimestamp = ƒ.Time.game.get() + this.idleTimeMSMin;
+                let walkNode = this.node.getParent();
+                this.walkArea = walkNode?.getComponent(Script.WalkableArea);
             }
             ;
             update(_e) {
@@ -497,18 +499,14 @@ var Script;
                         {
                             if (now > this.nextSwapTimestamp) {
                                 if (Math.random() < 0.3) {
-                                    this.state = STATE.SIT;
+                                    this.setState(STATE.SIT);
                                     this.nextSwapTimestamp = now + this.sitTimeMSMin + Math.random() * (this.sitTimeMSMax - this.sitTimeMSMin);
-                                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.SIT, 100);
                                 }
                                 else {
                                     this.targetPosition = this.getPositionToWalkTo();
                                     if (!this.targetPosition)
                                         break;
-                                    this.state = STATE.WALK;
-                                    let diff = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
-                                    this.node.mtxLocal.lookIn(diff, ƒ.Vector3.Y(1));
-                                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WALK, 100);
+                                    this.setState(STATE.WALK);
                                 }
                             }
                         }
@@ -516,9 +514,8 @@ var Script;
                     case STATE.SIT:
                         {
                             if (now > this.nextSwapTimestamp) {
-                                this.state = STATE.IDLE;
+                                this.setState(STATE.IDLE);
                                 this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
-                                this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 300);
                             }
                         }
                         break;
@@ -528,38 +525,88 @@ var Script;
                                 let difference = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
                                 difference.normalize((this.speed / 1000) * _e.detail.deltaTime);
                                 this.node.mtxLocal.translate(difference, false);
+                                this.node.mtxLocal.lookIn(difference, ƒ.Vector3.Y(1));
                             }
                             else {
                                 if (this.removeWhenReached) {
                                     this.targetPosition = undefined;
                                 }
-                                this.state = STATE.IDLE;
+                                this.setState(STATE.IDLE);
                                 this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
-                                this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 200);
                             }
                         }
                         break;
                     case STATE.WORK:
                         break;
+                    case STATE.PICKED:
+                        {
+                            this.node.mtxLocal.lookIn(Script.viewport.camera.mtxWorld.translation, ƒ.Vector3.Y(1));
+                            let newPos = this.findPickPosition();
+                            this.node.mtxLocal.translation = (ƒ.Vector3.SUM(this.node.mtxLocal.translation, ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation)));
+                            if (this.pointer.ended) {
+                                this.pointer = undefined;
+                                this.setState(STATE.FALL);
+                            }
+                        }
+                        break;
+                    case STATE.FALL:
+                        {
+                            this.fallSpeed += Script.gravity * _e.detail.deltaTime / 1000;
+                            this.node.mtxLocal.translateY(-this.fallSpeed);
+                            if (this.node.mtxLocal.translation.y < 0) {
+                                this.node.mtxLocal.translateY(0 - this.node.mtxLocal.translation.y);
+                                this.fallSpeed = 0;
+                                this.setState(STATE.IDLE);
+                            }
+                        }
+                        break;
                 }
             }
             ;
+            setState(_state) {
+                this.state = _state;
+                switch (_state) {
+                    case STATE.IDLE:
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 300);
+                        break;
+                    case STATE.FALL:
+                        break;
+                    case STATE.SIT:
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.SIT, 100);
+                        break;
+                    case STATE.WALK:
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WALK, 100);
+                        break;
+                    case STATE.PICKED:
+                        this.animator.overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON, 100);
+                        break;
+                    case STATE.WORK:
+                        break;
+                }
+            }
             getPositionToWalkTo() {
-                let walkNode = this.node.getParent();
-                if (!walkNode)
-                    return undefined;
-                let wa = walkNode.getComponent(Script.WalkableArea);
-                if (!wa)
-                    return undefined;
                 for (let i = 0; i < 10; i++) {
-                    let newPos = wa.getPositionInside();
+                    let newPos = this.walkArea.getPositionInside();
                     if (ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation).magnitudeSquared > 3) {
                         return newPos;
                     }
                 }
                 return undefined;
             }
-            pickUp() {
+            findPickPosition() {
+                const ray = Script.viewport.getRayFromClient(new ƒ.Vector2(this.pointer.currentX, this.pointer.currentY));
+                const planePos = new ƒ.Vector3(this.walkArea.minX, this.walkArea.Y, this.walkArea.maxZ);
+                let pos = ray.intersectPlane(planePos, ƒ.Vector3.Z(1));
+                // clean up pos to stay inside walkable area
+                pos.x = Math.max(this.walkArea.minX, Math.min(this.walkArea.maxX, pos.x));
+                pos.y = Math.max(this.walkArea.Y, pos.y);
+                pos.z = Math.max(this.walkArea.minZ, Math.min(this.walkArea.maxZ, pos.z));
+                return pos;
+            }
+            longTap(_pointer) {
+                debugger;
+                this.state = STATE.PICKED;
+                this.pointer = _pointer;
             }
         };
         return EumlingMovement = _classThis;
@@ -568,9 +615,11 @@ var Script;
     let STATE;
     (function (STATE) {
         STATE[STATE["IDLE"] = 0] = "IDLE";
-        STATE[STATE["SIT"] = 1] = "SIT";
-        STATE[STATE["WALK"] = 2] = "WALK";
-        STATE[STATE["WORK"] = 3] = "WORK";
+        STATE[STATE["FALL"] = 1] = "FALL";
+        STATE[STATE["SIT"] = 2] = "SIT";
+        STATE[STATE["WALK"] = 3] = "WALK";
+        STATE[STATE["PICKED"] = 4] = "PICKED";
+        STATE[STATE["WORK"] = 5] = "WORK";
     })(STATE || (STATE = {}));
 })(Script || (Script = {}));
 var Script;
@@ -800,6 +849,21 @@ var Script;
             getPositionInside() {
                 return ƒ.Vector3.SUM(this.node.mtxWorld.translation, new ƒ.Vector3(this.width * Math.random(), 0, this.depth * Math.random()));
             }
+            get minX() {
+                return this.node.mtxWorld.translation.x;
+            }
+            get maxX() {
+                return this.node.mtxWorld.translation.x + this.width;
+            }
+            get Y() {
+                return this.node.mtxWorld.translation.y;
+            }
+            get minZ() {
+                return this.node.mtxWorld.translation.z;
+            }
+            get maxZ() {
+                return this.node.mtxWorld.translation.z + this.depth;
+            }
             drawGizmos(_cmpCamera) {
                 const corners = [
                     this.node.mtxWorld.translation,
@@ -959,6 +1023,7 @@ var Script;
                 if (found)
                     return found;
             }
+            return undefined;
         }
     }
     Script.Workbench = Workbench;

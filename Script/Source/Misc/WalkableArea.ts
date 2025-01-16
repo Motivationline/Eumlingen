@@ -20,6 +20,22 @@ namespace Script {
             return ƒ.Vector3.SUM(this.node.mtxWorld.translation, new ƒ.Vector3(this.width * Math.random(), 0, this.depth * Math.random()))
         }
 
+        get minX(): number {
+            return this.node.mtxWorld.translation.x;
+        }
+        get maxX(): number {
+            return this.node.mtxWorld.translation.x + this.width;
+        }
+        get Y(): number {
+            return this.node.mtxWorld.translation.y;
+        }
+        get minZ(): number {
+            return this.node.mtxWorld.translation.z;
+        }
+        get maxZ(): number {
+            return this.node.mtxWorld.translation.z + this.depth;
+        }
+
 
         drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void {
             const corners = [
