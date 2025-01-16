@@ -3,7 +3,6 @@ namespace Script {
     import ƒ = FudgeCore;
     @ƒ.serialize
     export class EumlingMovement extends UpdateScriptComponent implements Clickable {
-        private targetPosition: ƒ.Vector3;
         @ƒ.serialize(Boolean)
         removeWhenReached: boolean = true;
         @ƒ.serialize(Number)
@@ -17,12 +16,14 @@ namespace Script {
         @ƒ.serialize(Number)
         sitTimeMSMax: number = 10000;
 
+        private targetPosition: ƒ.Vector3;
         private state: STATE = STATE.IDLE;
         private animator: EumlingAnimator;
         private nextSwapTimestamp: number = 0;
         private pointer: Pointer;
         private walkArea: WalkableArea;
         private fallSpeed: number = 0;
+
         constructor() {
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -33,7 +34,7 @@ namespace Script {
         override start() {
             this.animator = this.node.getComponent(EumlingAnimator);
             this.nextSwapTimestamp = ƒ.Time.game.get() + this.idleTimeMSMin;
-            
+
             let walkNode = this.node.getParent();
             this.walkArea = walkNode?.getComponent(WalkableArea);
         };
@@ -86,8 +87,15 @@ namespace Script {
                         let newPos = this.findPickPosition();
                         this.node.mtxLocal.translation = (ƒ.Vector3.SUM(this.node.mtxLocal.translation, ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation)));
                         if (this.pointer.ended) {
-                            this.pointer = undefined;
                             this.setState(STATE.FALL);
+                            let pointer = this.pointer;
+                            this.pointer = undefined;
+
+                            //check if dropped over workbench
+                            let pickedNodes = findAllPickedObjects(pointer);
+                            let wb = pickedNodes.find(n => !!n.getComponent(Workbench))
+                            if (!wb) break;
+                            this.node.getComponent(EumlingWork).assign(wb.getComponent(Workbench));
                         }
                     }
                     break;
@@ -105,13 +113,15 @@ namespace Script {
             }
         };
 
-        private setState(_state: STATE) {
+        setState(_state: STATE) {
+            console.log("state change", this.state, "to", _state);
             this.state = _state;
             switch (_state) {
                 case STATE.IDLE:
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.IDLE, 300);
                     break;
                 case STATE.FALL:
+                    this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.FALL, 300);
                     break;
                 case STATE.SIT:
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.SIT, 100);
@@ -120,9 +130,10 @@ namespace Script {
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WALK, 100);
                     break;
                 case STATE.PICKED:
-                    this.animator.overlayAnimation(EumlingAnimator.ANIMATIONS.CLICKED_ON, 100);
+                    this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.PICKED, 100);
                     break;
                 case STATE.WORK:
+                    this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.IDLE, 100);
                     break;
             }
         }
@@ -145,19 +156,33 @@ namespace Script {
             // clean up pos to stay inside walkable area
 
             pos.x = Math.max(this.walkArea.minX, Math.min(this.walkArea.maxX, pos.x));
-            pos.y = Math.max(this.walkArea.Y, pos.y);
+            pos.y = Math.max(this.walkArea.Y, pos.y - this.node.radius * 0.8);
             pos.z = Math.max(this.walkArea.minZ, Math.min(this.walkArea.maxZ, pos.z));
 
             return pos;
         }
 
         longTap(_pointer: Pointer): void {
-            debugger;
-            this.state = STATE.PICKED;
+            this.setState(STATE.PICKED);
             this.pointer = _pointer;
         }
+
+        walkAway() {
+            this.targetPosition = this.getPositionToWalkTo();
+            if (!this.targetPosition) this.walkAway(); //dangerous but probably not an issue
+            this.setState(STATE.WALK);
+        }
+
+        walkTo(_pos: ƒ.Vector3) {
+            this.targetPosition = ƒ.Vector3.DIFFERENCE(_pos, this.walkArea.node.mtxWorld.translation);
+            this.setState(STATE.WALK);
+        }
+
+        teleportTo(_pos: ƒ.Vector3) {
+            this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
+        }
     }
-    enum STATE {
+    export enum STATE {
         IDLE,
         FALL,
         SIT,

@@ -43,6 +43,7 @@ namespace Script {
 
 
         private hndPointerDown = (_event: PointerEvent) => {
+            _event.preventDefault();
             let existingPointer = this.getPointer(_event.pointerId);
             if (!existingPointer)
                 existingPointer = this.createPointerFromPointer(_event);
@@ -50,6 +51,7 @@ namespace Script {
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
         }
         private hndPointerUp = (_event: PointerEvent) => {
+            _event.preventDefault();
             let existingPointer = this.getPointer(_event.pointerId);
             if (existingPointer) {
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
@@ -62,6 +64,7 @@ namespace Script {
             }
         }
         private hndPointerMove = (_event: PointerEvent) => {
+            _event.preventDefault();
             let existingPointer = this.getPointer(_event.pointerId);
             if (!existingPointer)
                 return;

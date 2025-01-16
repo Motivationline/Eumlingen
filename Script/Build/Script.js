@@ -93,6 +93,7 @@ var Script;
             super(...arguments);
             this.pointers = new Map();
             this.hndPointerDown = (_event) => {
+                _event.preventDefault();
                 let existingPointer = this.getPointer(_event.pointerId);
                 if (!existingPointer)
                     existingPointer = this.createPointerFromPointer(_event);
@@ -100,6 +101,7 @@ var Script;
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
             };
             this.hndPointerUp = (_event) => {
+                _event.preventDefault();
                 let existingPointer = this.getPointer(_event.pointerId);
                 if (existingPointer) {
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
@@ -112,6 +114,7 @@ var Script;
                 }
             };
             this.hndPointerMove = (_event) => {
+                _event.preventDefault();
                 let existingPointer = this.getPointer(_event.pointerId);
                 if (!existingPointer)
                     return;
@@ -313,6 +316,10 @@ var Script;
         let _clickedOn_initializers = [];
         let _sit_decorators;
         let _sit_initializers = [];
+        let _pick_decorators;
+        let _pick_initializers = [];
+        let _fall_decorators;
+        let _fall_initializers = [];
         var EumlingAnimator = class extends _classSuper {
             static { _classThis = this; }
             constructor() {
@@ -321,6 +328,8 @@ var Script;
                 this.walk = __runInitializers(this, _walk_initializers, void 0);
                 this.clickedOn = __runInitializers(this, _clickedOn_initializers, void 0);
                 this.sit = __runInitializers(this, _sit_initializers, void 0);
+                this.pick = __runInitializers(this, _pick_initializers, void 0);
+                this.fall = __runInitializers(this, _fall_initializers, void 0);
                 this.activeAnimation = EumlingAnimator.ANIMATIONS.IDLE;
                 this.animations = new Map();
                 this.timeout = undefined;
@@ -331,10 +340,14 @@ var Script;
                 _walk_decorators = [ƒ.serialize(ƒ.Animation)];
                 _clickedOn_decorators = [ƒ.serialize(ƒ.Animation)];
                 _sit_decorators = [ƒ.serialize(ƒ.Animation)];
+                _pick_decorators = [ƒ.serialize(ƒ.Animation)];
+                _fall_decorators = [ƒ.serialize(ƒ.Animation)];
                 __esDecorate(null, null, _idle_decorators, { kind: "field", name: "idle", static: false, private: false, access: { has: obj => "idle" in obj, get: obj => obj.idle, set: (obj, value) => { obj.idle = value; } }, metadata: _metadata }, _idle_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _walk_decorators, { kind: "field", name: "walk", static: false, private: false, access: { has: obj => "walk" in obj, get: obj => obj.walk, set: (obj, value) => { obj.walk = value; } }, metadata: _metadata }, _walk_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _clickedOn_decorators, { kind: "field", name: "clickedOn", static: false, private: false, access: { has: obj => "clickedOn" in obj, get: obj => obj.clickedOn, set: (obj, value) => { obj.clickedOn = value; } }, metadata: _metadata }, _clickedOn_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _sit_decorators, { kind: "field", name: "sit", static: false, private: false, access: { has: obj => "sit" in obj, get: obj => obj.sit, set: (obj, value) => { obj.sit = value; } }, metadata: _metadata }, _sit_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _pick_decorators, { kind: "field", name: "pick", static: false, private: false, access: { has: obj => "pick" in obj, get: obj => obj.pick, set: (obj, value) => { obj.pick = value; } }, metadata: _metadata }, _pick_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _fall_decorators, { kind: "field", name: "fall", static: false, private: false, access: { has: obj => "fall" in obj, get: obj => obj.fall, set: (obj, value) => { obj.fall = value; } }, metadata: _metadata }, _fall_initializers, _instanceExtraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 EumlingAnimator = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -346,6 +359,8 @@ var Script;
                 this.animations.set(EumlingAnimator.ANIMATIONS.WALK, new ƒ.AnimationNodeAnimation(this.walk));
                 this.animations.set(EumlingAnimator.ANIMATIONS.CLICKED_ON, new ƒ.AnimationNodeAnimation(this.clickedOn, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
                 this.animations.set(EumlingAnimator.ANIMATIONS.SIT, new ƒ.AnimationNodeAnimation(this.sit, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
+                this.animations.set(EumlingAnimator.ANIMATIONS.PICKED, new ƒ.AnimationNodeAnimation(this.pick));
+                this.animations.set(EumlingAnimator.ANIMATIONS.FALL, new ƒ.AnimationNodeAnimation(this.fall));
                 this.animPlaying = new ƒ.AnimationNodeTransition(this.animations.get(this.activeAnimation));
                 this.animOverlay = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY));
                 let rootAnim = new ƒ.AnimationNodeBlend([this.animPlaying, this.animOverlay]);
@@ -389,7 +404,9 @@ var Script;
             ANIMATIONS[ANIMATIONS["IDLE"] = 1] = "IDLE";
             ANIMATIONS[ANIMATIONS["WALK"] = 2] = "WALK";
             ANIMATIONS[ANIMATIONS["CLICKED_ON"] = 3] = "CLICKED_ON";
-            ANIMATIONS[ANIMATIONS["SIT"] = 4] = "SIT";
+            ANIMATIONS[ANIMATIONS["PICKED"] = 4] = "PICKED";
+            ANIMATIONS[ANIMATIONS["FALL"] = 5] = "FALL";
+            ANIMATIONS[ANIMATIONS["SIT"] = 6] = "SIT";
         })(ANIMATIONS = EumlingAnimator.ANIMATIONS || (EumlingAnimator.ANIMATIONS = {}));
     })(EumlingAnimator = Script.EumlingAnimator || (Script.EumlingAnimator = {}));
 })(Script || (Script = {}));
@@ -472,8 +489,7 @@ var Script;
             }
             constructor() {
                 super();
-                this.targetPosition = (__runInitializers(this, _instanceExtraInitializers), void 0);
-                this.removeWhenReached = __runInitializers(this, _removeWhenReached_initializers, true);
+                this.removeWhenReached = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _removeWhenReached_initializers, true));
                 this.speed = __runInitializers(this, _speed_initializers, 1);
                 this.idleTimeMSMin = __runInitializers(this, _idleTimeMSMin_initializers, 1000);
                 this.idleTimeMSMax = __runInitializers(this, _idleTimeMSMax_initializers, 5000);
@@ -544,8 +560,15 @@ var Script;
                             let newPos = this.findPickPosition();
                             this.node.mtxLocal.translation = (ƒ.Vector3.SUM(this.node.mtxLocal.translation, ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation)));
                             if (this.pointer.ended) {
-                                this.pointer = undefined;
                                 this.setState(STATE.FALL);
+                                let pointer = this.pointer;
+                                this.pointer = undefined;
+                                //check if dropped over workbench
+                                let pickedNodes = Script.findAllPickedObjects(pointer);
+                                let wb = pickedNodes.find(n => !!n.getComponent(Script.Workbench));
+                                if (!wb)
+                                    break;
+                                this.node.getComponent(Script.EumlingWork).assign(wb.getComponent(Script.Workbench));
                             }
                         }
                         break;
@@ -564,12 +587,14 @@ var Script;
             }
             ;
             setState(_state) {
+                console.log("state change", this.state, "to", _state);
                 this.state = _state;
                 switch (_state) {
                     case STATE.IDLE:
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 300);
                         break;
                     case STATE.FALL:
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.FALL, 300);
                         break;
                     case STATE.SIT:
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.SIT, 100);
@@ -578,9 +603,10 @@ var Script;
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WALK, 100);
                         break;
                     case STATE.PICKED:
-                        this.animator.overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON, 100);
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.PICKED, 100);
                         break;
                     case STATE.WORK:
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 100);
                         break;
                 }
             }
@@ -599,14 +625,26 @@ var Script;
                 let pos = ray.intersectPlane(planePos, ƒ.Vector3.Z(1));
                 // clean up pos to stay inside walkable area
                 pos.x = Math.max(this.walkArea.minX, Math.min(this.walkArea.maxX, pos.x));
-                pos.y = Math.max(this.walkArea.Y, pos.y);
+                pos.y = Math.max(this.walkArea.Y, pos.y - this.node.radius * 0.8);
                 pos.z = Math.max(this.walkArea.minZ, Math.min(this.walkArea.maxZ, pos.z));
                 return pos;
             }
             longTap(_pointer) {
-                debugger;
-                this.state = STATE.PICKED;
+                this.setState(STATE.PICKED);
                 this.pointer = _pointer;
+            }
+            walkAway() {
+                this.targetPosition = this.getPositionToWalkTo();
+                if (!this.targetPosition)
+                    this.walkAway(); //dangerous but probably not an issue
+                this.setState(STATE.WALK);
+            }
+            walkTo(_pos) {
+                this.targetPosition = ƒ.Vector3.DIFFERENCE(_pos, this.walkArea.node.mtxWorld.translation);
+                this.setState(STATE.WALK);
+            }
+            teleportTo(_pos) {
+                this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
             }
         };
         return EumlingMovement = _classThis;
@@ -620,7 +658,7 @@ var Script;
         STATE[STATE["WALK"] = 3] = "WALK";
         STATE[STATE["PICKED"] = 4] = "PICKED";
         STATE[STATE["WORK"] = 5] = "WORK";
-    })(STATE || (STATE = {}));
+    })(STATE = Script.STATE || (Script.STATE = {}));
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -647,6 +685,53 @@ var Script;
     }
     Script.EumlingSpawner = EumlingSpawner;
 })(Script || (Script = {}));
+/// <reference path="../Plugins/UpdateScriptComponent.ts" />
+var Script;
+/// <reference path="../Plugins/UpdateScriptComponent.ts" />
+(function (Script) {
+    var ƒ = FudgeCore;
+    let EumlingWork = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = Script.UpdateScriptComponent;
+        var EumlingWork = class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                EumlingWork = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            start(_e) {
+                this.moveComp = this.node.getComponent(Script.EumlingMovement);
+            }
+            update(_e) {
+                this.work(_e.detail.deltaTime);
+            }
+            unassign() {
+                this.workbench = undefined;
+                this.moveComp.walkAway();
+            }
+            assign(_wb) {
+                _wb.work(this.node, 0);
+                this.workbench = _wb;
+                this.moveComp.teleportTo(_wb.node.mtxWorld.translation);
+                this.moveComp.setState(Script.STATE.WORK);
+            }
+            work(_timeMS) {
+                if (!this.workbench)
+                    return;
+                this.workbench.work(this.node, _timeMS);
+            }
+        };
+        return EumlingWork = _classThis;
+    })();
+    Script.EumlingWork = EumlingWork;
+})(Script || (Script = {}));
 var Script;
 (function (Script) {
     let TRAIT;
@@ -666,10 +751,11 @@ var Script;
     var ƒ = FudgeCore;
     Script.upInput.addEventListener(Script.EVENT_POINTER.LONG, longTap);
     Script.upInput.addEventListener(Script.EVENT_POINTER.SHORT, shortTap);
+    Script.upInput.addEventListener(Script.EVENT_POINTER.START, startTap);
     function longTap(_e) {
         if (_e.detail.pointer.used)
             return;
-        let pickedNode = findFrontPickedObject(_e);
+        let pickedNode = findFrontPickedObject(_e.detail.pointer);
         if (!pickedNode)
             return;
         pickedNode.getAllComponents()
@@ -679,15 +765,23 @@ var Script;
     function shortTap(_e) {
         if (_e.detail.pointer.used)
             return;
-        let pickedNode = findFrontPickedObject(_e);
+        let pickedNode = findFrontPickedObject(_e.detail.pointer);
         if (!pickedNode)
             return;
         pickedNode.getAllComponents()
             .filter(c => !!c.shortTap && c.isActive)
             .forEach(c => c.shortTap(_e.detail.pointer));
     }
-    function findFrontPickedObject(_e) {
-        const picks = ƒ.Picker.pickViewport(Script.viewport, new ƒ.Vector2(_e.detail.pointer.currentX, _e.detail.pointer.currentY));
+    function startTap(_e) {
+    }
+    function findFrontPickedObject(_p) {
+        let pickedNodes = findAllPickedObjects(_p);
+        pickedNodes.sort((a, b) => a.mtxWorld.translation.z - b.mtxWorld.translation.z);
+        return pickedNodes.pop();
+    }
+    Script.findFrontPickedObject = findFrontPickedObject;
+    function findAllPickedObjects(_pointer) {
+        const picks = ƒ.Picker.pickViewport(Script.viewport, new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
         let pickedNodes = [];
         for (let pick of picks) {
             let pickedNode = findPickableNodeInTree(pick.node);
@@ -695,9 +789,9 @@ var Script;
                 continue;
             pickedNodes.push(pickedNode);
         }
-        pickedNodes.sort((a, b) => a.mtxWorld.translation.z - b.mtxWorld.translation.z);
-        return pickedNodes.pop();
+        return pickedNodes;
     }
+    Script.findAllPickedObjects = findAllPickedObjects;
     function findPickableNodeInTree(node) {
         if (!node)
             return undefined;
@@ -907,7 +1001,7 @@ var Script;
 var Script;
 /// <reference path="../Eumlings/Traits.ts" />
 (function (Script) {
-    // import ƒ = FudgeCore;
+    var ƒ = FudgeCore;
     let CATEGORY;
     (function (CATEGORY) {
         CATEGORY[CATEGORY["NATURE"] = 1] = "NATURE";
@@ -927,6 +1021,8 @@ var Script;
             super(...arguments);
             this.category = undefined;
             this.subcategory = undefined;
+            this.buildProgress = 0;
+            this.buildSpeed = 1 / 10;
         }
         static { this.categories = [
             {
@@ -950,6 +1046,9 @@ var Script;
                 ]
             },
         ]; }
+        start(_e) {
+            this.matColor = this.node.getComponent(ƒ.ComponentMaterial).clrPrimary;
+        }
         shortTap(_pointer) {
             this.displayWorkbenchInfo();
         }
@@ -962,7 +1061,12 @@ var Script;
                 overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Kategorie", Workbench.categories);
             }
             else if (!this.subcategory) {
-                overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Spezialisierung", Workbench.categories.find(c => c.id === this.category).subcategories);
+                if (this.buildProgress < 1) {
+                    overlay = this.fillInfoOverlayWithInfo();
+                }
+                else {
+                    overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Spezialisierung", Workbench.categories.find(c => c.id === this.category).subcategories);
+                }
             }
             else {
                 overlay = this.fillInfoOverlayWithInfo();
@@ -993,10 +1097,14 @@ var Script;
         fillInfoOverlayWithInfo() {
             const overlay = document.getElementById("workbench-info-overlay");
             const info = overlay.querySelector("div#workbench-info-categories");
-            let mainCategory = Workbench.getCategoryFromId(this.category);
-            let subCategory = Workbench.getSubcategoryFromId(this.subcategory);
-            info.innerHTML = `<div class="workbench-category"><img src="${mainCategory.img}" alt="${mainCategory.name}" /><span>${mainCategory.name}</span></div>`;
-            info.innerHTML += `<div class="workbench-category"><img src="${subCategory.img}" alt="${subCategory.name}" /><span>${subCategory.name}</span></div>`;
+            let categories = [Workbench.getCategoryFromId(this.category), Workbench.getSubcategoryFromId(this.subcategory)];
+            info.innerHTML = "";
+            for (let cat of categories) {
+                if (!cat)
+                    continue;
+                info.innerHTML += `<div class="workbench-category"><img src="${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
+            }
+            overlay.querySelector("progress").value = this.buildProgress;
             overlay.querySelector("#workbench-deconstruct").addEventListener("click", () => {
                 this.resetCategory();
                 Script.removeTopLayer();
@@ -1024,6 +1132,30 @@ var Script;
                     return found;
             }
             return undefined;
+        }
+        work(_eumling, _timeMS) {
+            if (this.assignee !== _eumling) {
+                this.unassignEumling();
+                this.assignee = _eumling;
+            }
+            if (!this.category) {
+                this.unassignEumling();
+            }
+            else if (!this.subcategory) {
+                if (this.buildProgress < 1) {
+                    this.buildProgress += this.buildSpeed * _timeMS / 1000;
+                    this.matColor.b = this.buildProgress;
+                }
+                else {
+                    this.unassignEumling();
+                }
+            }
+        }
+        unassignEumling() {
+            if (!this.assignee)
+                return;
+            this.assignee.getComponent(Script.EumlingWork).unassign();
+            this.assignee = undefined;
         }
     }
     Script.Workbench = Workbench;

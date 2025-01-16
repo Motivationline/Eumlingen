@@ -1,11 +1,12 @@
 namespace Script {
     import ƒ = FudgeCore;
-    upInput.addEventListener(EVENT_POINTER.LONG, <EventListener>longTap)
-    upInput.addEventListener(EVENT_POINTER.SHORT, <EventListener>shortTap)
+    upInput.addEventListener(EVENT_POINTER.LONG, <EventListener>longTap);
+    upInput.addEventListener(EVENT_POINTER.SHORT, <EventListener>shortTap);
+    upInput.addEventListener(EVENT_POINTER.START, <EventListener>startTap);
 
     function longTap(_e: CustomEvent<UnifiedPointerEvent>) {
         if (_e.detail.pointer.used) return;
-        let pickedNode = findFrontPickedObject(_e);
+        let pickedNode = findFrontPickedObject(_e.detail.pointer);
         if (!pickedNode) return;
         pickedNode.getAllComponents()
             .filter(c => !!(<Clickable>c).longTap && c.isActive)
@@ -14,7 +15,7 @@ namespace Script {
 
     function shortTap(_e: CustomEvent<UnifiedPointerEvent>) {
         if (_e.detail.pointer.used) return;
-        let pickedNode = findFrontPickedObject(_e);
+        let pickedNode = findFrontPickedObject(_e.detail.pointer);
         if (!pickedNode) return;
 
         pickedNode.getAllComponents()
@@ -22,17 +23,26 @@ namespace Script {
             .forEach(c => (<Clickable>c).shortTap(_e.detail.pointer));
     }
 
-    function findFrontPickedObject(_e: CustomEvent<UnifiedPointerEvent>): ƒ.Node | undefined {
-        const picks = ƒ.Picker.pickViewport(viewport, new ƒ.Vector2(_e.detail.pointer.currentX, _e.detail.pointer.currentY));
+    function startTap(_e: CustomEvent<UnifiedPointerEvent>){
+
+    }
+
+    export function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined {
+        let pickedNodes = findAllPickedObjects(_p);
+        pickedNodes.sort((a, b) => a.mtxWorld.translation.z - b.mtxWorld.translation.z);
+
+        return pickedNodes.pop();
+    }
+
+    export function findAllPickedObjects(_pointer: Pointer): ƒ.Node[] {
+        const picks = ƒ.Picker.pickViewport(viewport, new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
         let pickedNodes: ƒ.Node[] = [];
         for (let pick of picks) {
             let pickedNode = findPickableNodeInTree(pick.node);
             if (!pickedNode) continue;
             pickedNodes.push(pickedNode);
         }
-        pickedNodes.sort((a, b) => a.mtxWorld.translation.z - b.mtxWorld.translation.z);
-
-        return pickedNodes.pop();
+        return pickedNodes;
     }
 
     function findPickableNodeInTree(node: ƒ.Node): ƒ.Node | undefined {

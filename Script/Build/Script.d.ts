@@ -75,6 +75,8 @@ declare namespace Script {
         walk: ƒ.Animation;
         clickedOn: ƒ.Animation;
         sit: ƒ.Animation;
+        pick: ƒ.Animation;
+        fall: ƒ.Animation;
         activeAnimation: EumlingAnimator.ANIMATIONS;
         private animations;
         private animPlaying;
@@ -92,7 +94,9 @@ declare namespace Script {
             IDLE = 1,
             WALK = 2,
             CLICKED_ON = 3,
-            SIT = 4
+            PICKED = 4,
+            FALL = 5,
+            SIT = 6
         }
     }
 }
@@ -107,14 +111,15 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
     class EumlingMovement extends UpdateScriptComponent implements Clickable {
-        private targetPosition;
         removeWhenReached: boolean;
         speed: number;
         idleTimeMSMin: number;
         idleTimeMSMax: number;
         sitTimeMSMin: number;
         sitTimeMSMax: number;
+        private targetPosition;
         private state;
         private animator;
         private nextSwapTimestamp;
@@ -124,10 +129,21 @@ declare namespace Script {
         constructor();
         start(): void;
         update(_e: CustomEvent<UpdateEvent>): void;
-        private setState;
+        setState(_state: STATE): void;
         private getPositionToWalkTo;
         private findPickPosition;
         longTap(_pointer: Pointer): void;
+        walkAway(): void;
+        walkTo(_pos: ƒ.Vector3): void;
+        teleportTo(_pos: ƒ.Vector3): void;
+    }
+    enum STATE {
+        IDLE = 0,
+        FALL = 1,
+        SIT = 2,
+        WALK = 3,
+        PICKED = 4,
+        WORK = 5
     }
 }
 declare namespace Script {
@@ -136,6 +152,17 @@ declare namespace Script {
         start(_e: CustomEvent<UpdateEvent>): void;
         update(_e: CustomEvent<UpdateEvent>): void;
         spawn: () => Promise<void>;
+    }
+}
+declare namespace Script {
+    class EumlingWork extends UpdateScriptComponent {
+        private workbench;
+        private moveComp;
+        start(_e: CustomEvent<UpdateEvent>): void;
+        update(_e: CustomEvent<UpdateEvent>): void;
+        unassign(): void;
+        assign(_wb: Workbench): void;
+        work(_timeMS: number): void;
     }
 }
 declare namespace Script {
@@ -151,6 +178,9 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
+    function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined;
+    function findAllPickedObjects(_pointer: Pointer): ƒ.Node[];
     interface Clickable {
         shortTap?(_pointer: Pointer): void;
         longTap?(_pointer: Pointer): void;
@@ -197,6 +227,7 @@ declare namespace Script {
     function randEnumValue<T extends object>(enumObj: T): T[keyof T];
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
     interface BaseCategory {
         img: string;
         name: string;
@@ -226,6 +257,11 @@ declare namespace Script {
         static categories: Category[];
         private category;
         private subcategory;
+        private buildProgress;
+        private readonly buildSpeed;
+        private assignee;
+        private matColor;
+        start(_e: CustomEvent<UpdateEvent>): void;
         shortTap(_pointer: Pointer): void;
         longTap(_pointer: Pointer): void;
         private displayWorkbenchInfo;
@@ -235,6 +271,8 @@ declare namespace Script {
         private resetCategory;
         static getCategoryFromId(_id: CATEGORY): Category;
         static getSubcategoryFromId(_id: SUBCATEGORY): Subcategory;
+        work(_eumling: ƒ.Node, _timeMS: number): void;
+        unassignEumling(): void;
     }
     export {};
 }

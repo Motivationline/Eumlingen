@@ -11,6 +11,10 @@ namespace Script {
         clickedOn: ƒ.Animation;
         @ƒ.serialize(ƒ.Animation)
         sit: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
+        pick: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
+        fall: ƒ.Animation;
 
         activeAnimation: EumlingAnimator.ANIMATIONS = EumlingAnimator.ANIMATIONS.IDLE;
 
@@ -26,6 +30,8 @@ namespace Script {
             this.animations.set(EumlingAnimator.ANIMATIONS.WALK, new ƒ.AnimationNodeAnimation(this.walk));
             this.animations.set(EumlingAnimator.ANIMATIONS.CLICKED_ON, new ƒ.AnimationNodeAnimation(this.clickedOn, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
             this.animations.set(EumlingAnimator.ANIMATIONS.SIT, new ƒ.AnimationNodeAnimation(this.sit, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
+            this.animations.set(EumlingAnimator.ANIMATIONS.PICKED, new ƒ.AnimationNodeAnimation(this.pick));
+            this.animations.set(EumlingAnimator.ANIMATIONS.FALL, new ƒ.AnimationNodeAnimation(this.fall));
 
             this.animPlaying = new ƒ.AnimationNodeTransition(this.animations.get(this.activeAnimation));
             this.animOverlay = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY));
@@ -70,6 +76,8 @@ namespace Script {
             IDLE,
             WALK,
             CLICKED_ON,
+            PICKED,
+            FALL,
             SIT,
         }
     }

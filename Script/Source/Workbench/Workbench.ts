@@ -1,7 +1,7 @@
 /// <reference path="../Eumlings/Traits.ts" />
 
 namespace Script {
-    // import ƒ = FudgeCore;
+    import ƒ = FudgeCore;
 
     interface BaseCategory {
         img: string,
@@ -58,6 +58,14 @@ namespace Script {
 
         private category: CATEGORY | undefined = undefined;
         private subcategory: SUBCATEGORY | undefined = undefined;
+        private buildProgress: number = 0;
+        private readonly buildSpeed: number = 1 / 10;
+        private assignee: ƒ.Node;
+        private matColor: ƒ.Color;
+
+        start(_e: CustomEvent<UpdateEvent>): void {
+            this.matColor = this.node.getComponent(ƒ.ComponentMaterial).clrPrimary;
+        }
 
         shortTap(_pointer: Pointer): void {
             this.displayWorkbenchInfo();
@@ -71,7 +79,11 @@ namespace Script {
             if (!this.category) {
                 overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Kategorie", Workbench.categories);
             } else if (!this.subcategory) {
-                overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Spezialisierung", Workbench.categories.find(c => c.id === this.category).subcategories);
+                if(this.buildProgress < 1){
+                    overlay = this.fillInfoOverlayWithInfo();
+                } else {
+                    overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Spezialisierung", Workbench.categories.find(c => c.id === this.category).subcategories);
+                }
             } else {
                 overlay = this.fillInfoOverlayWithInfo();
             }
@@ -107,12 +119,16 @@ namespace Script {
             const overlay = document.getElementById("workbench-info-overlay");
             const info = overlay.querySelector("div#workbench-info-categories");
 
-            let mainCategory = Workbench.getCategoryFromId(this.category);
-            let subCategory = Workbench.getSubcategoryFromId(this.subcategory);
-            info.innerHTML = `<div class="workbench-category"><img src="${mainCategory.img}" alt="${mainCategory.name}" /><span>${mainCategory.name}</span></div>`
-            info.innerHTML += `<div class="workbench-category"><img src="${subCategory.img}" alt="${subCategory.name}" /><span>${subCategory.name}</span></div>`
+            let categories = [Workbench.getCategoryFromId(this.category), Workbench.getSubcategoryFromId(this.subcategory)];
+            info.innerHTML = "";
+            for(let cat of categories){
+                if(!cat) continue;
+                info.innerHTML += `<div class="workbench-category"><img src="${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`
+            }
 
-            overlay.querySelector("#workbench-deconstruct").addEventListener("click", ()=>{
+            overlay.querySelector("progress").value = this.buildProgress;
+
+            overlay.querySelector("#workbench-deconstruct").addEventListener("click", () => {
                 this.resetCategory();
                 removeTopLayer();
             })
@@ -140,6 +156,29 @@ namespace Script {
                 if (found) return found;
             }
             return undefined;
+        }
+
+        work(_eumling: ƒ.Node, _timeMS: number) {
+            if (this.assignee !== _eumling) {
+                this.unassignEumling();
+                this.assignee = _eumling;
+            }
+            if (!this.category) {
+                this.unassignEumling();
+            } else if (!this.subcategory) {
+                if (this.buildProgress < 1) {
+                    this.buildProgress += this.buildSpeed * _timeMS / 1000;
+                    this.matColor.b = this.buildProgress;
+                } else {
+                    this.unassignEumling();
+                }
+            }
+        }
+
+        unassignEumling() {
+            if (!this.assignee) return;
+            this.assignee.getComponent(EumlingWork).unassign();
+            this.assignee = undefined;
         }
     }
 

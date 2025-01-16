@@ -542,7 +542,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[12.55479907989502, 0.2, 4.766234874725342]",
+                                  "translation": "[12.55479907989502, 0, 4.766234874725342]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -572,7 +572,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[8.084463119506836, 0.20000000000000004, 6.349684238433838]",
+                                  "translation": "[8.084463119506836, 0, 6.349684238433838]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -953,7 +953,16 @@
               "idle": "AnimationGLTF|2024-11-26T10:12:05.444Z|94426",
               "walk": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
               "clickedOn": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
-              "sit": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466"
+              "sit": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466",
+              "pick": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
+              "fall": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548"
+            }
+          }
+        ],
+        "EumlingWork": [
+          {
+            "Script.EumlingWork": {
+              "active": true
             }
           }
         ]
@@ -1062,7 +1071,7 @@
             "ƒ.ComponentMesh": {
               "idMesh": "MeshCube|2024-12-20T12:33:42.882Z|93243",
               "pivot": {
-                "translation": "[0, 0, 0]",
+                "translation": "[0, 0.20000000000000004, 0]",
                 "rotation": "[0, 0, 0]",
                 "scaling": "[0.5, 0.5, 0.5]"
               },
@@ -1076,7 +1085,7 @@
           {
             "ƒ.ComponentMaterial": {
               "sortForAlpha": false,
-              "clrPrimary": "[0.47843137254901963, 0.3764705882352941, 0, 1]",
+              "clrPrimary": "[0.4980392156862745, 0.5058823529411764, 0, 1]",
               "clrSecondary": "[1, 1, 1, 1]",
               "pivot": {
                 "translation": "[0, 0]",
@@ -1102,6 +1111,20 @@
           {
             "Script.Workbench": {
               "active": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
             }
           }
         ]
