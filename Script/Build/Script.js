@@ -537,8 +537,11 @@ var Script;
                         {
                             if (!this.targetPosition.equals(this.node.mtxWorld.translation, this.speed * 2)) {
                                 let difference = ƒ.Vector3.DIFFERENCE(this.targetPosition, this.node.mtxWorld.translation);
+                                let prevDistance = difference.magnitudeSquared;
                                 difference.normalize((this.speed / 1000) * _e.detail.deltaTime);
-                                this.node.mtxLocal.translate(difference, false);
+                                if (prevDistance > difference.magnitudeSquared) {
+                                    this.node.mtxLocal.translate(difference, false);
+                                }
                                 this.node.mtxLocal.lookIn(difference, ƒ.Vector3.Y(1));
                             }
                             else {
