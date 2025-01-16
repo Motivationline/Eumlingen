@@ -1,24 +1,30 @@
 /// <reference path="../Eumlings/Traits.ts" />
 
 namespace Script {
-    import ƒ = FudgeCore;
+    // import ƒ = FudgeCore;
 
-    export interface Category {
+    interface BaseCategory {
+        img: string,
+        name: string,
+        id: number,
+    }
+
+    export interface Category extends BaseCategory {
         id: CATEGORY,
         subcategories: Subcategory[],
     }
 
-    export interface Subcategory {
+    export interface Subcategory extends BaseCategory {
         id: SUBCATEGORY,
         preferredTraits: TRAIT[],
     }
 
     export enum CATEGORY {
-        NATURE,
+        NATURE = 1,
         CRAFT,
     }
     export enum SUBCATEGORY {
-        ANIMALS,
+        ANIMALS = 1,
         FARMING,
         GARDENING,
         MATERIAL_EXTRACTION,
@@ -30,18 +36,22 @@ namespace Script {
         static categories: Category[] = [
             {
                 id: CATEGORY.NATURE,
+                name: "Natur",
+                img: "",
                 subcategories: [
-                    { id: SUBCATEGORY.ANIMALS, preferredTraits: [TRAIT.ANIMAL_LOVER, TRAIT.SOCIAL] },
-                    { id: SUBCATEGORY.FARMING, preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.GARDENING, preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ARTISTIC] },
+                    { id: SUBCATEGORY.ANIMALS, img: "", name: "Tierwirtschaft", preferredTraits: [TRAIT.ANIMAL_LOVER, TRAIT.SOCIAL] },
+                    { id: SUBCATEGORY.FARMING, img: "", name: "Landwirtschaft", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.GARDENING, img: "", name: "Gartenbau", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ARTISTIC] },
                 ]
             },
             {
                 id: CATEGORY.CRAFT,
+                name: "Handwerk",
+                img: "",
                 subcategories: [
-                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, preferredTraits: [TRAIT.BODY_STRENGTH, TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.PRODUCTION, preferredTraits: [TRAIT.FINE_MOTOR_SKILLS, TRAIT.PATIENCE] },
-                    { id: SUBCATEGORY.PROCESSING, preferredTraits: [TRAIT.ARTISTIC, TRAIT.FINE_MOTOR_SKILLS] },
+                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "", name: "Rohstoffgewinnung", preferredTraits: [TRAIT.BODY_STRENGTH, TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.PRODUCTION, img: "", name: "Produktion", preferredTraits: [TRAIT.FINE_MOTOR_SKILLS, TRAIT.PATIENCE] },
+                    { id: SUBCATEGORY.PROCESSING, img: "", name: "Verarbeitung", preferredTraits: [TRAIT.ARTISTIC, TRAIT.FINE_MOTOR_SKILLS] },
                 ]
             },
         ]
@@ -56,10 +66,79 @@ namespace Script {
             this.displayWorkbenchInfo();
         }
 
-        displayWorkbenchInfo(){
-            const overlay = document.getElementById("workbench-info-overlay");
-            
+        private displayWorkbenchInfo() {
+            let overlay: HTMLElement;
+            if (!this.category) {
+                overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Kategorie", Workbench.categories);
+            } else if (!this.subcategory) {
+                overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Spezialisierung", Workbench.categories.find(c => c.id === this.category).subcategories);
+            } else {
+                overlay = this.fillInfoOverlayWithInfo();
+            }
+
+            if (!overlay) return;
             showLayer(overlay);
+        }
+
+        private fillUpgradeOverlayWithInfo(_title: string, _options: BaseCategory[]): HTMLElement {
+            const overlay = document.getElementById("workbench-upgrade-overlay");
+            const title = overlay.querySelector("h2");
+            const options = overlay.querySelector("div#workbench-options-wrapper");
+
+            title.innerText = _title;
+
+            let newOptions: HTMLElement[] = [];
+            for (let opt of _options) {
+                const div = document.createElement("div");
+                div.classList.add("workbench-option", "button");
+                div.innerHTML = `<img src="${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`
+                newOptions.push(div);
+                div.addEventListener("click", () => {
+                    this.setCategory(opt.id);
+                    removeTopLayer();
+                })
+            }
+            options.replaceChildren(...newOptions);
+
+            return overlay;
+        }
+
+        private fillInfoOverlayWithInfo(): HTMLElement {
+            const overlay = document.getElementById("workbench-info-overlay");
+            const info = overlay.querySelector("div#workbench-info-categories");
+
+            let mainCategory = Workbench.getCategoryFromId(this.category);
+            let subCategory = Workbench.getSubcategoryFromId(this.subcategory);
+            info.innerHTML = `<div class="workbench-category"><img src="${mainCategory.img}" alt="${mainCategory.name}" /><span>${mainCategory.name}</span></div>`
+            info.innerHTML += `<div class="workbench-category"><img src="${subCategory.img}" alt="${subCategory.name}" /><span>${subCategory.name}</span></div>`
+
+            overlay.querySelector("#workbench-deconstruct").addEventListener("click", ()=>{
+                this.resetCategory();
+                removeTopLayer();
+            })
+
+            return overlay;
+        }
+
+        private setCategory(_id: number) {
+            if (this.category === undefined) {
+                this.category = _id;
+            } else if (this.subcategory === undefined) {
+                this.subcategory = _id;
+            }
+        }
+        private resetCategory() {
+            this.category = this.subcategory = undefined;
+        }
+
+        static getCategoryFromId(_id: CATEGORY): Category {
+            return this.categories.find(c => c.id === _id);
+        }
+        static getSubcategoryFromId(_id: SUBCATEGORY): Subcategory {
+            for (let cat of this.categories) {
+                let found = cat.subcategories.find(c => c.id === _id);
+                if (found) return found;
+            }
         }
     }
 

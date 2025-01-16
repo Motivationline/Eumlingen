@@ -186,32 +186,44 @@ declare namespace Script {
     function randEnumValue<T extends object>(enumObj: T): T[keyof T];
 }
 declare namespace Script {
-    interface Category {
+    interface BaseCategory {
+        img: string;
+        name: string;
+        id: number;
+    }
+    export interface Category extends BaseCategory {
         id: CATEGORY;
         subcategories: Subcategory[];
     }
-    interface Subcategory {
+    export interface Subcategory extends BaseCategory {
         id: SUBCATEGORY;
         preferredTraits: TRAIT[];
     }
-    enum CATEGORY {
-        NATURE = 0,
-        CRAFT = 1
+    export enum CATEGORY {
+        NATURE = 1,
+        CRAFT = 2
     }
-    enum SUBCATEGORY {
-        ANIMALS = 0,
-        FARMING = 1,
-        GARDENING = 2,
-        MATERIAL_EXTRACTION = 3,
-        PRODUCTION = 4,
-        PROCESSING = 5
+    export enum SUBCATEGORY {
+        ANIMALS = 1,
+        FARMING = 2,
+        GARDENING = 3,
+        MATERIAL_EXTRACTION = 4,
+        PRODUCTION = 5,
+        PROCESSING = 6
     }
-    class Workbench extends UpdateScriptComponent implements Clickable {
+    export class Workbench extends UpdateScriptComponent implements Clickable {
         static categories: Category[];
         private category;
         private subcategory;
         shortTap(_pointer: Pointer): void;
         longTap(_pointer: Pointer): void;
-        displayWorkbenchInfo(): void;
+        private displayWorkbenchInfo;
+        private fillUpgradeOverlayWithInfo;
+        private fillInfoOverlayWithInfo;
+        private setCategory;
+        private resetCategory;
+        static getCategoryFromId(_id: CATEGORY): Category;
+        static getSubcategoryFromId(_id: SUBCATEGORY): Subcategory;
     }
+    export {};
 }

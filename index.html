@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>Eumlingen</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="styles.css" />
 
     <!--Editor settings of this project-->
-    <meta type="settings" autoview="Graph|2024-11-26T10:13:50.337Z|26526" project="{'name':'Eumlingen','graphAutoView':'Graph|2024-11-26T10:13:50.337Z|26526'}" />
+    <meta type="settings" autoview="Graph|2024-11-26T10:13:50.337Z|26526"
+        project="{'name':'Eumlingen','graphAutoView':'Graph|2024-11-26T10:13:50.337Z|26526'}" />
 
     <!--Activate the following line to include the FUDGE-version of Oimo-Physics. You may want to download a local copy to work offline and be independent from future changes!-->
     <!--<script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/OimoPhysics.js"></script>-->
@@ -35,8 +37,8 @@
         <button id="eumlingSpawn" class="interactable">Spawn Eumling</button>
         <span>short tap for info, long tap to remove Eumling</span>
     </div>
-    <div id="eumling-info-overlay" class="overlay hidden">
-        <div id="eumling-info-overlay-wrapper">
+    <div id="eumling-upgrade-overlay" class="overlay hidden">
+        <div id="eumling-upgrade-overlay-wrapper">
             <canvas id="eumling-canvas">
             </canvas>
             <div>
@@ -46,29 +48,40 @@
                 </div>
             </div>
         </div>
-        <div class="close-button">
+        <div class="close-button button">
+        </div>
+    </div>
+    <div id="workbench-upgrade-overlay" class="overlay hidden">
+        <div id="workbench-upgrade-overlay-wrapper">
+            <h2 id="workbench-options-title">Titel</h2>
+            <div id="workbench-options-wrapper">
+                <div class="workbench-option">
+                    <img src="" alt="Bild nicht gefunden" />
+                    <span>Option 1</span>
+                </div>
+                <div class="workbench-option">
+                    <img src="" alt="Bild nicht gefunden" />
+                    <span>Option 2</span>
+                </div>
+                <div class="workbench-option">
+                    <img src="" alt="Bild nicht gefunden" />
+                    <span>Option 3</span>
+                </div>
+            </div>
+        </div>
+        <div class="close-button button">
         </div>
     </div>
     <div id="workbench-info-overlay" class="overlay hidden">
         <div id="workbench-info-overlay-wrapper">
-            <div class="workbench-option">
-<span>Option 1</span>
-<img src="" alt="" />
-</div>
-            <div class="workbench-option">
-<span>Option 2</span>
-<img src="" alt="" />
-</div>
-            <div class="workbench-option">
-<span>Option 3</span>
-<img src="" alt="" />
-</div>
-        </div>
-        <div class="close-button">
+            <h2>Berufsstation Info</h2>
+            <div id="workbench-info-categories"></div>
+            <div class="button" id="workbench-deconstruct">Abreißen</div>
         </div>
     </div>
     <!--Canvas for FUDGE to render to-->
     <canvas class="fullscreen" id="game-canvas">
     </canvas>
 </body>
+
 </html>

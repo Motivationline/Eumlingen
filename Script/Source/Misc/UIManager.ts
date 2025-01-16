@@ -6,6 +6,7 @@ namespace Script {
     const activeLayers: [HTMLElement, Partial<LayerOptions>][] = [];
 
     export function showLayer(_layer: HTMLElement, _options: Partial<LayerOptions> = {}) {
+        if(!_layer) return;
         hideTopLayer();
         activeLayers.push([_layer, _options]);
         showTopLayer();

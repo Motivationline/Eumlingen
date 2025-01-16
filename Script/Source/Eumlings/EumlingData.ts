@@ -24,7 +24,7 @@ namespace Script {
         private showSelf() {
             this.node.addComponent(eumlingCamera);
             eumlingViewport.setBranch(this.node);
-            let infoOverlay = document.getElementById("eumling-info-overlay");
+            let infoOverlay = document.getElementById("eumling-upgrade-overlay");
             (<HTMLElement>infoOverlay.querySelector("#eumling-name")).innerText = this.name;
 
             showLayer(infoOverlay, { onRemove: () => { eumlingCameraActive = false; }, onAdd: () => { eumlingCameraActive = true } });
