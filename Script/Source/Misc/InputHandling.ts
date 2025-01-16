@@ -23,15 +23,22 @@ namespace Script {
             .forEach(c => (<Clickable>c).shortTap(_e.detail.pointer));
     }
 
-    function startTap(_e: CustomEvent<UnifiedPointerEvent>){
-
+    function startTap(_e: CustomEvent<UnifiedPointerEvent>) {
+        let frontEumling = findAllPickedObjects(_e.detail.pointer).filter(n => n.getComponent(EumlingMovement)).sort(sortByDistance).pop();
+        if(frontEumling){
+            frontEumling.getComponent(EumlingMovement).stopMoving();
+        }
     }
 
     export function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined {
         let pickedNodes = findAllPickedObjects(_p);
-        pickedNodes.sort((a, b) => a.mtxWorld.translation.z - b.mtxWorld.translation.z);
+        pickedNodes.sort(sortByDistance);
 
         return pickedNodes.pop();
+    }
+
+    function sortByDistance(a: ƒ.Node, b: ƒ.Node) {
+        return a.mtxWorld.translation.z - b.mtxWorld.translation.z;
     }
 
     export function findAllPickedObjects(_pointer: Pointer): ƒ.Node[] {

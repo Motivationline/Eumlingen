@@ -103,9 +103,9 @@
                     "direction": "diagonal",
                     "near": 0.1,
                     "far": 2000,
-                    "aspect": 1.5552447552447553,
+                    "aspect": 1.510172143974961,
                     "pivot": {
-                      "translation": "[0, 2.6999999999999997, 14]",
+                      "translation": "[-5, 2.6999999999999997, 14]",
                       "rotation": "[10, 180, 0]",
                       "scaling": "[1, 1, 1]"
                     },
@@ -899,6 +899,22 @@
       "url": "Assets\\EumlingV1.glb"
     }
   },
+  "AnimationGLTF|2025-01-16T12:50:29.974Z|66904": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
+      "name": "Drag",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
+  "AnimationGLTF|2025-01-16T12:50:29.977Z|96548": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
+      "name": "Drop",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
     "ƒ.Graph": {
       "name": "Eumling",
@@ -1146,22 +1162,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2025-01-15T14:56:23.860Z|47654",
       "name": "WalkV2",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
-    }
-  },
-  "AnimationGLTF|2025-01-16T12:50:29.974Z|66904": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
-      "name": "Drag",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
-    }
-  },
-  "AnimationGLTF|2025-01-16T12:50:29.977Z|96548": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
-      "name": "Drop",
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb"
     }

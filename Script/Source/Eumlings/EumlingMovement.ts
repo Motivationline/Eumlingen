@@ -33,10 +33,11 @@ namespace Script {
 
         override start() {
             this.animator = this.node.getComponent(EumlingAnimator);
-            this.nextSwapTimestamp = ƒ.Time.game.get() + this.idleTimeMSMin;
 
             let walkNode = this.node.getParent();
             this.walkArea = walkNode?.getComponent(WalkableArea);
+
+            this.setState(STATE.IDLE);
         };
         override update(_e: CustomEvent<UpdateEvent>) {
             let now = ƒ.Time.game.get();
@@ -46,7 +47,6 @@ namespace Script {
                         if (now > this.nextSwapTimestamp) {
                             if (Math.random() < 0.3) {
                                 this.setState(STATE.SIT);
-                                this.nextSwapTimestamp = now + this.sitTimeMSMin + Math.random() * (this.sitTimeMSMax - this.sitTimeMSMin);
                             } else {
                                 this.targetPosition = this.getPositionToWalkTo();
                                 if (!this.targetPosition) break;
@@ -59,7 +59,6 @@ namespace Script {
                     {
                         if (now > this.nextSwapTimestamp) {
                             this.setState(STATE.IDLE);
-                            this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
                         }
                     }
                     break;
@@ -75,7 +74,6 @@ namespace Script {
                                 this.targetPosition = undefined;
                             }
                             this.setState(STATE.IDLE);
-                            this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
                         }
                     }
                     break;
@@ -114,17 +112,19 @@ namespace Script {
         };
 
         setState(_state: STATE) {
-            console.log("state change", this.state, "to", _state);
+            let now = ƒ.Time.game.get();
             this.state = _state;
             switch (_state) {
                 case STATE.IDLE:
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.IDLE, 300);
+                    this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
                     break;
                 case STATE.FALL:
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.FALL, 300);
                     break;
                 case STATE.SIT:
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.SIT, 100);
+                    this.nextSwapTimestamp = now + this.sitTimeMSMin + Math.random() * (this.sitTimeMSMax - this.sitTimeMSMin);
                     break;
                 case STATE.WALK:
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WALK, 100);
@@ -180,6 +180,12 @@ namespace Script {
 
         teleportTo(_pos: ƒ.Vector3) {
             this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
+        }
+
+        stopMoving(){
+            if(this.state === STATE.WALK){
+                this.setState(STATE.IDLE);
+            }
         }
     }
     export enum STATE {

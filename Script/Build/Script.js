@@ -503,9 +503,9 @@ var Script;
             }
             start() {
                 this.animator = this.node.getComponent(Script.EumlingAnimator);
-                this.nextSwapTimestamp = ƒ.Time.game.get() + this.idleTimeMSMin;
                 let walkNode = this.node.getParent();
                 this.walkArea = walkNode?.getComponent(Script.WalkableArea);
+                this.setState(STATE.IDLE);
             }
             ;
             update(_e) {
@@ -516,7 +516,6 @@ var Script;
                             if (now > this.nextSwapTimestamp) {
                                 if (Math.random() < 0.3) {
                                     this.setState(STATE.SIT);
-                                    this.nextSwapTimestamp = now + this.sitTimeMSMin + Math.random() * (this.sitTimeMSMax - this.sitTimeMSMin);
                                 }
                                 else {
                                     this.targetPosition = this.getPositionToWalkTo();
@@ -531,7 +530,6 @@ var Script;
                         {
                             if (now > this.nextSwapTimestamp) {
                                 this.setState(STATE.IDLE);
-                                this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
                             }
                         }
                         break;
@@ -548,7 +546,6 @@ var Script;
                                     this.targetPosition = undefined;
                                 }
                                 this.setState(STATE.IDLE);
-                                this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
                             }
                         }
                         break;
@@ -587,17 +584,19 @@ var Script;
             }
             ;
             setState(_state) {
-                console.log("state change", this.state, "to", _state);
+                let now = ƒ.Time.game.get();
                 this.state = _state;
                 switch (_state) {
                     case STATE.IDLE:
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 300);
+                        this.nextSwapTimestamp = now + this.idleTimeMSMin + Math.random() * (this.idleTimeMSMax - this.idleTimeMSMin);
                         break;
                     case STATE.FALL:
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.FALL, 300);
                         break;
                     case STATE.SIT:
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.SIT, 100);
+                        this.nextSwapTimestamp = now + this.sitTimeMSMin + Math.random() * (this.sitTimeMSMax - this.sitTimeMSMin);
                         break;
                     case STATE.WALK:
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WALK, 100);
@@ -645,6 +644,11 @@ var Script;
             }
             teleportTo(_pos) {
                 this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
+            }
+            stopMoving() {
+                if (this.state === STATE.WALK) {
+                    this.setState(STATE.IDLE);
+                }
             }
         };
         return EumlingMovement = _classThis;
@@ -773,13 +777,20 @@ var Script;
             .forEach(c => c.shortTap(_e.detail.pointer));
     }
     function startTap(_e) {
+        let frontEumling = findAllPickedObjects(_e.detail.pointer).filter(n => n.getComponent(Script.EumlingMovement)).sort(sortByDistance).pop();
+        if (frontEumling) {
+            frontEumling.getComponent(Script.EumlingMovement).stopMoving();
+        }
     }
     function findFrontPickedObject(_p) {
         let pickedNodes = findAllPickedObjects(_p);
-        pickedNodes.sort((a, b) => a.mtxWorld.translation.z - b.mtxWorld.translation.z);
+        pickedNodes.sort(sortByDistance);
         return pickedNodes.pop();
     }
     Script.findFrontPickedObject = findFrontPickedObject;
+    function sortByDistance(a, b) {
+        return a.mtxWorld.translation.z - b.mtxWorld.translation.z;
+    }
     function findAllPickedObjects(_pointer) {
         const picks = ƒ.Picker.pickViewport(Script.viewport, new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
         let pickedNodes = [];

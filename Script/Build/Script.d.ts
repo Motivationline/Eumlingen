@@ -136,6 +136,7 @@ declare namespace Script {
         walkAway(): void;
         walkTo(_pos: ƒ.Vector3): void;
         teleportTo(_pos: ƒ.Vector3): void;
+        stopMoving(): void;
     }
     enum STATE {
         IDLE = 0,
