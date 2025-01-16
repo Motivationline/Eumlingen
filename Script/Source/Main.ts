@@ -9,7 +9,7 @@ namespace Script {
 
   export const upInput = new UnifiedPointerInput();
   export let eumlingCameraActive: boolean = false;
-  export const gravity: number = 1;
+  export const gravity: number = 8;
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
@@ -76,7 +76,7 @@ namespace Script {
   const maxCameraSpeed: number = 10;
   const timeUntilFullSpeed: number = 2;
   const cameraAcelleration: number = maxCameraSpeed / timeUntilFullSpeed;
-  const cameraBoundaryX: [number, number] = [-7, -2];
+  const cameraBoundaryX: [number, number] = [-8, -2];
   function moveCamera(_pointers: Pointer[]) {
     let speed: number = 0;
     for (let pointer of _pointers) {

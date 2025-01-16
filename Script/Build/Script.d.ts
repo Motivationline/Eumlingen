@@ -125,7 +125,8 @@ declare namespace Script {
         private nextSwapTimestamp;
         private pointer;
         private walkArea;
-        private fallSpeed;
+        private velocity;
+        static maxVelocity: number;
         constructor();
         start(): void;
         update(_e: CustomEvent<UpdateEvent>): void;

@@ -172,7 +172,7 @@ var Script;
     document.addEventListener("interactiveViewportStarted", start);
     Script.upInput = new Script.UnifiedPointerInput();
     Script.eumlingCameraActive = false;
-    Script.gravity = 1;
+    Script.gravity = 8;
     function start(_event) {
         Script.viewport = _event.detail;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
@@ -229,7 +229,7 @@ var Script;
     const maxCameraSpeed = 10;
     const timeUntilFullSpeed = 2;
     const cameraAcelleration = maxCameraSpeed / timeUntilFullSpeed;
-    const cameraBoundaryX = [-7, -2];
+    const cameraBoundaryX = [-8, -2];
     function moveCamera(_pointers) {
         let speed = 0;
         for (let pointer of _pointers) {
@@ -485,8 +485,8 @@ var Script;
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 EumlingMovement = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
             }
+            static { this.maxVelocity = 10; }
             constructor() {
                 super();
                 this.removeWhenReached = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _removeWhenReached_initializers, true));
@@ -497,7 +497,7 @@ var Script;
                 this.sitTimeMSMax = __runInitializers(this, _sitTimeMSMax_initializers, 10000);
                 this.state = STATE.IDLE;
                 this.nextSwapTimestamp = 0;
-                this.fallSpeed = 0;
+                this.velocity = new ƒ.Vector3();
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                     return;
             }
@@ -510,6 +510,7 @@ var Script;
             ;
             update(_e) {
                 let now = ƒ.Time.game.get();
+                let deltaTimeSeconds = _e.detail.deltaTime / 1000;
                 switch (this.state) {
                     case STATE.IDLE:
                         {
@@ -556,11 +557,17 @@ var Script;
                         break;
                     case STATE.PICKED:
                         {
-                            this.node.mtxLocal.lookIn(Script.viewport.camera.mtxWorld.translation, ƒ.Vector3.Y(1));
+                            let viewDirection = ƒ.Vector3.DIFFERENCE(Script.viewport.camera.mtxWorld.translation, this.node.mtxWorld.translation);
+                            this.node.mtxLocal.lookIn(viewDirection, ƒ.Vector3.Y(1));
                             let newPos = this.findPickPosition();
-                            this.node.mtxLocal.translation = (ƒ.Vector3.SUM(this.node.mtxLocal.translation, ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation)));
+                            let difference = ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation);
+                            this.node.mtxLocal.translate(difference, false);
+                            this.velocity.set(difference.x / deltaTimeSeconds, difference.y / deltaTimeSeconds, 0);
                             if (this.pointer.ended) {
                                 this.setState(STATE.FALL);
+                                console.log(this.velocity.magnitude);
+                                if (this.velocity.magnitudeSquared > EumlingMovement.maxVelocity * EumlingMovement.maxVelocity)
+                                    this.velocity.normalize(EumlingMovement.maxVelocity);
                                 let pointer = this.pointer;
                                 this.pointer = undefined;
                                 //check if dropped over workbench
@@ -574,11 +581,15 @@ var Script;
                         break;
                     case STATE.FALL:
                         {
-                            this.fallSpeed += Script.gravity * _e.detail.deltaTime / 1000;
-                            this.node.mtxLocal.translateY(-this.fallSpeed);
+                            this.velocity.y -= Script.gravity * deltaTimeSeconds;
+                            if (this.node.mtxWorld.translation.x + this.velocity.x * deltaTimeSeconds < this.walkArea.minX ||
+                                this.node.mtxWorld.translation.x + this.velocity.x * deltaTimeSeconds > this.walkArea.maxX) {
+                                this.velocity.x = 0;
+                            }
+                            this.node.mtxLocal.translate(ƒ.Vector3.SCALE(this.velocity, deltaTimeSeconds), false);
                             if (this.node.mtxLocal.translation.y < 0) {
                                 this.node.mtxLocal.translateY(0 - this.node.mtxLocal.translation.y);
-                                this.fallSpeed = 0;
+                                this.velocity.set(0, 0, 0);
                                 this.setState(STATE.IDLE);
                             }
                         }
@@ -652,6 +663,9 @@ var Script;
                 if (this.state === STATE.WALK) {
                     this.setState(STATE.IDLE);
                 }
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
             }
         };
         return EumlingMovement = _classThis;

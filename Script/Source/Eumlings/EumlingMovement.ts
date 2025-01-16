@@ -22,7 +22,9 @@ namespace Script {
         private nextSwapTimestamp: number = 0;
         private pointer: Pointer;
         private walkArea: WalkableArea;
-        private fallSpeed: number = 0;
+        private velocity: ƒ.Vector3 = new ƒ.Vector3();
+
+        static maxVelocity: number = 10;
 
         constructor() {
             super();
@@ -41,6 +43,7 @@ namespace Script {
         };
         override update(_e: CustomEvent<UpdateEvent>) {
             let now = ƒ.Time.game.get();
+            let deltaTimeSeconds: number = _e.detail.deltaTime / 1000;
             switch (this.state) {
                 case STATE.IDLE:
                     {
@@ -84,11 +87,17 @@ namespace Script {
                     break;
                 case STATE.PICKED:
                     {
-                        this.node.mtxLocal.lookIn(viewport.camera.mtxWorld.translation, ƒ.Vector3.Y(1));
+                        let viewDirection = ƒ.Vector3.DIFFERENCE(viewport.camera.mtxWorld.translation, this.node.mtxWorld.translation);
+                        this.node.mtxLocal.lookIn(viewDirection, ƒ.Vector3.Y(1));
                         let newPos = this.findPickPosition();
-                        this.node.mtxLocal.translation = (ƒ.Vector3.SUM(this.node.mtxLocal.translation, ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation)));
+                        let difference = ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation);
+                        this.node.mtxLocal.translate(difference, false);
+                        this.velocity.set(difference.x / deltaTimeSeconds, difference.y / deltaTimeSeconds, 0);
                         if (this.pointer.ended) {
                             this.setState(STATE.FALL);
+                            console.log(this.velocity.magnitude);
+                            if (this.velocity.magnitudeSquared > EumlingMovement.maxVelocity * EumlingMovement.maxVelocity)
+                                this.velocity.normalize(EumlingMovement.maxVelocity);
                             let pointer = this.pointer;
                             this.pointer = undefined;
 
@@ -102,11 +111,15 @@ namespace Script {
                     break;
                 case STATE.FALL:
                     {
-                        this.fallSpeed += gravity * _e.detail.deltaTime / 1000;
-                        this.node.mtxLocal.translateY(-this.fallSpeed);
+                        this.velocity.y -= gravity * deltaTimeSeconds;
+                        if (this.node.mtxWorld.translation.x + this.velocity.x * deltaTimeSeconds < this.walkArea.minX ||
+                            this.node.mtxWorld.translation.x + this.velocity.x * deltaTimeSeconds > this.walkArea.maxX) {
+                            this.velocity.x = 0;
+                        }
+                        this.node.mtxLocal.translate(ƒ.Vector3.SCALE(this.velocity, deltaTimeSeconds), false);
                         if (this.node.mtxLocal.translation.y < 0) {
                             this.node.mtxLocal.translateY(0 - this.node.mtxLocal.translation.y);
-                            this.fallSpeed = 0;
+                            this.velocity.set(0, 0, 0);
                             this.setState(STATE.IDLE);
                         }
                     }
