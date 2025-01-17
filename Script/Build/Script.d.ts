@@ -242,6 +242,7 @@ declare namespace Script {
     import ƒ = FudgeCore;
     function findFirstCameraInGraph(_graph: ƒ.Node): ƒ.ComponentCamera;
     function randomEnum<T extends object>(anEnum: T): T[keyof T];
+    function mobileOrTabletCheck(): boolean;
 }
 declare namespace Script {
     import ƒ = FudgeCore;
