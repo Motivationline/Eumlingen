@@ -286,7 +286,7 @@ declare namespace Script {
         private fillUpgradeOverlayWithInfo;
         private fillInfoOverlayWithInfo;
         private setCategory;
-        private resetCategory;
+        private resetAll;
         static getCategoryFromId(_id: CATEGORY): Category;
         static getSubcategoryFromId(_id: SUBCATEGORY): Subcategory;
         get needsAssembly(): boolean;

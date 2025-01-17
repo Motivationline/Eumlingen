@@ -1215,7 +1215,7 @@ var Script;
             }
             overlay.querySelector("progress").value = this.buildProgress;
             overlay.querySelector("#workbench-deconstruct").addEventListener("click", () => {
-                this.resetCategory();
+                this.resetAll();
                 Script.removeTopLayer();
             });
             return overlay;
@@ -1228,8 +1228,10 @@ var Script;
                 this.subcategory = _id;
             }
         }
-        resetCategory() {
+        resetAll() {
             this.category = this.subcategory = undefined;
+            this.matColor.b = 0;
+            this.buildProgress = 0;
         }
         static getCategoryFromId(_id) {
             return this.categories.find(c => c.id === _id);

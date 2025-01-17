@@ -130,7 +130,7 @@ namespace Script {
             overlay.querySelector("progress").value = this.buildProgress;
 
             overlay.querySelector("#workbench-deconstruct").addEventListener("click", () => {
-                this.resetCategory();
+                this.resetAll();
                 removeTopLayer();
             })
 
@@ -144,8 +144,10 @@ namespace Script {
                 this.subcategory = _id;
             }
         }
-        private resetCategory() {
+        private resetAll() {
             this.category = this.subcategory = undefined;
+            this.matColor.b = 0;
+            this.buildProgress = 0;
         }
 
         static getCategoryFromId(_id: CATEGORY): Category {
