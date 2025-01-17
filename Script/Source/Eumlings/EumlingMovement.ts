@@ -171,7 +171,7 @@ namespace Script {
             // clean up pos to stay inside walkable area
 
             pos.x = Math.max(this.walkArea.minX, Math.min(this.walkArea.maxX, pos.x));
-            pos.y = Math.max(this.walkArea.Y, pos.y - this.node.radius * 0.8);
+            pos.y = Math.max(this.walkArea.Y, pos.y - this.node.radius * 0.62);
             pos.z = Math.max(this.walkArea.minZ, Math.min(this.walkArea.maxZ, pos.z));
 
             return pos;
@@ -201,6 +201,7 @@ namespace Script {
             if (this.state === STATE.WALK) {
                 this.setState(STATE.IDLE);
             }
+            this.animator.overlayAnimation(EumlingAnimator.ANIMATIONS.CLICKED_ON);
         }
     }
     export enum STATE {

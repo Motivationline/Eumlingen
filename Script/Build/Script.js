@@ -426,9 +426,35 @@ var Script;
         })(ANIMATIONS = EumlingAnimator.ANIMATIONS || (EumlingAnimator.ANIMATIONS = {}));
     })(EumlingAnimator = Script.EumlingAnimator || (Script.EumlingAnimator = {}));
 })(Script || (Script = {}));
+var Script;
+(function (Script) {
+    let TRAIT;
+    (function (TRAIT) {
+        TRAIT[TRAIT["ANIMAL_LOVER"] = 0] = "ANIMAL_LOVER";
+        TRAIT[TRAIT["SOCIAL"] = 1] = "SOCIAL";
+        TRAIT[TRAIT["NATURE_CONNECTION"] = 2] = "NATURE_CONNECTION";
+        TRAIT[TRAIT["ORGANIZED"] = 3] = "ORGANIZED";
+        TRAIT[TRAIT["ARTISTIC"] = 4] = "ARTISTIC";
+        TRAIT[TRAIT["BODY_STRENGTH"] = 5] = "BODY_STRENGTH";
+        TRAIT[TRAIT["FINE_MOTOR_SKILLS"] = 6] = "FINE_MOTOR_SKILLS";
+        TRAIT[TRAIT["PATIENCE"] = 7] = "PATIENCE";
+    })(TRAIT = Script.TRAIT || (Script.TRAIT = {}));
+    Script.traitInfo = new Map([
+        [TRAIT.ANIMAL_LOVER, { image: "placeholder.png", name: "Tierlieb" }],
+        [TRAIT.ARTISTIC, { image: "placeholder.png", name: "Künstlerisch" }],
+        [TRAIT.BODY_STRENGTH, { image: "placeholder.png", name: "Körperkraft" }],
+        [TRAIT.FINE_MOTOR_SKILLS, { image: "placeholder.png", name: "Feinmotorisch" }],
+        [TRAIT.NATURE_CONNECTION, { image: "placeholder.png", name: "Naturverbunden" }],
+        [TRAIT.ORGANIZED, { image: "placeholder.png", name: "Organisiert" }],
+        [TRAIT.PATIENCE, { image: "placeholder.png", name: "Geduldig" }],
+        [TRAIT.SOCIAL, { image: "placeholder.png", name: "Sozial" }],
+    ]);
+})(Script || (Script = {}));
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
+/// <reference path="../Eumlings/Traits.ts" />
 var Script;
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
+/// <reference path="../Eumlings/Traits.ts" />
 (function (Script) {
     class EumlingData extends Script.UpdateScriptComponent {
         constructor() {
@@ -440,7 +466,7 @@ var Script;
         start(_e) {
             this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
             while (this.traits.size < 2) {
-                this.traits.add(Script.randEnumValue(Script.TRAIT));
+                this.traits.add(Script.randomEnum(Script.TRAIT));
             }
         }
         shortTap(_pointer) {
@@ -451,6 +477,18 @@ var Script;
             Script.eumlingViewport.setBranch(this.node);
             let infoOverlay = document.getElementById("eumling-upgrade-overlay");
             infoOverlay.querySelector("#eumling-name").innerText = this.name;
+            let traitsDiv = infoOverlay.querySelector("div#eumling-traits");
+            traitsDiv.innerHTML = "";
+            let traits = Array.from(this.traits.keys());
+            for (let i = 0; i < 4; i++) {
+                let trait = Script.traitInfo.get(traits[i]);
+                if (trait) {
+                    traitsDiv.innerHTML += `<div class="eumling-trait"><img src="Images/${trait.image}" /><span>${trait.name}</span></div>`;
+                }
+                else {
+                    traitsDiv.innerHTML += `<div class="eumling-trait empty"></div>`;
+                }
+            }
             Script.showLayer(infoOverlay, { onRemove: () => { Script.eumlingCameraActive = false; }, onAdd: () => { Script.eumlingCameraActive = true; } });
             this.node.getComponent(Script.EumlingAnimator).overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON);
         }
@@ -653,7 +691,7 @@ var Script;
                 let pos = ray.intersectPlane(planePos, ƒ.Vector3.Z(1));
                 // clean up pos to stay inside walkable area
                 pos.x = Math.max(this.walkArea.minX, Math.min(this.walkArea.maxX, pos.x));
-                pos.y = Math.max(this.walkArea.Y, pos.y - this.node.radius * 0.8);
+                pos.y = Math.max(this.walkArea.Y, pos.y - this.node.radius * 0.62);
                 pos.z = Math.max(this.walkArea.minZ, Math.min(this.walkArea.maxZ, pos.z));
                 return pos;
             }
@@ -678,6 +716,7 @@ var Script;
                 if (this.state === STATE.WALK) {
                     this.setState(STATE.IDLE);
                 }
+                this.animator.overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON);
             }
             static {
                 __runInitializers(_classThis, _classExtraInitializers);
@@ -767,20 +806,6 @@ var Script;
         return EumlingWork = _classThis;
     })();
     Script.EumlingWork = EumlingWork;
-})(Script || (Script = {}));
-var Script;
-(function (Script) {
-    let TRAIT;
-    (function (TRAIT) {
-        TRAIT[TRAIT["ANIMAL_LOVER"] = 0] = "ANIMAL_LOVER";
-        TRAIT[TRAIT["SOCIAL"] = 1] = "SOCIAL";
-        TRAIT[TRAIT["NATURE_CONNECTION"] = 2] = "NATURE_CONNECTION";
-        TRAIT[TRAIT["ORGANIZED"] = 3] = "ORGANIZED";
-        TRAIT[TRAIT["ARTISTIC"] = 4] = "ARTISTIC";
-        TRAIT[TRAIT["BODY_STRENGTH"] = 5] = "BODY_STRENGTH";
-        TRAIT[TRAIT["FINE_MOTOR_SKILLS"] = 6] = "FINE_MOTOR_SKILLS";
-        TRAIT[TRAIT["PATIENCE"] = 7] = "PATIENCE";
-    })(TRAIT = Script.TRAIT || (Script.TRAIT = {}));
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -1033,12 +1058,15 @@ var Script;
         return undefined;
     }
     Script.findFirstCameraInGraph = findFirstCameraInGraph;
-    function randEnumValue(enumObj) {
-        const enumValues = Object.values(enumObj);
-        const index = Math.floor(Math.random() * enumValues.length);
-        return enumValues[index];
+    function randomEnum(anEnum) {
+        const enumValues = Object.keys(anEnum)
+            .map(n => Number.parseInt(n))
+            .filter(n => !Number.isNaN(n));
+        const randomIndex = Math.floor(Math.random() * enumValues.length);
+        const randomEnumValue = enumValues[randomIndex];
+        return randomEnumValue;
     }
-    Script.randEnumValue = randEnumValue;
+    Script.randomEnum = randomEnum;
 })(Script || (Script = {}));
 /// <reference path="../Eumlings/Traits.ts" />
 var Script;
@@ -1071,21 +1099,21 @@ var Script;
             {
                 id: CATEGORY.NATURE,
                 name: "Natur",
-                img: "",
+                img: "placeholder.png",
                 subcategories: [
-                    { id: SUBCATEGORY.ANIMALS, img: "", name: "Tierwirtschaft", preferredTraits: [Script.TRAIT.ANIMAL_LOVER, Script.TRAIT.SOCIAL] },
-                    { id: SUBCATEGORY.FARMING, img: "", name: "Landwirtschaft", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.GARDENING, img: "", name: "Gartenbau", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ARTISTIC] },
+                    { id: SUBCATEGORY.ANIMALS, img: "placeholder.png", name: "Tierwirtschaft", preferredTraits: [Script.TRAIT.ANIMAL_LOVER, Script.TRAIT.SOCIAL] },
+                    { id: SUBCATEGORY.FARMING, img: "placeholder.png", name: "Landwirtschaft", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.GARDENING, img: "placeholder.png", name: "Gartenbau", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ARTISTIC] },
                 ]
             },
             {
                 id: CATEGORY.CRAFT,
                 name: "Handwerk",
-                img: "",
+                img: "placeholder.png",
                 subcategories: [
-                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "", name: "Rohstoffgewinnung", preferredTraits: [Script.TRAIT.BODY_STRENGTH, Script.TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.PRODUCTION, img: "", name: "Produktion", preferredTraits: [Script.TRAIT.FINE_MOTOR_SKILLS, Script.TRAIT.PATIENCE] },
-                    { id: SUBCATEGORY.PROCESSING, img: "", name: "Verarbeitung", preferredTraits: [Script.TRAIT.ARTISTIC, Script.TRAIT.FINE_MOTOR_SKILLS] },
+                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "placeholder.png", name: "Rohstoffgewinnung", preferredTraits: [Script.TRAIT.BODY_STRENGTH, Script.TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.PRODUCTION, img: "placeholder.png", name: "Produktion", preferredTraits: [Script.TRAIT.FINE_MOTOR_SKILLS, Script.TRAIT.PATIENCE] },
+                    { id: SUBCATEGORY.PROCESSING, img: "placeholder.png", name: "Verarbeitung", preferredTraits: [Script.TRAIT.ARTISTIC, Script.TRAIT.FINE_MOTOR_SKILLS] },
                 ]
             },
         ]; }
@@ -1127,7 +1155,7 @@ var Script;
             for (let opt of _options) {
                 const div = document.createElement("div");
                 div.classList.add("workbench-option", "button");
-                div.innerHTML = `<img src="${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`;
+                div.innerHTML = `<img src="Images/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`;
                 newOptions.push(div);
                 div.addEventListener("click", () => {
                     this.setCategory(opt.id);
@@ -1145,7 +1173,7 @@ var Script;
             for (let cat of categories) {
                 if (!cat)
                     continue;
-                info.innerHTML += `<div class="workbench-category"><img src="${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
+                info.innerHTML += `<div class="workbench-category"><img src="Images/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
             }
             overlay.querySelector("progress").value = this.buildProgress;
             overlay.querySelector("#workbench-deconstruct").addEventListener("click", () => {

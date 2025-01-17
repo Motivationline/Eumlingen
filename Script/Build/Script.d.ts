@@ -102,6 +102,24 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    export enum TRAIT {
+        ANIMAL_LOVER = 0,
+        SOCIAL = 1,
+        NATURE_CONNECTION = 2,
+        ORGANIZED = 3,
+        ARTISTIC = 4,
+        BODY_STRENGTH = 5,
+        FINE_MOTOR_SKILLS = 6,
+        PATIENCE = 7
+    }
+    interface TraitData {
+        name: string;
+        image: string;
+    }
+    export const traitInfo: Map<TRAIT, TraitData>;
+    export {};
+}
+declare namespace Script {
     class EumlingData extends UpdateScriptComponent implements Clickable {
         static names: string[];
         name: string;
@@ -169,18 +187,6 @@ declare namespace Script {
     }
 }
 declare namespace Script {
-    enum TRAIT {
-        ANIMAL_LOVER = 0,
-        SOCIAL = 1,
-        NATURE_CONNECTION = 2,
-        ORGANIZED = 3,
-        ARTISTIC = 4,
-        BODY_STRENGTH = 5,
-        FINE_MOTOR_SKILLS = 6,
-        PATIENCE = 7
-    }
-}
-declare namespace Script {
     import ƒ = FudgeCore;
     function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined;
     function findAllPickedObjects(_pointer: Pointer): ƒ.Node[];
@@ -227,7 +233,7 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     function findFirstCameraInGraph(_graph: ƒ.Node): ƒ.ComponentCamera;
-    function randEnumValue<T extends object>(enumObj: T): T[keyof T];
+    function randomEnum<T extends object>(anEnum: T): T[keyof T];
 }
 declare namespace Script {
     import ƒ = FudgeCore;

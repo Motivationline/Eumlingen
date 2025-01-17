@@ -154,3 +154,36 @@ div.close-button {
   justify-content: center;
   align-items: center;
 }
+
+#eumling-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#eumling-traits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--grid-gap);
+}
+
+.eumling-trait {
+  border-radius: var(--border-radius);
+  padding: var(--grid-gap);
+  background-color: white;
+  text-align: center;
+  display: grid;
+  place-items: center;
+}
+
+.eumling-trait.empty {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.workbench-option img,
+.eumling-trait img {
+  object-fit: contain;
+  height: 20vh;
+  width: 30vw;
+}
