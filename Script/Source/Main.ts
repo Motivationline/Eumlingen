@@ -43,7 +43,7 @@ namespace Script {
   export const eumlingViewport = new ƒ.Viewport();
   async function startViewport(_event: MouseEvent) {
     if (mobileOrTabletCheck()) {
-      document.documentElement.requestFullscreen
+      document.documentElement.requestFullscreen();
     }
     document.getElementById("start-screen").remove();
     let graphId/* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView")
