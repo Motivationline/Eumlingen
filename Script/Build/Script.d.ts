@@ -78,13 +78,16 @@ declare namespace Script {
         sit: ƒ.Animation;
         pick: ƒ.Animation;
         fall: ƒ.Animation;
+        work_build: ƒ.Animation;
+        work_bad: ƒ.Animation;
+        work_normal: ƒ.Animation;
+        work_good: ƒ.Animation;
         activeAnimation: EumlingAnimator.ANIMATIONS;
         private animations;
         private animPlaying;
         private animOverlay;
         private cmpAnim;
         start(_e: CustomEvent<UpdateEvent>): void;
-        update(_e: CustomEvent<UpdateEvent>): void;
         transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
         private timeout;
         overlayAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
@@ -97,7 +100,11 @@ declare namespace Script {
             CLICKED_ON = 3,
             PICKED = 4,
             FALL = 5,
-            SIT = 6
+            SIT = 6,
+            WORK_BUILD = 7,
+            WORK_BAD = 8,
+            WORK_NORMAL = 9,
+            WORK_GOOD = 10
         }
     }
 }
@@ -179,6 +186,7 @@ declare namespace Script {
     class EumlingWork extends UpdateScriptComponent {
         private workbench;
         private moveComp;
+        private animator;
         start(_e: CustomEvent<UpdateEvent>): void;
         update(_e: CustomEvent<UpdateEvent>): void;
         unassign(): void;
@@ -270,6 +278,7 @@ declare namespace Script {
         private readonly buildSpeed;
         private assignee;
         private matColor;
+        private fittingTraits;
         start(_e: CustomEvent<UpdateEvent>): void;
         shortTap(_pointer: Pointer): void;
         longTap(_pointer: Pointer): void;
@@ -280,7 +289,8 @@ declare namespace Script {
         private resetCategory;
         static getCategoryFromId(_id: CATEGORY): Category;
         static getSubcategoryFromId(_id: SUBCATEGORY): Subcategory;
-        work(_eumling: ƒ.Node, _timeMS: number): void;
+        get needsAssembly(): boolean;
+        work(_eumling: ƒ.Node, _timeMS: number): number;
         unassignEumling(): void;
     }
     export {};

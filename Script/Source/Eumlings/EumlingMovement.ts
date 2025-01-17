@@ -148,7 +148,6 @@ namespace Script {
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.PICKED, 100);
                     break;
                 case STATE.WORK:
-                    this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.IDLE, 100);
                     break;
             }
         }

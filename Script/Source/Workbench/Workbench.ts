@@ -62,6 +62,7 @@ namespace Script {
         private readonly buildSpeed: number = 1 / 10;
         private assignee: ƒ.Node;
         private matColor: ƒ.Color;
+        private fittingTraits: number = 0;
 
         start(_e: CustomEvent<UpdateEvent>): void {
             this.matColor = this.node.getComponent(ƒ.ComponentMaterial).clrPrimary;
@@ -79,7 +80,7 @@ namespace Script {
             if (!this.category) {
                 overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Kategorie", Workbench.categories);
             } else if (!this.subcategory) {
-                if(this.buildProgress < 1){
+                if (this.buildProgress < 1) {
                     overlay = this.fillInfoOverlayWithInfo();
                 } else {
                     overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Spezialisierung", Workbench.categories.find(c => c.id === this.category).subcategories);
@@ -121,8 +122,8 @@ namespace Script {
 
             let categories = [Workbench.getCategoryFromId(this.category), Workbench.getSubcategoryFromId(this.subcategory)];
             info.innerHTML = "";
-            for(let cat of categories){
-                if(!cat) continue;
+            for (let cat of categories) {
+                if (!cat) continue;
                 info.innerHTML += `<div class="workbench-category"><img src="Images/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`
             }
 
@@ -158,10 +159,23 @@ namespace Script {
             return undefined;
         }
 
-        work(_eumling: ƒ.Node, _timeMS: number) {
+        get needsAssembly(): boolean {
+            return (this.category && this.buildProgress < 1); 
+        }
+
+        work(_eumling: ƒ.Node, _timeMS: number): number {
             if (this.assignee !== _eumling) {
                 this.unassignEumling();
                 this.assignee = _eumling;
+
+                this.fittingTraits = 0;
+                if (this.subcategory) {
+                    let sub = Workbench.getSubcategoryFromId(this.subcategory);
+                    let assigneeTraits = this.assignee.getComponent(EumlingData).traits;
+                    for (let t of sub.preferredTraits) {
+                        if (assigneeTraits.has(t)) this.fittingTraits++;
+                    }
+                }
             }
             if (!this.category) {
                 this.unassignEumling();
@@ -173,6 +187,7 @@ namespace Script {
                     this.unassignEumling();
                 }
             }
+            return this.fittingTraits;
         }
 
         unassignEumling() {
@@ -181,5 +196,4 @@ namespace Script {
             this.assignee = undefined;
         }
     }
-
 }

@@ -915,6 +915,14 @@
       "url": "Assets\\EumlingV1.glb"
     }
   },
+  "AnimationGLTF|2025-01-15T14:56:23.841Z|15808": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808",
+      "name": "InteractingBlockingPolishingV1",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb"
+    }
+  },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
     "ƒ.Graph": {
       "name": "Eumling",
@@ -971,7 +979,11 @@
               "clickedOn": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
               "sit": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466",
               "pick": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
-              "fall": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548"
+              "fall": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
+              "work_build": "AnimationGLTF|2024-11-26T10:12:05.438Z|84941",
+              "work_bad": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
+              "work_normal": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
+              "work_good": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808"
             }
           }
         ],
@@ -1148,14 +1160,6 @@
       "children": [],
       "idResource": "Graph|2025-01-15T14:48:41.922Z|40103",
       "type": "Graph"
-    }
-  },
-  "AnimationGLTF|2025-01-15T14:56:23.841Z|15808": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808",
-      "name": "InteractingBlockingPolishingV1",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
     }
   },
   "AnimationGLTF|2025-01-15T14:56:23.860Z|47654": {

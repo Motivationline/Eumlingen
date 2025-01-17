@@ -15,6 +15,14 @@ namespace Script {
         pick: ƒ.Animation;
         @ƒ.serialize(ƒ.Animation)
         fall: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
+        work_build: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
+        work_bad: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
+        work_normal: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
+        work_good: ƒ.Animation;
 
         activeAnimation: EumlingAnimator.ANIMATIONS = EumlingAnimator.ANIMATIONS.IDLE;
 
@@ -32,6 +40,10 @@ namespace Script {
             this.animations.set(EumlingAnimator.ANIMATIONS.SIT, new ƒ.AnimationNodeAnimation(this.sit, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
             this.animations.set(EumlingAnimator.ANIMATIONS.PICKED, new ƒ.AnimationNodeAnimation(this.pick));
             this.animations.set(EumlingAnimator.ANIMATIONS.FALL, new ƒ.AnimationNodeAnimation(this.fall));
+            this.animations.set(EumlingAnimator.ANIMATIONS.WORK_BUILD, new ƒ.AnimationNodeAnimation(this.work_build));
+            this.animations.set(EumlingAnimator.ANIMATIONS.WORK_BAD, new ƒ.AnimationNodeAnimation(this.work_bad));
+            this.animations.set(EumlingAnimator.ANIMATIONS.WORK_NORMAL, new ƒ.AnimationNodeAnimation(this.work_normal));
+            this.animations.set(EumlingAnimator.ANIMATIONS.WORK_GOOD, new ƒ.AnimationNodeAnimation(this.work_good));
 
             this.animPlaying = new ƒ.AnimationNodeTransition(this.animations.get(this.activeAnimation));
             this.animOverlay = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY));
@@ -41,9 +53,6 @@ namespace Script {
             let importedScene = this.node.getChild(0);
             importedScene.getComponent(ƒ.ComponentAnimation).activate(false);
             importedScene.addComponent(this.cmpAnim);
-        }
-        update(_e: CustomEvent<UpdateEvent>): void {
-            // throw new Error("Method not implemented.");
         }
 
         public transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time: number = 300) {
@@ -79,6 +88,10 @@ namespace Script {
             PICKED,
             FALL,
             SIT,
+            WORK_BUILD,
+            WORK_BAD,
+            WORK_NORMAL,
+            WORK_GOOD,
         }
     }
 }
