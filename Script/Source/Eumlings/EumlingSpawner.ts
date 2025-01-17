@@ -6,10 +6,8 @@ namespace Script {
             this.node.addEventListener("spawnEumling", this.spawn, true);
             this.eumling = <ƒ.Graph>ƒ.Project.getResourcesByName("Eumling")[0];
         }
-        update(_e: CustomEvent<UpdateEvent>): void {
-        }
-
         spawn = async () => {
+            console.log("spawn eumling");
             let wa = this.node.getComponent(WalkableArea);
             if (!wa) return;
             let newPos = wa.getPositionInside();

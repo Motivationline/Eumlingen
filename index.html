@@ -33,7 +33,19 @@
         <button id="freecam" class="start-button">Freecam</button>
         <button id="gameplay" class="start-button">Gameplay</button>
     </div>
-    <div id="game-overlay" class="overlay no-interact">
+    <div id="game-overlay" class="overlay hidden no-interact">
+        <div id="game-info-wrapper">
+            <div>
+                <img src="Images/point.svg" alt="">
+                <span class="point-display"></span>
+            </div>
+            <div>
+                <img src="Images/eumling.svg" alt="">
+                <span class="eumling-display"></span>
+            </div>
+        </div>
+        <div class="button interactable" id="pause-button"><img src="Images/pause.svg" alt="Pause"></div>
+        <div class="button interactable" id="achievement-button"><img src="Images/trophy.svg" alt="Achievements"></div>
         <button id="eumlingSpawn" class="interactable">Spawn Eumling</button>
         <span>short tap for info, long tap to pick up</span>
     </div>
@@ -83,6 +95,24 @@
         </div>
         <div class="close-button button">
         </div>
+    </div>
+    <div id="pause-overlay" class="overlay hidden">
+        <h1>Pause</h1>
+        <div class="close-button button"></div>
+    </div>
+    <div id="achievement-overlay" class="hidden no-interact"></div>
+    <div id="achievement-screen-overlay" class="overlay hidden">
+        <div id="achievement-list"></div>
+        <div id="achievement-progress-wrapper">
+            <div id="achievement-points-wrapper">
+                <span class="total-points-display">30</span>
+                <img src="Images/point.svg" alt="">
+            </div>
+            <div>
+                <progress id="achievement-progress" value="0"></progress>
+            </div>
+        </div>
+        <div class="close-button button"></div>
     </div>
     <!--Canvas for FUDGE to render to-->
     <canvas class="fullscreen" id="game-canvas">

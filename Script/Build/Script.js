@@ -189,6 +189,7 @@ var Script;
     Script.upInput = new Script.UnifiedPointerInput();
     Script.eumlingCameraActive = false;
     Script.gravity = 8;
+    Script.globalEvents = new EventTarget();
     function start(_event) {
         Script.viewport = _event.detail;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
@@ -200,11 +201,13 @@ var Script;
         // ƒ.Physics.simulate();  // if physics is included and used
         // viewport.draw();
         ƒ.AudioManager.default.update();
-        if (Script.eumlingCameraActive) {
-            Script.eumlingViewport.draw();
-        }
-        else {
-            Script.viewport.draw();
+        if (!Script.GameData.paused) {
+            if (Script.eumlingCameraActive) {
+                Script.eumlingViewport.draw();
+            }
+            else {
+                Script.viewport.draw();
+            }
         }
         if (gameMode) {
             // console.log(upInput.pointerList.length);
@@ -220,6 +223,8 @@ var Script;
             document.documentElement.requestFullscreen();
         }
         document.getElementById("start-screen").remove();
+        document.getElementById("game-overlay").classList.remove("hidden");
+        document.getElementById("achievement-overlay").classList.remove("hidden");
         let graphId /* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView");
         if (_event.target.id === "freecam") {
             //@ts-ignore
@@ -243,6 +248,7 @@ var Script;
         Script.eumlingCamera.mtxPivot.translateY(1);
         Script.eumlingCamera.mtxPivot.rotateY(180);
         Script.eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
+        viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     }
     let currentCameraSpeed = 0;
     const maxCameraSpeed = 10;
@@ -680,7 +686,6 @@ var Script;
             ;
             setState(_state) {
                 let now = ƒ.Time.game.get();
-                this.state = _state;
                 switch (_state) {
                     case STATE.IDLE:
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.IDLE, 300);
@@ -697,11 +702,15 @@ var Script;
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WALK, 100);
                         break;
                     case STATE.PICKED:
+                        if (this.state === STATE.WORK) {
+                            this.node.getComponent(Script.EumlingWork).unassign();
+                        }
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.PICKED, 100);
                         break;
                     case STATE.WORK:
                         break;
                 }
+                this.state = _state;
             }
             getPositionToWalkTo() {
                 for (let i = 0; i < 10; i++) {
@@ -769,6 +778,7 @@ var Script;
         constructor() {
             super(...arguments);
             this.spawn = async () => {
+                console.log("spawn eumling");
                 let wa = this.node.getComponent(Script.WalkableArea);
                 if (!wa)
                     return;
@@ -781,8 +791,6 @@ var Script;
         start(_e) {
             this.node.addEventListener("spawnEumling", this.spawn, true);
             this.eumling = ƒ.Project.getResourcesByName("Eumling")[0];
-        }
-        update(_e) {
         }
     }
     Script.EumlingSpawner = EumlingSpawner;
@@ -816,7 +824,11 @@ var Script;
                 this.work(_e.detail.deltaTime);
             }
             unassign() {
+                if (!this.workbench)
+                    return;
+                let wb = this.workbench;
                 this.workbench = undefined;
+                wb.unassignEumling();
                 this.moveComp.walkAway();
             }
             assign(_wb) {
@@ -824,16 +836,19 @@ var Script;
                 this.workbench = _wb;
                 this.moveComp.teleportTo(_wb.node.mtxWorld.translation);
                 this.moveComp.setState(Script.STATE.WORK);
+                this.updateWorkAnimation(fittingTraits);
+            }
+            updateWorkAnimation(_fittingTraits) {
                 if (this.workbench.needsAssembly) {
                     this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_BUILD, 100);
                 }
-                else if (fittingTraits === 0) {
+                else if (_fittingTraits === 0) {
                     this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_BAD, 100);
                 }
-                else if (fittingTraits === 1) {
+                else if (_fittingTraits === 1) {
                     this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_NORMAL, 100);
                 }
-                else if (fittingTraits === 2) {
+                else if (_fittingTraits === 2) {
                     this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_GOOD, 100);
                 }
             }
@@ -846,6 +861,210 @@ var Script;
         return EumlingWork = _classThis;
     })();
     Script.EumlingWork = EumlingWork;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    const achievements = [
+        {
+            title: "Das passt ja gar nicht",
+            description: "Weise einen Eumling einer Station zu, die mit keiner Eigenschaft übereinstimmt.",
+            icon: "placeholder.png",
+            reward: 10,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "assignEumling")
+                    return false;
+                if (_e.detail.data.fittingTraits === 0)
+                    return true;
+                return false;
+            }
+        },
+        {
+            title: "Könnte klappen",
+            description: "Weise einen Eumling einer Station zu, die mit einer Eigenschaft übereinstimmt.",
+            icon: "placeholder.png",
+            reward: 15,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait")
+                    return false;
+                if (_e.detail.data.fittingTraits === 1)
+                    return true;
+                return false;
+            }
+        },
+        {
+            title: "Perfect Match",
+            description: "Weise einen Eumling einer Station zu, die mit zwei Eigenschaften übereinstimmt.",
+            icon: "placeholder.png",
+            reward: 20,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait")
+                    return false;
+                if (_e.detail.data.fittingTraits === 2)
+                    return true;
+                return false;
+            }
+        },
+        {
+            title: "Umschulung",
+            description: "Ein Eumling entwickelt eine Eigenschaft an einer eigentlich unpassenden Station",
+            icon: "placeholder.png",
+            reward: 10,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "eumlingDevelopTrait")
+                    return false;
+                return true;
+            }
+        },
+        {
+            title: "Treue Mitarbeit",
+            description: "Ein Eumling arbeitet für mindestens 10 Minuten durchgängig an derselben Station",
+            icon: "placeholder.png",
+            reward: 15,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "eumlingWorking")
+                    return false;
+                if (_e.detail.data.workTime > 10 * 60 * 1000)
+                    return true;
+                return false;
+            }
+        },
+        {
+            title: "Allrounder",
+            description: "Ein Eumling hat 4 Eigenschaften.",
+            icon: "placeholder.png",
+            reward: 20,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "eumlingDevelopTrait")
+                    return false;
+                if (_e.detail.data.traits.size === 4)
+                    return true;
+                return false;
+            }
+        },
+        {
+            title: "Gefunden!",
+            description: "Finde alle 3 Eumling-Statuen",
+            icon: "placeholder.png",
+            reward: 10,
+            secret: true,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "clickStatue")
+                    return false;
+                return false;
+            }
+        },
+    ];
+    Script.maxAchievablePoints = achievements.reduce((prev, curr) => prev + curr.reward, 0);
+    function popupAchievement(_a) {
+        const div = document.createElement("div");
+        div.innerHTML = `
+        <span class="achievement-title">${_a.title}</span>
+        <span class="achievement-description">${_a.description}</span>
+        <span class="achievement-reward"><img src="Images/point.svg">+${_a.reward}</span>`;
+        div.classList.add("achievement-popup");
+        document.getElementById("achievement-overlay").appendChild(div);
+        let timeout = setTimeout(() => {
+            div.remove();
+        }, 10000);
+        div.addEventListener("click", () => {
+            div.remove();
+            clearTimeout(timeout);
+        });
+        return div;
+    }
+    function createFlyingPoints(_div, _amt) {
+        _div.addEventListener("animationend", async () => {
+            let rect = _div.getBoundingClientRect();
+            let targetRect = document.getElementById("game-info-wrapper").getBoundingClientRect();
+            for (let i = 0; i < _amt; i++) {
+                let img = Script.createElementAdvanced("img", { classes: ["flying-point", "no-interact"] });
+                img.src = "Images/point.svg";
+                img.style.left = rect.x + rect.width * Math.random() + "px";
+                img.style.top = rect.y + rect.height * Math.random() + "px";
+                document.body.appendChild(img);
+                setTimeout(() => {
+                    img.style.left = targetRect.left + "px";
+                    img.style.top = targetRect.top + "px";
+                    setTimeout(() => {
+                        Script.GameData.addPoints(1);
+                        img.remove();
+                    }, 1000);
+                }, 1000);
+                await Script.waitMS(20);
+            }
+        });
+        _div.addEventListener("animationcancel", () => { Script.GameData.addPoints(_amt); });
+    }
+    function updateAchievementList() {
+        const list = document.getElementById("achievement-list");
+        let newElements = [];
+        for (let a of achievements) {
+            const div = Script.createElementAdvanced("div", {
+                classes: ["achievement"],
+                innerHTML: `
+                <span class="achievement-icon"> <img src="Images/${a.icon}"/></span>
+                <span class="achievement-title">${a.secret ? "???" : a.title}</span>
+                <div class="achievement-divider"></div>
+                <span class="achievement-description">${a.secret ? "???" : a.description}</span>
+                <span class="achievement-reward"><img src="Images/point.svg">+${a.reward}</span>`
+            });
+            if (a.achieved)
+                div.classList.add("achieved");
+            newElements.push(div);
+        }
+        list.replaceChildren(...newElements);
+    }
+    Script.globalEvents.addEventListener("event", checkAchievements);
+    function checkAchievements(_e) {
+        for (let a of achievements) {
+            if (a.achieved)
+                continue;
+            if (a.checkCompleted(_e)) {
+                a.achieved = true;
+                let div = popupAchievement(a);
+                createFlyingPoints(div, a.reward);
+                updateAchievementList();
+            }
+        }
+    }
+    document.addEventListener("DOMContentLoaded", updateAchievementList);
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    // import ƒ = FudgeCore;
+    class GameData {
+        static { this.Instance = new GameData(); }
+        static #points = 0;
+        static #totalPoints = 0;
+        static #unlockedEumlings = 1;
+        static { this.paused = false; }
+        constructor() {
+            if (GameData.Instance)
+                return GameData.Instance;
+        }
+        static get points() {
+            return this.#points;
+        }
+        static addPoints(_points) {
+            this.#points += _points;
+            this.#totalPoints += _points;
+            //check new Eumling reached
+            if (Math.floor(this.#totalPoints / 20) > this.#unlockedEumlings - 1) {
+                this.#unlockedEumlings++;
+                Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
+            }
+            this.updateDisplays();
+        }
+        static updateDisplays() {
+            document.querySelectorAll(".total-points-display").forEach(el => el.innerText = this.#totalPoints.toString());
+            document.querySelectorAll(".point-display").forEach(el => el.innerText = this.#points.toString());
+            document.querySelectorAll(".eumling-display").forEach(el => el.innerText = this.#unlockedEumlings.toString());
+            const progress = document.getElementById("achievement-progress");
+            progress.max = Script.maxAchievablePoints;
+            progress.value = this.#totalPoints;
+        }
+    }
+    Script.GameData = GameData;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -974,6 +1193,7 @@ var Script;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
+    var ƒ = FudgeCore;
     const activeLayers = [];
     function showLayer(_layer, _options = {}) {
         if (!_layer)
@@ -1008,10 +1228,23 @@ var Script;
     }
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".close-button").forEach(b => {
-            b.innerHTML = "x";
-            b.addEventListener("click", removeTopLayer);
+            b.addEventListener("click", hideTopLayer);
+            b.addEventListener("click", unpauseGame);
         });
+        document.getElementById("achievement-button").addEventListener("click", () => { showLayer(document.getElementById("achievement-screen-overlay")); });
+        document.getElementById("pause-button").addEventListener("click", pauseGame);
+        document.getElementById("pause-button").addEventListener("click", pauseGame);
+        Script.GameData.updateDisplays();
     });
+    function pauseGame() {
+        Script.GameData.paused = true;
+        showLayer(document.getElementById("pause-overlay"));
+        ƒ.Time.game.setScale(0.000001);
+    }
+    function unpauseGame() {
+        Script.GameData.paused = false;
+        ƒ.Time.game.setScale(1);
+    }
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -1111,6 +1344,31 @@ var Script;
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
     Script.mobileOrTabletCheck = mobileOrTabletCheck;
+    function createElementAdvanced(_type, _options = {}) {
+        let el = document.createElement(_type);
+        if (_options.classes) {
+            el.classList.add(..._options.classes);
+        }
+        if (_options.innerHTML) {
+            el.innerHTML = _options.innerHTML;
+        }
+        return el;
+    }
+    Script.createElementAdvanced = createElementAdvanced;
+    function shuffleArray(_array) {
+        for (let i = _array.length - 1; i >= 0; i--) {
+            const k = Math.floor(Math.random() * (i + 1));
+            [_array[i], _array[k]] = [_array[k], _array[i]];
+        }
+        return _array;
+    }
+    Script.shuffleArray = shuffleArray;
+    async function waitMS(_ms) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, _ms);
+        });
+    }
+    Script.waitMS = waitMS;
 })(Script || (Script = {}));
 /// <reference path="../Eumlings/Traits.ts" />
 var Script;
@@ -1134,11 +1392,13 @@ var Script;
     class Workbench extends Script.UpdateScriptComponent {
         constructor() {
             super(...arguments);
+            this.buildSpeed = 1 / 10;
+            this.traitUnlockChancePerSecond = 1 / 60;
             this.category = undefined;
             this.subcategory = undefined;
             this.buildProgress = 0;
-            this.buildSpeed = 1 / 10;
             this.fittingTraits = 0;
+            this.startWorkTime = 0;
         }
         static { this.categories = [
             {
@@ -1256,17 +1516,7 @@ var Script;
         }
         work(_eumling, _timeMS) {
             if (this.assignee !== _eumling) {
-                this.unassignEumling();
-                this.assignee = _eumling;
-                this.fittingTraits = 0;
-                if (this.subcategory) {
-                    let sub = Workbench.getSubcategoryFromId(this.subcategory);
-                    let assigneeTraits = this.assignee.getComponent(Script.EumlingData).traits;
-                    for (let t of sub.preferredTraits) {
-                        if (assigneeTraits.has(t))
-                            this.fittingTraits++;
-                    }
-                }
+                this.assignNewEumling(_eumling);
             }
             if (!this.category) {
                 this.unassignEumling();
@@ -1280,13 +1530,55 @@ var Script;
                     this.unassignEumling();
                 }
             }
+            if (this.assignee) {
+                Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "eumlingWorking", data: { workTime: ƒ.Time.game.get() - this.startWorkTime } } }));
+                if (this.fittingTraits < 2) {
+                    this.attemptToTeachNewTrait(_timeMS);
+                }
+            }
             return this.fittingTraits;
+        }
+        attemptToTeachNewTrait(_timeMS) {
+            if (!this.subcategory)
+                return;
+            let data = this.assignee.getComponent(Script.EumlingData);
+            if (data.traits.size >= 4)
+                return;
+            if (Math.random() > (_timeMS / 1000) * this.traitUnlockChancePerSecond)
+                return;
+            let requiredTraits = [...Workbench.getSubcategoryFromId(this.subcategory).preferredTraits];
+            Script.shuffleArray(requiredTraits);
+            for (let trait of requiredTraits) {
+                if (!data.traits.has(trait)) {
+                    data.traits.add(trait);
+                    break;
+                }
+            }
+            this.fittingTraits++;
+            Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "eumlingDevelopTrait", data: { fittingTraits: this.fittingTraits, traits: data.traits, eumling: this.assignee } } }));
+            this.assignee.getComponent(Script.EumlingWork).updateWorkAnimation(this.fittingTraits);
+        }
+        assignNewEumling(_eumling) {
+            this.unassignEumling();
+            this.assignee = _eumling;
+            this.startWorkTime = ƒ.Time.game.get();
+            this.fittingTraits = 0;
+            if (this.subcategory) {
+                let sub = Workbench.getSubcategoryFromId(this.subcategory);
+                let assigneeTraits = this.assignee.getComponent(Script.EumlingData).traits;
+                for (let t of sub.preferredTraits) {
+                    if (assigneeTraits.has(t))
+                        this.fittingTraits++;
+                }
+                Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "assignEumling", data: { fittingTraits: this.fittingTraits } } }));
+            }
         }
         unassignEumling() {
             if (!this.assignee)
                 return;
             this.assignee.getComponent(Script.EumlingWork).unassign();
             this.assignee = undefined;
+            Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "unassignEumling", data: { workTime: ƒ.Time.game.get() - this.startWorkTime } } }));
         }
     }
     Script.Workbench = Workbench;

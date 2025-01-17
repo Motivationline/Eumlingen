@@ -128,7 +128,6 @@ namespace Script {
 
         setState(_state: STATE) {
             let now = ƒ.Time.game.get();
-            this.state = _state;
             switch (_state) {
                 case STATE.IDLE:
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.IDLE, 300);
@@ -145,11 +144,16 @@ namespace Script {
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WALK, 100);
                     break;
                 case STATE.PICKED:
+                    if(this.state === STATE.WORK) {
+                        this.node.getComponent(EumlingWork).unassign();
+                    }
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.PICKED, 100);
                     break;
                 case STATE.WORK:
                     break;
             }
+            
+            this.state = _state;
         }
 
         private getPositionToWalkTo(): ƒ.Vector3 | undefined {

@@ -54,6 +54,7 @@ declare namespace Script {
     const upInput: UnifiedPointerInput;
     let eumlingCameraActive: boolean;
     const gravity: number;
+    const globalEvents: EventTarget;
     const eumlingCamera: ƒ.ComponentCamera;
     const eumlingViewport: ƒ.Viewport;
 }
@@ -178,7 +179,6 @@ declare namespace Script {
     class EumlingSpawner extends UpdateScriptComponent {
         private eumling;
         start(_e: CustomEvent<UpdateEvent>): void;
-        update(_e: CustomEvent<UpdateEvent>): void;
         spawn: () => Promise<void>;
     }
 }
@@ -191,7 +191,26 @@ declare namespace Script {
         update(_e: CustomEvent<UpdateEvent>): void;
         unassign(): void;
         assign(_wb: Workbench): void;
+        updateWorkAnimation(_fittingTraits: number): void;
         work(_timeMS: number): void;
+    }
+}
+declare namespace Script {
+    interface GlobalEventData {
+        type: string;
+        data: any;
+    }
+    const maxAchievablePoints: number;
+}
+declare namespace Script {
+    class GameData {
+        #private;
+        static Instance: GameData;
+        static paused: boolean;
+        constructor();
+        static get points(): number;
+        static addPoints(_points: number): void;
+        static updateDisplays(): void;
     }
 }
 declare namespace Script {
@@ -240,9 +259,17 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    function findFirstCameraInGraph(_graph: ƒ.Node): ƒ.ComponentCamera;
-    function randomEnum<T extends object>(anEnum: T): T[keyof T];
-    function mobileOrTabletCheck(): boolean;
+    export function findFirstCameraInGraph(_graph: ƒ.Node): ƒ.ComponentCamera;
+    export function randomEnum<T extends object>(anEnum: T): T[keyof T];
+    export function mobileOrTabletCheck(): boolean;
+    interface CreateElementAdvancedOptions {
+        classes: string[];
+        innerHTML: string;
+    }
+    export function createElementAdvanced<K extends keyof HTMLElementTagNameMap>(_type: K, _options?: Partial<CreateElementAdvancedOptions>): HTMLElementTagNameMap[K];
+    export function shuffleArray<T>(_array: Array<T>): Array<T>;
+    export function waitMS(_ms: number): Promise<void>;
+    export {};
 }
 declare namespace Script {
     import ƒ = FudgeCore;
@@ -273,13 +300,15 @@ declare namespace Script {
     }
     export class Workbench extends UpdateScriptComponent implements Clickable {
         static categories: Category[];
+        private readonly buildSpeed;
+        private readonly traitUnlockChancePerSecond;
         private category;
         private subcategory;
         private buildProgress;
-        private readonly buildSpeed;
         private assignee;
         private matColor;
         private fittingTraits;
+        private startWorkTime;
         start(_e: CustomEvent<UpdateEvent>): void;
         shortTap(_pointer: Pointer): void;
         longTap(_pointer: Pointer): void;
@@ -292,6 +321,8 @@ declare namespace Script {
         static getSubcategoryFromId(_id: SUBCATEGORY): Subcategory;
         get needsAssembly(): boolean;
         work(_eumling: ƒ.Node, _timeMS: number): number;
+        private attemptToTeachNewTrait;
+        private assignNewEumling;
         unassignEumling(): void;
     }
     export {};

@@ -15,6 +15,8 @@ body {
   overflow: hidden;
   --grid-gap: min(1rem, 10vh, 10vw);
   --border-radius: 1rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  user-select: none;
 }
 
 dialog {
@@ -69,7 +71,7 @@ div.overlay.no-interact {
   background: transparent;
 }
 
-div.overlay.hidden {
+.hidden {
   display: none !important;
 }
 
@@ -83,6 +85,7 @@ div.overlay.hidden {
   justify-content: center;
   align-items: center;
 }
+
 div.close-button {
   position: absolute;
   z-index: 1;
@@ -91,6 +94,9 @@ div.close-button {
   font-size: 2rem;
   width: 2em;
   height: 2em;
+  background-image: url(Images/close.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .interactable {
@@ -129,6 +135,7 @@ div.close-button {
   grid-template-rows: auto 1fr;
   grid-template-areas: "title" "options";
 }
+
 #workbench-info-overlay-wrapper {
   grid-template-rows: auto 1fr auto;
   grid-template-areas: "title" "options" "remove";
@@ -186,4 +193,162 @@ div.close-button {
   object-fit: contain;
   height: 20vh;
   width: 30vw;
+}
+
+#achievement-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  align-items: end;
+  padding: var(--grid-gap);
+  gap: var(--grid-gap);
+  right: 0;
+  bottom: 0;
+  position: absolute;
+}
+
+#achievement-list {
+  display: grid;
+  gap: var(--grid-gap);
+  padding: var(--grid-gap);
+  width: calc(100% - 10 * var(--grid-gap));
+  max-height: 100%;
+  overflow-y: scroll;
+  padding-bottom: 20vh;
+}
+
+
+.achievement,
+.achievement-popup {
+  background-color: white;
+  border-radius: var(--border-radius);
+  padding: var(--grid-gap);
+  gap: var(--grid-gap);
+  display: grid;
+}
+.achievement {
+  grid-template-areas: "icon title divider description reward";
+  grid-template-columns: auto 1fr 0.3em 3fr auto;
+  opacity: 0.6;
+}
+.achievement.achieved {
+  opacity: 1;
+}
+
+.achievement-popup {
+  grid-template-areas: "title reward" "description reward";
+  position: relative;
+  cursor: pointer;
+  animation: achievement-in 1s forwards ease;
+}
+
+.achievement-title {
+  grid-area: title;
+  font-weight: bold;
+  text-align: left;
+}
+.achievement-description {
+  grid-area: description;
+  text-align: left;
+}
+.achievement-reward {
+  grid-area: reward;
+  font-weight: bold;
+  font-size: 2em;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+.achievement-icon {
+  grid-area: icon;
+  max-height: 4em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.achievement-icon img {
+  object-fit: contain;
+  max-height: 100%;
+}
+.achievement-divider {
+  border-radius: var(--border-radius);
+  width: 0.3em;
+  height: 100%;
+  background-color: black;
+}
+
+#achievement-progress-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(0deg, rgba(120,120,120,1) 29%, rgba(119,119,119,0) 100%);
+  height: 20vh;
+  display: flex;
+  padding: var(--grid-gap);
+  gap: var(--grid-gap);
+}
+
+#achievement-points-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#achievement-points-wrapper img {
+  width: 2em;
+}
+
+@keyframes achievement-in {
+  0% {left: 100%}
+  100% {left: 0%}
+}
+
+progress {
+  width: 100%;
+}
+
+#pause-button {
+  position: absolute;
+  top: var(--grid-gap);
+  right: var(--grid-gap);
+}
+#achievement-button {
+  position: absolute;
+  bottom: var(--grid-gap);
+  right: var(--grid-gap);
+}
+
+#game-info-wrapper {
+  top: var(--grid-gap);
+  left: var(--grid-gap);
+  position: absolute;
+  display: flex;
+  gap: var(--grid-gap);
+  filter: invert(100%);
+  font-size: 2em;
+}
+#game-info-wrapper div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#game-info-wrapper img {
+  width: 1em;
+}
+
+.flying-point {
+  position: absolute;
+  transition: left 1s, top 1s;
+  transition-timing-function: cubic-bezier(.42,-0.01,.71,-0.24);
+  animation: scaleUp 0.5s;
+  animation-timing-function: linear(0, 0.402 7.4%, 0.711 15.3%, 0.929 23.7%, 1.008 28.2%, 1.067 33%, 1.099 36.9%, 1.12 41%, 1.13 45.4%, 1.13 50.1%, 1.111 58.5%, 1.019 83.2%, 1.004 91.3%, 1);
+  filter: invert(31%) sepia(15%) saturate(2169%) hue-rotate(53deg) brightness(100%) contrast(88%);
+}
+
+@keyframes scaleUp {
+  0% {scale: 0;}
+  100% {scale: 1;}
 }

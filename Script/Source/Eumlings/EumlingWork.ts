@@ -15,7 +15,10 @@ namespace Script {
         }
 
         public unassign() {
+            if(!this.workbench) return;
+            let wb = this.workbench;
             this.workbench = undefined;
+            wb.unassignEumling();
             this.moveComp.walkAway();
         }
 
@@ -24,17 +27,20 @@ namespace Script {
             this.workbench = _wb;
             this.moveComp.teleportTo(_wb.node.mtxWorld.translation);
             this.moveComp.setState(STATE.WORK);
-            
+            this.updateWorkAnimation(fittingTraits);
+        }
+        
+        public updateWorkAnimation(_fittingTraits: number) {
             if(this.workbench.needsAssembly){
                 this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WORK_BUILD, 100);
             }
-            else if(fittingTraits === 0){
+            else if(_fittingTraits === 0){
                 this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WORK_BAD, 100);
             }
-            else if(fittingTraits === 1){
+            else if(_fittingTraits === 1){
                 this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WORK_NORMAL, 100);
             }
-            else if(fittingTraits === 2){
+            else if(_fittingTraits === 2){
                 this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WORK_GOOD, 100);
             }
         }

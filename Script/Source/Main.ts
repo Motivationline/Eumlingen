@@ -10,6 +10,7 @@ namespace Script {
   export const upInput = new UnifiedPointerInput();
   export let eumlingCameraActive: boolean = false;
   export const gravity: number = 8;
+  export const globalEvents: EventTarget = new EventTarget();
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
@@ -26,10 +27,12 @@ namespace Script {
     // viewport.draw();
     ƒ.AudioManager.default.update();
 
-    if (eumlingCameraActive) {
-      eumlingViewport.draw();
-    } else {
-      viewport.draw();
+    if(!GameData.paused){
+      if (eumlingCameraActive) {
+        eumlingViewport.draw();
+      } else {
+        viewport.draw();
+      }
     }
     if (gameMode) {
       // console.log(upInput.pointerList.length);
@@ -45,7 +48,10 @@ namespace Script {
     if (mobileOrTabletCheck()) {
       document.documentElement.requestFullscreen();
     }
+
     document.getElementById("start-screen").remove();
+    document.getElementById("game-overlay").classList.remove("hidden");
+    document.getElementById("achievement-overlay").classList.remove("hidden");
     let graphId/* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView")
     if ((<HTMLElement>_event.target).id === "freecam") {
       //@ts-ignore
@@ -73,6 +79,8 @@ namespace Script {
     eumlingCamera.mtxPivot.translateY(1);
     eumlingCamera.mtxPivot.rotateY(180);
     eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
+
+    viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
   }
 
   let currentCameraSpeed: number = 0;

@@ -56,13 +56,15 @@ namespace Script {
             },
         ]
 
+        private readonly buildSpeed: number = 1 / 10;
+        private readonly traitUnlockChancePerSecond = 1 / 60;
         private category: CATEGORY | undefined = undefined;
         private subcategory: SUBCATEGORY | undefined = undefined;
         private buildProgress: number = 0;
-        private readonly buildSpeed: number = 1 / 10;
         private assignee: ƒ.Node;
         private matColor: ƒ.Color;
         private fittingTraits: number = 0;
+        private startWorkTime: number = 0;
 
         start(_e: CustomEvent<UpdateEvent>): void {
             this.matColor = this.node.getComponent(ƒ.ComponentMaterial).clrPrimary;
@@ -162,22 +164,12 @@ namespace Script {
         }
 
         get needsAssembly(): boolean {
-            return (this.category && this.buildProgress < 1); 
+            return (this.category && this.buildProgress < 1);
         }
 
         work(_eumling: ƒ.Node, _timeMS: number): number {
             if (this.assignee !== _eumling) {
-                this.unassignEumling();
-                this.assignee = _eumling;
-
-                this.fittingTraits = 0;
-                if (this.subcategory) {
-                    let sub = Workbench.getSubcategoryFromId(this.subcategory);
-                    let assigneeTraits = this.assignee.getComponent(EumlingData).traits;
-                    for (let t of sub.preferredTraits) {
-                        if (assigneeTraits.has(t)) this.fittingTraits++;
-                    }
-                }
+                this.assignNewEumling(_eumling);
             }
             if (!this.category) {
                 this.unassignEumling();
@@ -189,13 +181,54 @@ namespace Script {
                     this.unassignEumling();
                 }
             }
+            if (this.assignee) {
+                globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "eumlingWorking", data: { workTime: ƒ.Time.game.get() - this.startWorkTime } } }));
+                if (this.fittingTraits < 2) {
+                    this.attemptToTeachNewTrait(_timeMS);
+                }
+            }
             return this.fittingTraits;
+        }
+
+        private attemptToTeachNewTrait(_timeMS: number) {
+            if (!this.subcategory) return;
+            let data = this.assignee.getComponent(EumlingData);
+            if (data.traits.size >= 4) return;
+            if (Math.random() > (_timeMS / 1000) * this.traitUnlockChancePerSecond) return;
+            let requiredTraits: TRAIT[] = [...Workbench.getSubcategoryFromId(this.subcategory).preferredTraits];
+            shuffleArray(requiredTraits);
+            for (let trait of requiredTraits) {
+                if (!data.traits.has(trait)) {
+                    data.traits.add(trait);
+                    break;
+                }
+            }
+            this.fittingTraits++;
+            globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "eumlingDevelopTrait", data: { fittingTraits: this.fittingTraits, traits: data.traits, eumling: this.assignee } } }));
+            this.assignee.getComponent(EumlingWork).updateWorkAnimation(this.fittingTraits);
+        }
+
+        private assignNewEumling(_eumling: ƒ.Node) {
+            this.unassignEumling();
+            this.assignee = _eumling;
+            this.startWorkTime = ƒ.Time.game.get();
+
+            this.fittingTraits = 0;
+            if (this.subcategory) {
+                let sub = Workbench.getSubcategoryFromId(this.subcategory);
+                let assigneeTraits = this.assignee.getComponent(EumlingData).traits;
+                for (let t of sub.preferredTraits) {
+                    if (assigneeTraits.has(t)) this.fittingTraits++;
+                }
+                globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "assignEumling", data: { fittingTraits: this.fittingTraits } } }));
+            }
         }
 
         unassignEumling() {
             if (!this.assignee) return;
             this.assignee.getComponent(EumlingWork).unassign();
             this.assignee = undefined;
+            globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "unassignEumling", data: { workTime: ƒ.Time.game.get() - this.startWorkTime } } }));
         }
     }
 }
