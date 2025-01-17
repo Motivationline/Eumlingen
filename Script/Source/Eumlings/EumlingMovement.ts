@@ -95,7 +95,6 @@ namespace Script {
                         this.velocity.set(difference.x / deltaTimeSeconds, difference.y / deltaTimeSeconds, 0);
                         if (this.pointer.ended) {
                             this.setState(STATE.FALL);
-                            console.log(this.velocity.magnitude);
                             if (this.velocity.magnitudeSquared > EumlingMovement.maxVelocity * EumlingMovement.maxVelocity)
                                 this.velocity.normalize(EumlingMovement.maxVelocity);
                             let pointer = this.pointer;

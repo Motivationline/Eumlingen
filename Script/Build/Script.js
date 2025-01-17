@@ -87,21 +87,20 @@ var Script;
         EVENT_POINTER["LONG"] = "pointerlong";
     })(EVENT_POINTER = Script.EVENT_POINTER || (Script.EVENT_POINTER = {}));
     const timeUntilLongClickMS = 500;
-    const maxDistanceForLongClick = 20;
+    const maxDistanceForLongClick = 100;
     class UnifiedPointerInput extends EventTarget {
         constructor() {
             super(...arguments);
             this.pointers = new Map();
             this.hndPointerDown = (_event) => {
-                _event.preventDefault();
                 let existingPointer = this.getPointer(_event.pointerId);
                 if (!existingPointer)
                     existingPointer = this.createPointerFromPointer(_event);
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
+                // console.log("pointer down");
             };
             this.hndPointerUp = (_event) => {
-                _event.preventDefault();
                 let existingPointer = this.getPointer(_event.pointerId);
                 if (existingPointer) {
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
@@ -111,10 +110,10 @@ var Script;
                     clearTimeout(existingPointer.longTapTimeout);
                     existingPointer.ended = true;
                     this.pointers.delete(existingPointer.id);
+                    // console.log("pointer up");
                 }
             };
             this.hndPointerMove = (_event) => {
-                _event.preventDefault();
                 let existingPointer = this.getPointer(_event.pointerId);
                 if (!existingPointer)
                     return;
@@ -134,6 +133,19 @@ var Script;
             _element.addEventListener("pointerup", this.hndPointerUp);
             _element.addEventListener("pointercancel", this.hndPointerUp);
             _element.addEventListener("pointermove", this.hndPointerMove);
+            //prevent defaults
+            _element.addEventListener("contextmenu", this.preventDefaults);
+            _element.addEventListener("pointerdown", this.preventDefaults);
+            _element.addEventListener("pointerup", this.preventDefaults);
+            _element.addEventListener("pointermove", this.preventDefaults);
+            _element.addEventListener("touchstart", this.preventDefaults);
+            _element.addEventListener("touchend", this.preventDefaults);
+            _element.addEventListener("touchcancel", this.preventDefaults);
+            _element.addEventListener("touchmove", this.preventDefaults);
+            _element.addEventListener("dblclick", this.preventDefaults);
+            _element.addEventListener("pointercancel", this.preventDefaults);
+            _element.addEventListener("scroll", this.preventDefaults);
+            _element.addEventListener("scrollend", this.preventDefaults);
         }
         getPointer(_id) {
             return this.pointers.get(_id);
@@ -156,6 +168,10 @@ var Script;
             this.pointers.set(pointer.id, pointer);
             this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer } }));
             return pointer;
+        }
+        preventDefaults(_e) {
+            _e.preventDefault();
+            _e.stopPropagation();
         }
         get pointerList() {
             return Array.from(this.pointers, ([, pointer]) => (pointer));
@@ -565,7 +581,6 @@ var Script;
                             this.velocity.set(difference.x / deltaTimeSeconds, difference.y / deltaTimeSeconds, 0);
                             if (this.pointer.ended) {
                                 this.setState(STATE.FALL);
-                                console.log(this.velocity.magnitude);
                                 if (this.velocity.magnitudeSquared > EumlingMovement.maxVelocity * EumlingMovement.maxVelocity)
                                     this.velocity.normalize(EumlingMovement.maxVelocity);
                                 let pointer = this.pointer;

@@ -44,6 +44,7 @@ declare namespace Script {
         private hndPointerMove;
         private getPointer;
         private createPointerFromPointer;
+        private preventDefaults;
         get pointerList(): Pointer[];
     }
 }

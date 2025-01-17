@@ -29,7 +29,7 @@ namespace Script {
         pointer: Pointer,
     }
     const timeUntilLongClickMS = 500;
-    const maxDistanceForLongClick = 20;
+    const maxDistanceForLongClick = 100;
     export class UnifiedPointerInput extends EventTarget {
         private pointers: Map<number, Pointer> = new Map();
 
@@ -39,19 +39,32 @@ namespace Script {
             _element.addEventListener("pointerup", <EventListener>this.hndPointerUp);
             _element.addEventListener("pointercancel", <EventListener>this.hndPointerUp);
             _element.addEventListener("pointermove", <EventListener>this.hndPointerMove);
+
+            //prevent defaults
+            _element.addEventListener("contextmenu", this.preventDefaults);
+            _element.addEventListener("pointerdown", this.preventDefaults);
+            _element.addEventListener("pointerup", this.preventDefaults);
+            _element.addEventListener("pointermove", this.preventDefaults);
+            _element.addEventListener("touchstart", this.preventDefaults);
+            _element.addEventListener("touchend", this.preventDefaults);
+            _element.addEventListener("touchcancel", this.preventDefaults);
+            _element.addEventListener("touchmove", this.preventDefaults);
+            _element.addEventListener("dblclick", this.preventDefaults);
+            _element.addEventListener("pointercancel", this.preventDefaults);
+            _element.addEventListener("scroll", this.preventDefaults);
+            _element.addEventListener("scrollend", this.preventDefaults);
         }
 
 
         private hndPointerDown = (_event: PointerEvent) => {
-            _event.preventDefault();
             let existingPointer = this.getPointer(_event.pointerId);
             if (!existingPointer)
                 existingPointer = this.createPointerFromPointer(_event);
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
+            // console.log("pointer down");
         }
         private hndPointerUp = (_event: PointerEvent) => {
-            _event.preventDefault();
             let existingPointer = this.getPointer(_event.pointerId);
             if (existingPointer) {
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
@@ -61,10 +74,10 @@ namespace Script {
                 clearTimeout(existingPointer.longTapTimeout);
                 existingPointer.ended = true;
                 this.pointers.delete(existingPointer.id);
+                // console.log("pointer up");
             }
         }
         private hndPointerMove = (_event: PointerEvent) => {
-            _event.preventDefault();
             let existingPointer = this.getPointer(_event.pointerId);
             if (!existingPointer)
                 return;
@@ -107,8 +120,14 @@ namespace Script {
             return pointer;
         }
 
+        private preventDefaults(_e: Event) {
+            _e.preventDefault();
+            _e.stopPropagation();
+        }
+
         public get pointerList(): Pointer[] {
             return Array.from(this.pointers, ([, pointer]) => (pointer));
         }
+
     }
 }
