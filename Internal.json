@@ -107,7 +107,7 @@
                     "direction": "diagonal",
                     "near": 0.1,
                     "far": 2000,
-                    "aspect": 1.510172143974961,
+                    "aspect": 1.6223776223776223,
                     "pivot": {
                       "translation": "[-5, 2.6999999999999997, 14]",
                       "rotation": "[10, 180, 0]",
@@ -433,6 +433,36 @@
                                       "local": {
                                         "translation": "[-2.536552906036377, -0.15047197043895721, 5.3606038093566895]",
                                         "rotation": "[0, -81.21995366793581, -11.31777696779826]",
+                                        "scaling": "[1, 1, 1]"
+                                      },
+                                      "Component": {
+                                        "active": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "children": [
+                                {
+                                  "ƒ.GraphInstance": {
+                                    "deserializeFromSource": true,
+                                    "idSource": "GraphGLTF|2025-01-10T11:23:09.621Z|21884"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "ƒ.Node": {
+                              "name": "Monument3",
+                              "active": true,
+                              "components": {
+                                "ComponentTransform": [
+                                  {
+                                    "ƒ.ComponentTransform": {
+                                      "local": {
+                                        "translation": "[-12.420828819274902, 0.33342763781547546, 3.903961658477783]",
+                                        "rotation": "[0.0000023115945926261677, -81.21995471158672, 7.547688789636379]",
                                         "scaling": "[1, 1, 1]"
                                       },
                                       "Component": {
@@ -932,6 +962,42 @@
       "events": {}
     }
   },
+  "AnimationGLTF|2025-01-20T13:44:22.411Z|76255": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255",
+      "name": "Craft",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.477Z|09086": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.477Z|09086",
+      "name": "work_bad",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.484Z|42105": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.484Z|42105",
+      "name": "work_okay",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.493Z|83835": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.493Z|83835",
+      "name": "work_perfect",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
     "ƒ.Graph": {
       "name": "Eumling",
@@ -1175,42 +1241,6 @@
     "ƒ.AnimationGLTF": {
       "idResource": "AnimationGLTF|2025-01-15T14:56:23.860Z|47654",
       "name": "WalkV2",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb",
-      "events": {}
-    }
-  },
-  "AnimationGLTF|2025-01-20T13:44:22.411Z|76255": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255",
-      "name": "Craft",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb",
-      "events": {}
-    }
-  },
-  "AnimationGLTF|2025-01-20T13:44:22.477Z|09086": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-20T13:44:22.477Z|09086",
-      "name": "work_bad",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb",
-      "events": {}
-    }
-  },
-  "AnimationGLTF|2025-01-20T13:44:22.484Z|42105": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-20T13:44:22.484Z|42105",
-      "name": "work_okay",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb",
-      "events": {}
-    }
-  },
-  "AnimationGLTF|2025-01-20T13:44:22.493Z|83835": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-20T13:44:22.493Z|83835",
-      "name": "work_perfect",
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb",
       "events": {}
