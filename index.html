@@ -105,16 +105,31 @@
     <div id="achievement-overlay" class="hidden no-interact"></div>
     <div id="achievement-screen-overlay" class="overlay hidden">
         <div id="achievement-list"></div>
-        <div id="achievement-progress-wrapper">
-            <div id="achievement-points-wrapper">
+        <div class="achievement-progress-wrapper">
+            <div class="achievement-points-wrapper">
                 <span class="total-points-display">30</span>
                 <img src="Images/point.svg" alt="">
             </div>
-            <div>
-                <progress id="achievement-progress" value="0"></progress>
+            <div class="achievement-progress-bar-wrapper">
+                <div class="achievement-progress-bar">
+                    <div class="achievement-progress-bar-now"></div>
+                </div>
             </div>
         </div>
         <div class="close-button button"></div>
+    </div>
+    <div id="achievement-progress-overlay" class="no-interact hide hidden">
+        <div class="achievement-progress-wrapper">
+            <div class="achievement-points-wrapper">
+                <span class="total-points-display">30</span>
+                <img src="Images/point.svg" alt="">
+            </div>
+            <div class="achievement-progress-bar-wrapper">
+                <div class="achievement-progress-bar">
+                    <div class="achievement-progress-bar-now"></div>
+                </div>
+            </div>
+        </div>
     </div>
     <!--Canvas for FUDGE to render to-->
     <canvas class="fullscreen" id="game-canvas">

@@ -52,6 +52,7 @@ namespace Script {
     document.getElementById("start-screen").remove();
     document.getElementById("game-overlay").classList.remove("hidden");
     document.getElementById("achievement-overlay").classList.remove("hidden");
+    document.getElementById("achievement-progress-overlay").classList.remove("hidden");
     let graphId/* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView")
     if ((<HTMLElement>_event.target).id === "freecam") {
       //@ts-ignore

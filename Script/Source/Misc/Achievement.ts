@@ -16,6 +16,7 @@ namespace Script {
     }
 
     const achievements: Achievement[] = [
+        // { title: "", description: "", icon: "", reward: 100, checkCompleted(_e) { return true; }, },
         {
             title: "Das passt ja gar nicht",
             description: "Weise einen Eumling einer Station zu, die mit keiner Eigenschaft übereinstimmt.",
@@ -140,7 +141,7 @@ namespace Script {
                 await waitMS(20);
             }
         })
-        _div.addEventListener("animationcancel", ()=>{GameData.addPoints(_amt)});
+        _div.addEventListener("animationcancel", () => { GameData.addPoints(_amt) });
     }
 
     function updateAchievementList() {

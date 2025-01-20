@@ -210,7 +210,11 @@ declare namespace Script {
         constructor();
         static get points(): number;
         static addPoints(_points: number): void;
-        static updateDisplays(): void;
+        static updateDisplays(showProgressOverlay?: boolean): void;
+        static updateProgressBar(): void;
+        static displayTimeout: number;
+        static displayProgressBarOverlay(): void;
+        static hideProgressBarOverlay(): void;
     }
 }
 declare namespace Script {

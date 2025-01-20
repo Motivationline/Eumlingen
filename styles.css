@@ -278,7 +278,7 @@ div.close-button {
   background-color: black;
 }
 
-#achievement-progress-wrapper {
+.achievement-progress-wrapper {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -290,15 +290,57 @@ div.close-button {
   gap: var(--grid-gap);
 }
 
-#achievement-points-wrapper {
+.achievement-points-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
-#achievement-points-wrapper img {
+.achievement-points-wrapper img {
   width: 2em;
+}
+
+.achievement-progress-bar-wrapper {
+  --width: 90vw;
+  width: var(--width);
+  --totalPoints: 100;
+  --pointsUntilEumling: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.achievement-progress-bar {
+  width: 100%;
+  /* background: red; */
+  --fill-color: lightgray;
+}
+.achievement-progress-bar-now {
+  --fill-color: black;
+  width: 0%;
+  transition: width 1s ease-out;  
+}
+.achievement-progress-bar,
+.achievement-progress-bar-now {
+  height: 10vh;
+  background: linear-gradient(to right, var(--fill-color) 99.9%, transparent 99.9%), radial-gradient(circle at 95% 50%, var(--fill-color) 5%, transparent 5%);
+  background-position: 0 50%, 0 50%;
+  background-size: 100% 5px, calc(var(--pointsUntilEumling) / var(--totalPoints) * var(--width)) 100%;
+  background-repeat: no-repeat, repeat-x;
+}
+
+#achievement-progress-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+#achievement-progress-overlay .achievement-progress-wrapper {
+  transition: bottom 1s ease;
+  bottom: 0;
+}
+#achievement-progress-overlay.hide .achievement-progress-wrapper {
+  bottom: -20vh;
 }
 
 @keyframes achievement-in {

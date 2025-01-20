@@ -225,6 +225,7 @@ var Script;
         document.getElementById("start-screen").remove();
         document.getElementById("game-overlay").classList.remove("hidden");
         document.getElementById("achievement-overlay").classList.remove("hidden");
+        document.getElementById("achievement-progress-overlay").classList.remove("hidden");
         let graphId /* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView");
         if (_event.target.id === "freecam") {
             //@ts-ignore
@@ -865,6 +866,7 @@ var Script;
 var Script;
 (function (Script) {
     const achievements = [
+        // { title: "", description: "", icon: "", reward: 100, checkCompleted(_e) { return true; }, },
         {
             title: "Das passt ja gar nicht",
             description: "Weise einen Eumling einer Station zu, die mit keiner Eigenschaft übereinstimmt.",
@@ -1038,6 +1040,7 @@ var Script;
         static #totalPoints = 0;
         static #unlockedEumlings = 1;
         static { this.paused = false; }
+        static #pointsPerEumling = 20;
         constructor() {
             if (GameData.Instance)
                 return GameData.Instance;
@@ -1049,19 +1052,45 @@ var Script;
             this.#points += _points;
             this.#totalPoints += _points;
             //check new Eumling reached
-            if (Math.floor(this.#totalPoints / 20) > this.#unlockedEumlings - 1) {
+            const newEumlingAmt = Math.floor(this.#totalPoints / this.#pointsPerEumling) + 1;
+            const eumlingsToSpawn = newEumlingAmt - this.#unlockedEumlings;
+            for (let i = 0; i < eumlingsToSpawn; i++) {
                 this.#unlockedEumlings++;
-                Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
+                setTimeout(() => {
+                    Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
+                }, 100 * i);
             }
-            this.updateDisplays();
+            this.updateDisplays(true);
         }
-        static updateDisplays() {
+        static updateDisplays(showProgressOverlay = false) {
             document.querySelectorAll(".total-points-display").forEach(el => el.innerText = this.#totalPoints.toString());
             document.querySelectorAll(".point-display").forEach(el => el.innerText = this.#points.toString());
             document.querySelectorAll(".eumling-display").forEach(el => el.innerText = this.#unlockedEumlings.toString());
-            const progress = document.getElementById("achievement-progress");
-            progress.max = Script.maxAchievablePoints;
-            progress.value = this.#totalPoints;
+            this.updateProgressBar();
+            if (showProgressOverlay)
+                this.displayProgressBarOverlay();
+        }
+        static updateProgressBar() {
+            let wrappers = document.querySelectorAll(".achievement-progress-bar-wrapper");
+            wrappers.forEach(wrapper => {
+                wrapper.style.setProperty("--totalPoints", Script.maxAchievablePoints.toString());
+                wrapper.style.setProperty("--pointsUntilEumling", this.#pointsPerEumling.toString());
+            });
+            const progress = this.#totalPoints / Script.maxAchievablePoints;
+            const elements = document.querySelectorAll(".achievement-progress-bar-now");
+            elements.forEach(element => {
+                element.style.width = progress * 100 + "%";
+            });
+        }
+        static displayProgressBarOverlay() {
+            const overlay = document.getElementById("achievement-progress-overlay");
+            clearTimeout(this.displayTimeout);
+            overlay.classList.remove("hide");
+            this.displayTimeout = setTimeout(this.hideProgressBarOverlay, 3000);
+        }
+        static hideProgressBarOverlay() {
+            const overlay = document.getElementById("achievement-progress-overlay");
+            overlay.classList.add("hide");
         }
     }
     Script.GameData = GameData;
