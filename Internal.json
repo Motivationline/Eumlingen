@@ -30,7 +30,8 @@
       "idResource": "AnimationGLTF|2024-11-26T10:12:05.444Z|94426",
       "name": "IdleV1",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2024-11-26T10:12:05.429Z|70191": {
@@ -38,7 +39,8 @@
       "idResource": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
       "name": "Fishing",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2024-11-26T10:12:05.438Z|84941": {
@@ -46,7 +48,8 @@
       "idResource": "AnimationGLTF|2024-11-26T10:12:05.438Z|84941",
       "name": "FishingCast",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2024-11-26T10:12:05.457Z|72466": {
@@ -54,7 +57,8 @@
       "idResource": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466",
       "name": "Sit",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "MeshCube|2024-12-20T12:33:42.882Z|93243": {
@@ -888,7 +892,8 @@
       "idResource": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
       "name": "WalkV1",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2025-01-14T09:33:32.705Z|59264": {
@@ -896,7 +901,8 @@
       "idResource": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
       "name": "ClickBlockout",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2025-01-16T12:50:29.974Z|66904": {
@@ -904,7 +910,8 @@
       "idResource": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
       "name": "Drag",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2025-01-16T12:50:29.977Z|96548": {
@@ -912,7 +919,8 @@
       "idResource": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
       "name": "Drop",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2025-01-15T14:56:23.841Z|15808": {
@@ -920,7 +928,8 @@
       "idResource": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808",
       "name": "InteractingBlockingPolishingV1",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
@@ -980,10 +989,10 @@
               "sit": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466",
               "pick": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
               "fall": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
-              "work_build": "AnimationGLTF|2024-11-26T10:12:05.438Z|84941",
-              "work_bad": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
-              "work_normal": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
-              "work_good": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808"
+              "work_build": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255",
+              "work_bad": "AnimationGLTF|2025-01-20T13:44:22.477Z|09086",
+              "work_normal": "AnimationGLTF|2025-01-20T13:44:22.484Z|42105",
+              "work_good": "AnimationGLTF|2025-01-20T13:44:22.493Z|83835"
             }
           }
         ],
@@ -1167,7 +1176,44 @@
       "idResource": "AnimationGLTF|2025-01-15T14:56:23.860Z|47654",
       "name": "WalkV2",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.411Z|76255": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255",
+      "name": "Craft",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.477Z|09086": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.477Z|09086",
+      "name": "work_bad",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.484Z|42105": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.484Z|42105",
+      "name": "work_okay",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.493Z|83835": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.493Z|83835",
+      "name": "work_perfect",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   }
 }
