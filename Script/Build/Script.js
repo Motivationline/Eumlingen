@@ -303,12 +303,22 @@ var Script;
             super();
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
+            this.addEventListener("preupdate", this.prestart, { once: true });
             this.addEventListener("update", this.start, { once: true });
             this.addEventListener("update", this.update);
         }
         // runs updates of all updateable components
         static updateAllInBranch(_branch) {
             let event = new CustomEvent("update", { detail: { deltaTime: ƒ.Loop.timeFrameGame } });
+            let preEvent = new CustomEvent("preupdate", { detail: { deltaTime: ƒ.Loop.timeFrameGame } });
+            for (let node of _branch) {
+                for (let component of node.getAllComponents()) {
+                    if (component instanceof UpdateScriptComponent) {
+                        if (component.active)
+                            component.dispatchEvent(preEvent);
+                    }
+                }
+            }
             for (let node of _branch) {
                 for (let component of node.getAllComponents()) {
                     if (component instanceof UpdateScriptComponent) {
@@ -399,7 +409,7 @@ var Script;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
                 __runInitializers(_classThis, _classExtraInitializers);
             }
-            start(_e) {
+            prestart(_e) {
                 this.animations.set(EumlingAnimator.ANIMATIONS.EMPTY, new ƒ.AnimationNodeAnimation());
                 this.animations.set(EumlingAnimator.ANIMATIONS.IDLE, new ƒ.AnimationNodeAnimation(this.idle));
                 this.animations.set(EumlingAnimator.ANIMATIONS.WALK, new ƒ.AnimationNodeAnimation(this.walk));
@@ -505,6 +515,9 @@ var Script;
             }
         }
         shortTap(_pointer) {
+            if (this.node.getComponent(Script.EumlingMovement).getState() === Script.STATE.GROWN || _pointer.used) {
+                return;
+            }
             this.showSelf();
         }
         showSelf() {
@@ -584,7 +597,7 @@ var Script;
                 this.idleTimeMSMax = __runInitializers(this, _idleTimeMSMax_initializers, 5000);
                 this.sitTimeMSMin = __runInitializers(this, _sitTimeMSMin_initializers, 5000);
                 this.sitTimeMSMax = __runInitializers(this, _sitTimeMSMax_initializers, 10000);
-                this.state = STATE.IDLE;
+                this.state = STATE.GROWN;
                 this.nextSwapTimestamp = 0;
                 this.velocity = new ƒ.Vector3();
                 if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -594,7 +607,7 @@ var Script;
                 this.animator = this.node.getComponent(Script.EumlingAnimator);
                 let walkNode = this.node.getParent();
                 this.walkArea = walkNode?.getComponent(Script.WalkableArea);
-                this.setState(STATE.IDLE);
+                this.setState(this.state);
             }
             ;
             update(_e) {
@@ -710,6 +723,10 @@ var Script;
                         break;
                     case STATE.WORK:
                         break;
+                    case STATE.GROWN:
+                        this.node.mtxLocal.translateY(-0.95);
+                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.PICKED, 100);
+                        break;
                 }
                 this.state = _state;
             }
@@ -732,7 +749,20 @@ var Script;
                 pos.z = Math.max(this.walkArea.minZ, Math.min(this.walkArea.maxZ, pos.z));
                 return pos;
             }
+            shortTap(_pointer) {
+                if (this.state === STATE.GROWN) {
+                    this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
+                    this.setState(STATE.IDLE);
+                    _pointer.used = true;
+                    return;
+                }
+            }
             longTap(_pointer) {
+                if (this.state === STATE.GROWN) {
+                    this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
+                    this.setState(STATE.IDLE);
+                    return;
+                }
                 this.setState(STATE.PICKED);
                 this.pointer = _pointer;
             }
@@ -755,6 +785,9 @@ var Script;
                 }
                 this.animator.overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON);
             }
+            getState() {
+                return this.state;
+            }
             static {
                 __runInitializers(_classThis, _classExtraInitializers);
             }
@@ -770,6 +803,7 @@ var Script;
         STATE[STATE["WALK"] = 3] = "WALK";
         STATE[STATE["PICKED"] = 4] = "PICKED";
         STATE[STATE["WORK"] = 5] = "WORK";
+        STATE[STATE["GROWN"] = 6] = "GROWN";
     })(STATE = Script.STATE || (Script.STATE = {}));
 })(Script || (Script = {}));
 var Script;

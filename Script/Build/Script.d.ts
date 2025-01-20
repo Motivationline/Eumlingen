@@ -66,6 +66,7 @@ declare namespace Script {
     abstract class UpdateScriptComponent extends ƒ.Component {
         constructor();
         static updateAllInBranch(_branch: ƒ.Node): void;
+        prestart?(_e: CustomEvent<UpdateEvent>): void;
         start?(_e: CustomEvent<UpdateEvent>): void;
         update?(_e: CustomEvent<UpdateEvent>): void;
     }
@@ -88,7 +89,7 @@ declare namespace Script {
         private animPlaying;
         private animOverlay;
         private cmpAnim;
-        start(_e: CustomEvent<UpdateEvent>): void;
+        prestart(_e: CustomEvent<UpdateEvent>): void;
         transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
         private timeout;
         overlayAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
@@ -160,11 +161,13 @@ declare namespace Script {
         setState(_state: STATE): void;
         private getPositionToWalkTo;
         private findPickPosition;
+        shortTap(_pointer: Pointer): void;
         longTap(_pointer: Pointer): void;
         walkAway(): void;
         walkTo(_pos: ƒ.Vector3): void;
         teleportTo(_pos: ƒ.Vector3): void;
         stopMoving(): void;
+        getState(): STATE;
     }
     enum STATE {
         IDLE = 0,
@@ -172,7 +175,8 @@ declare namespace Script {
         SIT = 2,
         WALK = 3,
         PICKED = 4,
-        WORK = 5
+        WORK = 5,
+        GROWN = 6
     }
 }
 declare namespace Script {

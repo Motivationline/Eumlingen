@@ -31,8 +31,7 @@ namespace Script {
         private animOverlay: ƒ.AnimationNodeTransition;
         private cmpAnim: ƒ.ComponentAnimationGraph;
 
-        start(_e: CustomEvent<UpdateEvent>): void {
-
+        prestart(_e: CustomEvent<UpdateEvent>): void {
             this.animations.set(EumlingAnimator.ANIMATIONS.EMPTY, new ƒ.AnimationNodeAnimation());
             this.animations.set(EumlingAnimator.ANIMATIONS.IDLE, new ƒ.AnimationNodeAnimation(this.idle));
             this.animations.set(EumlingAnimator.ANIMATIONS.WALK, new ƒ.AnimationNodeAnimation(this.walk));
@@ -49,7 +48,7 @@ namespace Script {
             this.animOverlay = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY));
             let rootAnim = new ƒ.AnimationNodeBlend([this.animPlaying, this.animOverlay]);
             this.cmpAnim = new ƒ.ComponentAnimationGraph(rootAnim);
-
+    
             let importedScene = this.node.getChild(0);
             importedScene.getComponent(ƒ.ComponentAnimation).activate(false);
             importedScene.addComponent(this.cmpAnim);

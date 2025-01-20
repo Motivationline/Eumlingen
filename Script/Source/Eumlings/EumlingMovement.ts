@@ -17,7 +17,7 @@ namespace Script {
         sitTimeMSMax: number = 10000;
 
         private targetPosition: ƒ.Vector3;
-        private state: STATE = STATE.IDLE;
+        private state: STATE = STATE.GROWN;
         private animator: EumlingAnimator;
         private nextSwapTimestamp: number = 0;
         private pointer: Pointer;
@@ -39,7 +39,7 @@ namespace Script {
             let walkNode = this.node.getParent();
             this.walkArea = walkNode?.getComponent(WalkableArea);
 
-            this.setState(STATE.IDLE);
+            this.setState(this.state);
         };
         override update(_e: CustomEvent<UpdateEvent>) {
             let now = ƒ.Time.game.get();
@@ -144,15 +144,19 @@ namespace Script {
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WALK, 100);
                     break;
                 case STATE.PICKED:
-                    if(this.state === STATE.WORK) {
+                    if (this.state === STATE.WORK) {
                         this.node.getComponent(EumlingWork).unassign();
                     }
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.PICKED, 100);
                     break;
                 case STATE.WORK:
                     break;
+                case STATE.GROWN:
+                    this.node.mtxLocal.translateY(-0.95);
+                    this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.PICKED, 100);
+                    break;
             }
-            
+
             this.state = _state;
         }
 
@@ -180,7 +184,21 @@ namespace Script {
             return pos;
         }
 
+        shortTap(_pointer: Pointer): void {
+            if (this.state === STATE.GROWN) {
+                this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
+                this.setState(STATE.IDLE);
+                _pointer.used = true;
+                return;
+            }
+        }
+
         longTap(_pointer: Pointer): void {
+            if (this.state === STATE.GROWN) {
+                this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
+                this.setState(STATE.IDLE);
+                return;
+            }
             this.setState(STATE.PICKED);
             this.pointer = _pointer;
         }
@@ -206,6 +224,10 @@ namespace Script {
             }
             this.animator.overlayAnimation(EumlingAnimator.ANIMATIONS.CLICKED_ON);
         }
+
+        getState(): STATE {
+            return this.state;
+        }
     }
     export enum STATE {
         IDLE,
@@ -214,5 +236,6 @@ namespace Script {
         WALK,
         PICKED,
         WORK,
+        GROWN,
     }
 }

@@ -15,6 +15,9 @@ namespace Script {
 
 
         shortTap(_pointer: Pointer): void {
+            if (this.node.getComponent(EumlingMovement).getState() === STATE.GROWN || _pointer.used) {
+                return;
+            }
             this.showSelf();
         }
 
