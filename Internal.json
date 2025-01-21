@@ -1075,7 +1075,7 @@
               "pick": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
               "fall": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
               "work_build": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255",
-              "work_build_offset": "[0, 0, 0]",
+              "work_build_offset": "[0, 0, -1]",
               "work_bad": "AnimationGLTF|2025-01-20T13:44:22.477Z|09086",
               "work_bad_offset": "[0, 0, 0]",
               "work_normal": "AnimationGLTF|2025-01-20T13:44:22.484Z|42105",
