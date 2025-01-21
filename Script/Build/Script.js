@@ -611,6 +611,8 @@ var Script;
             }
             ;
             update(_e) {
+                if (Script.eumlingCameraActive)
+                    return;
                 let now = ƒ.Time.game.get();
                 let deltaTimeSeconds = _e.detail.deltaTime / 1000;
                 switch (this.state) {

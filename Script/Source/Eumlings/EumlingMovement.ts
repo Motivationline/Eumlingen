@@ -42,6 +42,7 @@ namespace Script {
             this.setState(this.state);
         };
         override update(_e: CustomEvent<UpdateEvent>) {
+            if (eumlingCameraActive) return;
             let now = ƒ.Time.game.get();
             let deltaTimeSeconds: number = _e.detail.deltaTime / 1000;
             switch (this.state) {
