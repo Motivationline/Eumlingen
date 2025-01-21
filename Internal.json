@@ -1269,39 +1269,6 @@
       "name": "Workbench",
       "active": true,
       "components": {
-        "ComponentMesh": [
-          {
-            "ƒ.ComponentMesh": {
-              "idMesh": "MeshCube|2024-12-20T12:33:42.882Z|93243",
-              "pivot": {
-                "translation": "[0, 0.20000000000000004, 0]",
-                "rotation": "[0, 0, 0]",
-                "scaling": "[0.5, 0.5, 0.5]"
-              },
-              "Component": {
-                "active": true
-              }
-            }
-          }
-        ],
-        "ComponentMaterial": [
-          {
-            "ƒ.ComponentMaterial": {
-              "sortForAlpha": false,
-              "clrPrimary": "[0.4980392156862745, 0.5058823529411764, 0, 1]",
-              "clrSecondary": "[1, 1, 1, 1]",
-              "pivot": {
-                "translation": "[0, 0]",
-                "rotation": 0,
-                "scaling": "[1, 1]"
-              },
-              "Component": {
-                "active": true
-              },
-              "idMaterial": "Material|2024-12-20T12:33:52.056Z|05556"
-            }
-          }
-        ],
         "ComponentPick": [
           {
             "ƒ.ComponentPick": {
@@ -1328,6 +1295,22 @@
               "Component": {
                 "active": true
               }
+            }
+          }
+        ],
+        "WorkbenchVisuals": [
+          {
+            "Script.WorkbenchVisuals": {
+              "active": true,
+              "default": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "nature": "GraphGLTF|2024-11-26T10:12:05.429Z|21958",
+              "nature_animals": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "nature_farming": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "nature_gardening": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_mat_extr": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_production": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_processing": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
             }
           }
         ]

@@ -298,27 +298,27 @@ declare namespace Script {
         name: string;
         id: number;
     }
-    export interface Category extends BaseCategory {
+    interface Category extends BaseCategory {
         id: CATEGORY;
         subcategories: Subcategory[];
     }
-    export interface Subcategory extends BaseCategory {
+    interface Subcategory extends BaseCategory {
         id: SUBCATEGORY;
         preferredTraits: TRAIT[];
     }
-    export enum CATEGORY {
+    enum CATEGORY {
         NATURE = 1,
         CRAFT = 2
     }
-    export enum SUBCATEGORY {
-        ANIMALS = 1,
-        FARMING = 2,
-        GARDENING = 3,
-        MATERIAL_EXTRACTION = 4,
-        PRODUCTION = 5,
-        PROCESSING = 6
+    enum SUBCATEGORY {
+        ANIMALS = 100,
+        FARMING = 101,
+        GARDENING = 102,
+        MATERIAL_EXTRACTION = 103,
+        PRODUCTION = 104,
+        PROCESSING = 105
     }
-    export class Workbench extends UpdateScriptComponent implements Clickable {
+    class Workbench extends UpdateScriptComponent implements Clickable {
         static categories: Category[];
         private readonly buildSpeed;
         private readonly traitUnlockChancePerSecond;
@@ -326,7 +326,6 @@ declare namespace Script {
         private subcategory;
         private buildProgress;
         private assignee;
-        private matColor;
         private fittingTraits;
         private startWorkTime;
         start(_e: CustomEvent<UpdateEvent>): void;
@@ -345,5 +344,22 @@ declare namespace Script {
         private assignNewEumling;
         unassignEumling(): void;
     }
-    export {};
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class WorkbenchVisuals extends UpdateScriptComponent {
+        #private;
+        default: ƒ.Graph;
+        nature: ƒ.Graph;
+        nature_animals: ƒ.Graph;
+        nature_farming: ƒ.Graph;
+        nature_gardening: ƒ.Graph;
+        craft: ƒ.Graph;
+        craft_mat_extr: ƒ.Graph;
+        craft_production: ƒ.Graph;
+        craft_processing: ƒ.Graph;
+        start(_e: CustomEvent<UpdateEvent>): void;
+        private hndSetVisual;
+        setVisual(_id: number): void;
+    }
 }

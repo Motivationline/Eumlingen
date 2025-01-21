@@ -1496,12 +1496,12 @@ var Script;
     })(CATEGORY = Script.CATEGORY || (Script.CATEGORY = {}));
     let SUBCATEGORY;
     (function (SUBCATEGORY) {
-        SUBCATEGORY[SUBCATEGORY["ANIMALS"] = 1] = "ANIMALS";
-        SUBCATEGORY[SUBCATEGORY["FARMING"] = 2] = "FARMING";
-        SUBCATEGORY[SUBCATEGORY["GARDENING"] = 3] = "GARDENING";
-        SUBCATEGORY[SUBCATEGORY["MATERIAL_EXTRACTION"] = 4] = "MATERIAL_EXTRACTION";
-        SUBCATEGORY[SUBCATEGORY["PRODUCTION"] = 5] = "PRODUCTION";
-        SUBCATEGORY[SUBCATEGORY["PROCESSING"] = 6] = "PROCESSING";
+        SUBCATEGORY[SUBCATEGORY["ANIMALS"] = 100] = "ANIMALS";
+        SUBCATEGORY[SUBCATEGORY["FARMING"] = 101] = "FARMING";
+        SUBCATEGORY[SUBCATEGORY["GARDENING"] = 102] = "GARDENING";
+        SUBCATEGORY[SUBCATEGORY["MATERIAL_EXTRACTION"] = 103] = "MATERIAL_EXTRACTION";
+        SUBCATEGORY[SUBCATEGORY["PRODUCTION"] = 104] = "PRODUCTION";
+        SUBCATEGORY[SUBCATEGORY["PROCESSING"] = 105] = "PROCESSING";
     })(SUBCATEGORY = Script.SUBCATEGORY || (Script.SUBCATEGORY = {}));
     class Workbench extends Script.UpdateScriptComponent {
         constructor() {
@@ -1537,7 +1537,6 @@ var Script;
             },
         ]; }
         start(_e) {
-            this.matColor = this.node.getComponent(ƒ.ComponentMaterial).clrPrimary;
         }
         shortTap(_pointer) {
             this.displayWorkbenchInfo();
@@ -1607,12 +1606,13 @@ var Script;
             }
             else if (this.subcategory === undefined) {
                 this.subcategory = _id;
+                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: _id }));
             }
         }
         resetAll() {
             this.category = this.subcategory = undefined;
-            this.matColor.b = 0;
             this.buildProgress = 0;
+            this.node.dispatchEvent(new CustomEvent("setVisual", { detail: 0 }));
         }
         static getCategoryFromId(_id) {
             return this.categories.find(c => c.id === _id);
@@ -1638,9 +1638,9 @@ var Script;
             else if (!this.subcategory) {
                 if (this.buildProgress < 1) {
                     this.buildProgress += this.buildSpeed * _timeMS / 1000;
-                    this.matColor.b = this.buildProgress;
                 }
                 else {
+                    this.node.dispatchEvent(new CustomEvent("setVisual", { detail: this.category }));
                     this.unassignEumling();
                 }
             }
@@ -1696,5 +1696,103 @@ var Script;
         }
     }
     Script.Workbench = Workbench;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    let WorkbenchVisuals = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = Script.UpdateScriptComponent;
+        let _instanceExtraInitializers = [];
+        let _default_decorators;
+        let _default_initializers = [];
+        let _nature_decorators;
+        let _nature_initializers = [];
+        let _nature_animals_decorators;
+        let _nature_animals_initializers = [];
+        let _nature_farming_decorators;
+        let _nature_farming_initializers = [];
+        let _nature_gardening_decorators;
+        let _nature_gardening_initializers = [];
+        let _craft_decorators;
+        let _craft_initializers = [];
+        let _craft_mat_extr_decorators;
+        let _craft_mat_extr_initializers = [];
+        let _craft_production_decorators;
+        let _craft_production_initializers = [];
+        let _craft_processing_decorators;
+        let _craft_processing_initializers = [];
+        var WorkbenchVisuals = class extends _classSuper {
+            static { _classThis = this; }
+            constructor() {
+                super(...arguments);
+                this.default = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _default_initializers, void 0));
+                this.nature = __runInitializers(this, _nature_initializers, void 0);
+                this.nature_animals = __runInitializers(this, _nature_animals_initializers, void 0);
+                this.nature_farming = __runInitializers(this, _nature_farming_initializers, void 0);
+                this.nature_gardening = __runInitializers(this, _nature_gardening_initializers, void 0);
+                this.craft = __runInitializers(this, _craft_initializers, void 0);
+                this.craft_mat_extr = __runInitializers(this, _craft_mat_extr_initializers, void 0);
+                this.craft_production = __runInitializers(this, _craft_production_initializers, void 0);
+                this.craft_processing = __runInitializers(this, _craft_processing_initializers, void 0);
+                this.#graphs = new Map();
+                this.hndSetVisual = (_e) => {
+                    this.setVisual(_e.detail);
+                };
+            }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _default_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_animals_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_farming_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_gardening_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_mat_extr_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_production_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_processing_decorators = [ƒ.serialize(ƒ.Graph)];
+                __esDecorate(null, null, _default_decorators, { kind: "field", name: "default", static: false, private: false, access: { has: obj => "default" in obj, get: obj => obj.default, set: (obj, value) => { obj.default = value; } }, metadata: _metadata }, _default_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_decorators, { kind: "field", name: "nature", static: false, private: false, access: { has: obj => "nature" in obj, get: obj => obj.nature, set: (obj, value) => { obj.nature = value; } }, metadata: _metadata }, _nature_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_animals_decorators, { kind: "field", name: "nature_animals", static: false, private: false, access: { has: obj => "nature_animals" in obj, get: obj => obj.nature_animals, set: (obj, value) => { obj.nature_animals = value; } }, metadata: _metadata }, _nature_animals_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_farming_decorators, { kind: "field", name: "nature_farming", static: false, private: false, access: { has: obj => "nature_farming" in obj, get: obj => obj.nature_farming, set: (obj, value) => { obj.nature_farming = value; } }, metadata: _metadata }, _nature_farming_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_gardening_decorators, { kind: "field", name: "nature_gardening", static: false, private: false, access: { has: obj => "nature_gardening" in obj, get: obj => obj.nature_gardening, set: (obj, value) => { obj.nature_gardening = value; } }, metadata: _metadata }, _nature_gardening_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_decorators, { kind: "field", name: "craft", static: false, private: false, access: { has: obj => "craft" in obj, get: obj => obj.craft, set: (obj, value) => { obj.craft = value; } }, metadata: _metadata }, _craft_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_mat_extr_decorators, { kind: "field", name: "craft_mat_extr", static: false, private: false, access: { has: obj => "craft_mat_extr" in obj, get: obj => obj.craft_mat_extr, set: (obj, value) => { obj.craft_mat_extr = value; } }, metadata: _metadata }, _craft_mat_extr_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_production_decorators, { kind: "field", name: "craft_production", static: false, private: false, access: { has: obj => "craft_production" in obj, get: obj => obj.craft_production, set: (obj, value) => { obj.craft_production = value; } }, metadata: _metadata }, _craft_production_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_processing_decorators, { kind: "field", name: "craft_processing", static: false, private: false, access: { has: obj => "craft_processing" in obj, get: obj => obj.craft_processing, set: (obj, value) => { obj.craft_processing = value; } }, metadata: _metadata }, _craft_processing_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                WorkbenchVisuals = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            #graphs;
+            start(_e) {
+                this.#graphs.set(0, this.default);
+                this.#graphs.set(Script.CATEGORY.NATURE, this.nature);
+                this.#graphs.set(Script.SUBCATEGORY.ANIMALS, this.nature_animals);
+                this.#graphs.set(Script.SUBCATEGORY.FARMING, this.nature_farming);
+                this.#graphs.set(Script.SUBCATEGORY.GARDENING, this.nature_gardening);
+                this.#graphs.set(Script.CATEGORY.CRAFT, this.craft);
+                this.#graphs.set(Script.SUBCATEGORY.MATERIAL_EXTRACTION, this.craft_mat_extr);
+                this.#graphs.set(Script.SUBCATEGORY.PROCESSING, this.craft_processing);
+                this.#graphs.set(Script.SUBCATEGORY.PRODUCTION, this.craft_production);
+                this.setVisual(0);
+                this.node.addEventListener("setVisual", this.hndSetVisual);
+            }
+            setVisual(_id) {
+                let graph = this.#graphs.get(_id);
+                if (!graph)
+                    return;
+                this.node.removeAllChildren();
+                this.node.appendChild(graph);
+            }
+        };
+        return WorkbenchVisuals = _classThis;
+    })();
+    Script.WorkbenchVisuals = WorkbenchVisuals;
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map
