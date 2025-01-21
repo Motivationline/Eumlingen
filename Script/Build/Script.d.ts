@@ -81,11 +81,16 @@ declare namespace Script {
         pick: ƒ.Animation;
         fall: ƒ.Animation;
         work_build: ƒ.Animation;
+        work_build_offset: ƒ.Vector3;
         work_bad: ƒ.Animation;
+        work_bad_offset: ƒ.Vector3;
         work_normal: ƒ.Animation;
+        work_normal_offset: ƒ.Vector3;
         work_good: ƒ.Animation;
+        work_good_offset: ƒ.Vector3;
         activeAnimation: EumlingAnimator.ANIMATIONS;
         private animations;
+        private offsets;
         private animPlaying;
         private animOverlay;
         private cmpAnim;
@@ -93,6 +98,7 @@ declare namespace Script {
         transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
         private timeout;
         overlayAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
+        getOffset(_anim: EumlingAnimator.ANIMATIONS): ƒ.Vector3;
     }
     namespace EumlingAnimator {
         enum ANIMATIONS {
@@ -169,7 +175,8 @@ declare namespace Script {
         longTap(_pointer: Pointer): void;
         walkAway(): void;
         walkTo(_pos: ƒ.Vector3): void;
-        teleportTo(_pos: ƒ.Vector3): void;
+        teleportTo(_pos: ƒ.Vector3, _rot?: ƒ.Vector3): void;
+        teleportBy(_dif: ƒ.Vector3, _local?: boolean): void;
         stopMoving(): void;
         getState(): STATE;
     }
@@ -199,7 +206,8 @@ declare namespace Script {
         update(_e: CustomEvent<UpdateEvent>): void;
         unassign(): void;
         assign(_wb: Workbench): void;
-        updateWorkAnimation(_fittingTraits: number): void;
+        getWorkAnimation(_fittingTraits: number): EumlingAnimator.ANIMATIONS;
+        updateWorkAnimation(_anim: EumlingAnimator.ANIMATIONS): void;
         work(_timeMS: number): void;
     }
 }

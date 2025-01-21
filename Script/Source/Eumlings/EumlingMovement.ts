@@ -215,8 +215,13 @@ namespace Script {
             this.setState(STATE.WALK);
         }
 
-        teleportTo(_pos: ƒ.Vector3) {
+        teleportTo(_pos: ƒ.Vector3, _rot?: ƒ.Vector3) {
             this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
+            if(_rot)
+                this.node.mtxLocal.rotate(ƒ.Vector3.DIFFERENCE(_rot, this.node.mtxWorld.rotation), false);
+        }
+        teleportBy(_dif: ƒ.Vector3, _local?: boolean) {
+            this.node.mtxLocal.translate(_dif, _local);
         }
 
         stopMoving() {

@@ -358,12 +358,20 @@ var Script;
         let _fall_initializers = [];
         let _work_build_decorators;
         let _work_build_initializers = [];
+        let _work_build_offset_decorators;
+        let _work_build_offset_initializers = [];
         let _work_bad_decorators;
         let _work_bad_initializers = [];
+        let _work_bad_offset_decorators;
+        let _work_bad_offset_initializers = [];
         let _work_normal_decorators;
         let _work_normal_initializers = [];
+        let _work_normal_offset_decorators;
+        let _work_normal_offset_initializers = [];
         let _work_good_decorators;
         let _work_good_initializers = [];
+        let _work_good_offset_decorators;
+        let _work_good_offset_initializers = [];
         var EumlingAnimator = class extends _classSuper {
             static { _classThis = this; }
             constructor() {
@@ -375,11 +383,16 @@ var Script;
                 this.pick = __runInitializers(this, _pick_initializers, void 0);
                 this.fall = __runInitializers(this, _fall_initializers, void 0);
                 this.work_build = __runInitializers(this, _work_build_initializers, void 0);
+                this.work_build_offset = __runInitializers(this, _work_build_offset_initializers, new ƒ.Vector3());
                 this.work_bad = __runInitializers(this, _work_bad_initializers, void 0);
+                this.work_bad_offset = __runInitializers(this, _work_bad_offset_initializers, new ƒ.Vector3());
                 this.work_normal = __runInitializers(this, _work_normal_initializers, void 0);
+                this.work_normal_offset = __runInitializers(this, _work_normal_offset_initializers, new ƒ.Vector3());
                 this.work_good = __runInitializers(this, _work_good_initializers, void 0);
+                this.work_good_offset = __runInitializers(this, _work_good_offset_initializers, new ƒ.Vector3());
                 this.activeAnimation = EumlingAnimator.ANIMATIONS.IDLE;
                 this.animations = new Map();
+                this.offsets = new Map();
                 this.timeout = undefined;
             }
             static {
@@ -391,9 +404,13 @@ var Script;
                 _pick_decorators = [ƒ.serialize(ƒ.Animation)];
                 _fall_decorators = [ƒ.serialize(ƒ.Animation)];
                 _work_build_decorators = [ƒ.serialize(ƒ.Animation)];
+                _work_build_offset_decorators = [ƒ.serialize(ƒ.Vector3)];
                 _work_bad_decorators = [ƒ.serialize(ƒ.Animation)];
+                _work_bad_offset_decorators = [ƒ.serialize(ƒ.Vector3)];
                 _work_normal_decorators = [ƒ.serialize(ƒ.Animation)];
+                _work_normal_offset_decorators = [ƒ.serialize(ƒ.Vector3)];
                 _work_good_decorators = [ƒ.serialize(ƒ.Animation)];
+                _work_good_offset_decorators = [ƒ.serialize(ƒ.Vector3)];
                 __esDecorate(null, null, _idle_decorators, { kind: "field", name: "idle", static: false, private: false, access: { has: obj => "idle" in obj, get: obj => obj.idle, set: (obj, value) => { obj.idle = value; } }, metadata: _metadata }, _idle_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _walk_decorators, { kind: "field", name: "walk", static: false, private: false, access: { has: obj => "walk" in obj, get: obj => obj.walk, set: (obj, value) => { obj.walk = value; } }, metadata: _metadata }, _walk_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _clickedOn_decorators, { kind: "field", name: "clickedOn", static: false, private: false, access: { has: obj => "clickedOn" in obj, get: obj => obj.clickedOn, set: (obj, value) => { obj.clickedOn = value; } }, metadata: _metadata }, _clickedOn_initializers, _instanceExtraInitializers);
@@ -401,9 +418,13 @@ var Script;
                 __esDecorate(null, null, _pick_decorators, { kind: "field", name: "pick", static: false, private: false, access: { has: obj => "pick" in obj, get: obj => obj.pick, set: (obj, value) => { obj.pick = value; } }, metadata: _metadata }, _pick_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _fall_decorators, { kind: "field", name: "fall", static: false, private: false, access: { has: obj => "fall" in obj, get: obj => obj.fall, set: (obj, value) => { obj.fall = value; } }, metadata: _metadata }, _fall_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_build_decorators, { kind: "field", name: "work_build", static: false, private: false, access: { has: obj => "work_build" in obj, get: obj => obj.work_build, set: (obj, value) => { obj.work_build = value; } }, metadata: _metadata }, _work_build_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _work_build_offset_decorators, { kind: "field", name: "work_build_offset", static: false, private: false, access: { has: obj => "work_build_offset" in obj, get: obj => obj.work_build_offset, set: (obj, value) => { obj.work_build_offset = value; } }, metadata: _metadata }, _work_build_offset_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_bad_decorators, { kind: "field", name: "work_bad", static: false, private: false, access: { has: obj => "work_bad" in obj, get: obj => obj.work_bad, set: (obj, value) => { obj.work_bad = value; } }, metadata: _metadata }, _work_bad_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _work_bad_offset_decorators, { kind: "field", name: "work_bad_offset", static: false, private: false, access: { has: obj => "work_bad_offset" in obj, get: obj => obj.work_bad_offset, set: (obj, value) => { obj.work_bad_offset = value; } }, metadata: _metadata }, _work_bad_offset_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_normal_decorators, { kind: "field", name: "work_normal", static: false, private: false, access: { has: obj => "work_normal" in obj, get: obj => obj.work_normal, set: (obj, value) => { obj.work_normal = value; } }, metadata: _metadata }, _work_normal_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _work_normal_offset_decorators, { kind: "field", name: "work_normal_offset", static: false, private: false, access: { has: obj => "work_normal_offset" in obj, get: obj => obj.work_normal_offset, set: (obj, value) => { obj.work_normal_offset = value; } }, metadata: _metadata }, _work_normal_offset_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_good_decorators, { kind: "field", name: "work_good", static: false, private: false, access: { has: obj => "work_good" in obj, get: obj => obj.work_good, set: (obj, value) => { obj.work_good = value; } }, metadata: _metadata }, _work_good_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _work_good_offset_decorators, { kind: "field", name: "work_good_offset", static: false, private: false, access: { has: obj => "work_good_offset" in obj, get: obj => obj.work_good_offset, set: (obj, value) => { obj.work_good_offset = value; } }, metadata: _metadata }, _work_good_offset_initializers, _instanceExtraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 EumlingAnimator = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -421,6 +442,10 @@ var Script;
                 this.animations.set(EumlingAnimator.ANIMATIONS.WORK_BAD, new ƒ.AnimationNodeAnimation(this.work_bad));
                 this.animations.set(EumlingAnimator.ANIMATIONS.WORK_NORMAL, new ƒ.AnimationNodeAnimation(this.work_normal));
                 this.animations.set(EumlingAnimator.ANIMATIONS.WORK_GOOD, new ƒ.AnimationNodeAnimation(this.work_good));
+                this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_BUILD, this.work_build_offset);
+                this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_BAD, this.work_bad_offset);
+                this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_NORMAL, this.work_normal_offset);
+                this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_GOOD, this.work_good_offset);
                 this.animPlaying = new ƒ.AnimationNodeTransition(this.animations.get(this.activeAnimation));
                 this.animOverlay = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY));
                 let rootAnim = new ƒ.AnimationNodeBlend([this.animPlaying, this.animOverlay]);
@@ -449,6 +474,9 @@ var Script;
                     this.timeout = undefined;
                     this.animOverlay.transit(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY), 100);
                 });
+            }
+            getOffset(_anim) {
+                return this.offsets.get(_anim) ?? ƒ.Vector3.ZERO();
             }
         };
         return EumlingAnimator = _classThis;
@@ -788,8 +816,13 @@ var Script;
                 this.targetPosition = ƒ.Vector3.DIFFERENCE(_pos, this.walkArea.node.mtxWorld.translation);
                 this.setState(STATE.WALK);
             }
-            teleportTo(_pos) {
+            teleportTo(_pos, _rot) {
                 this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
+                if (_rot)
+                    this.node.mtxLocal.rotate(ƒ.Vector3.DIFFERENCE(_rot, this.node.mtxWorld.rotation), false);
+            }
+            teleportBy(_dif, _local) {
+                this.node.mtxLocal.translate(_dif, _local);
             }
             stopMoving() {
                 if (this.state === STATE.WALK) {
@@ -881,23 +914,29 @@ var Script;
             assign(_wb) {
                 let fittingTraits = _wb.work(this.node, 0);
                 this.workbench = _wb;
-                this.moveComp.teleportTo(_wb.node.mtxWorld.translation);
+                const anim = this.getWorkAnimation(fittingTraits);
+                this.moveComp.teleportTo(_wb.node.mtxWorld.translation, _wb.node.mtxWorld.rotation);
+                this.moveComp.teleportBy(this.animator.getOffset(anim), true);
                 this.moveComp.setState(Script.STATE.WORK);
-                this.updateWorkAnimation(fittingTraits);
+                this.updateWorkAnimation(anim);
             }
-            updateWorkAnimation(_fittingTraits) {
+            getWorkAnimation(_fittingTraits) {
                 if (this.workbench.needsAssembly) {
-                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_BUILD, 100);
+                    return Script.EumlingAnimator.ANIMATIONS.WORK_BUILD;
                 }
                 else if (_fittingTraits === 0) {
-                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_BAD, 100);
+                    return Script.EumlingAnimator.ANIMATIONS.WORK_BAD;
                 }
                 else if (_fittingTraits === 1) {
-                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_NORMAL, 100);
+                    return Script.EumlingAnimator.ANIMATIONS.WORK_NORMAL;
                 }
                 else if (_fittingTraits === 2) {
-                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_GOOD, 100);
+                    return Script.EumlingAnimator.ANIMATIONS.WORK_GOOD;
                 }
+                return Script.EumlingAnimator.ANIMATIONS.WORK_GOOD;
+            }
+            updateWorkAnimation(_anim) {
+                this.animator.transitionToAnimation(_anim, 100);
             }
             work(_timeMS) {
                 if (!this.workbench)

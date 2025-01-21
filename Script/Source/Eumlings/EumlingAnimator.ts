@@ -17,16 +17,25 @@ namespace Script {
         fall: ƒ.Animation;
         @ƒ.serialize(ƒ.Animation)
         work_build: ƒ.Animation;
+        @ƒ.serialize(ƒ.Vector3)
+        work_build_offset: ƒ.Vector3 = new ƒ.Vector3();
         @ƒ.serialize(ƒ.Animation)
         work_bad: ƒ.Animation;
+        @ƒ.serialize(ƒ.Vector3)
+        work_bad_offset: ƒ.Vector3 = new ƒ.Vector3();
         @ƒ.serialize(ƒ.Animation)
         work_normal: ƒ.Animation;
+        @ƒ.serialize(ƒ.Vector3)
+        work_normal_offset: ƒ.Vector3 = new ƒ.Vector3();
         @ƒ.serialize(ƒ.Animation)
         work_good: ƒ.Animation;
+        @ƒ.serialize(ƒ.Vector3)
+        work_good_offset: ƒ.Vector3 = new ƒ.Vector3();
 
         activeAnimation: EumlingAnimator.ANIMATIONS = EumlingAnimator.ANIMATIONS.IDLE;
 
         private animations: Map<EumlingAnimator.ANIMATIONS, ƒ.AnimationNodeAnimation> = new Map();
+        private offsets: Map<EumlingAnimator.ANIMATIONS, ƒ.Vector3> = new Map();
         private animPlaying: ƒ.AnimationNodeTransition;
         private animOverlay: ƒ.AnimationNodeTransition;
         private cmpAnim: ƒ.ComponentAnimationGraph;
@@ -44,11 +53,16 @@ namespace Script {
             this.animations.set(EumlingAnimator.ANIMATIONS.WORK_NORMAL, new ƒ.AnimationNodeAnimation(this.work_normal));
             this.animations.set(EumlingAnimator.ANIMATIONS.WORK_GOOD, new ƒ.AnimationNodeAnimation(this.work_good));
 
+            this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_BUILD, this.work_build_offset);
+            this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_BAD, this.work_bad_offset);
+            this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_NORMAL, this.work_normal_offset);
+            this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_GOOD, this.work_good_offset);
+
             this.animPlaying = new ƒ.AnimationNodeTransition(this.animations.get(this.activeAnimation));
             this.animOverlay = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY));
             let rootAnim = new ƒ.AnimationNodeBlend([this.animPlaying, this.animOverlay]);
             this.cmpAnim = new ƒ.ComponentAnimationGraph(rootAnim);
-    
+
             let importedScene = this.node.getChild(0);
             importedScene.getComponent(ƒ.ComponentAnimation).activate(false);
             importedScene.addComponent(this.cmpAnim);
@@ -75,6 +89,10 @@ namespace Script {
                 this.animOverlay.transit(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY), 100);
 
             })
+        }
+
+        public getOffset(_anim: EumlingAnimator.ANIMATIONS): ƒ.Vector3 {
+            return this.offsets.get(_anim) ?? ƒ.Vector3.ZERO();
         }
     }
 
