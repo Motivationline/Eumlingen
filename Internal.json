@@ -998,6 +998,25 @@
       "events": {}
     }
   },
+  "MeshQuad|2025-01-21T10:38:04.319Z|68327": {
+    "ƒ.MeshQuad": {
+      "idResource": "MeshQuad|2025-01-21T10:38:04.319Z|68327",
+      "name": "MeshName"
+    }
+  },
+  "Material|2025-01-21T10:38:19.483Z|37759": {
+    "ƒ.Material": {
+      "name": "ShaderName",
+      "idResource": "Material|2025-01-21T10:38:19.483Z|37759",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]"
+        }
+      },
+      "alphaClip": 0.01
+    }
+  },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
     "ƒ.Graph": {
       "name": "Eumling",
@@ -1075,6 +1094,83 @@
           "ƒ.GraphInstance": {
             "deserializeFromSource": true,
             "idSource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958"
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Name",
+            "active": true,
+            "components": {
+              "ComponentText": [
+                {
+                  "ƒ.ComponentText": {
+                    "active": true,
+                    "texture": {
+                      "mipmap": 3,
+                      "wrap": 0,
+                      "text": "Name",
+                      "font": "100px Verdana"
+                    },
+                    "fixedSize": false
+                  }
+                }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 1.5000000000000004, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshQuad|2025-01-21T10:38:04.319Z|68327",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[0.20000000000000015, 0.20000000000000015, 0.20000000000000015]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2025-01-21T10:38:19.483Z|37759"
+                  }
+                }
+              ],
+              "ComponentFaceCamera": [
+                {
+                  "ƒ.ComponentFaceCamera": {
+                    "active": true
+                  }
+                }
+              ]
+            },
+            "children": []
           }
         }
       ],

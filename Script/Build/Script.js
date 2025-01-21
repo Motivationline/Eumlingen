@@ -501,18 +501,28 @@ var Script;
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
 /// <reference path="../Eumlings/Traits.ts" />
 (function (Script) {
+    var ƒ = FudgeCore;
     class EumlingData extends Script.UpdateScriptComponent {
         constructor() {
             super(...arguments);
-            this.name = "";
+            this.#name = "";
             this.traits = new Set();
         }
         static { this.names = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst", "Aluni", "Lyraen", "Nivrel", "Elvaris", "Sylin", "Veyla", "Auren", "Liriel", "Riva", "Moraen", "Tynel", "Lymra", "Ondis", "Floren", "Nymra", "Aeris", "Erya", "Thyra", "Nyra", "Velin", "Fenya", "Arion", "Sylva", "Caelis", "Plenna", "Quira", "Lumel", "Flimra", "Vonae", "Tivra", "Elna", "Myrel"]; }
+        #name;
         start(_e) {
-            this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
             while (this.traits.size < 2) {
                 this.traits.add(Script.randomEnum(Script.TRAIT));
             }
+            this.nameDisplay = this.node.getChildrenByName("Name")[0].getComponent(ƒ.ComponentText);
+            this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
+        }
+        get name() {
+            return this.#name;
+        }
+        set name(_name) {
+            this.#name = _name;
+            this.nameDisplay.texture.text = this.#name;
         }
         shortTap(_pointer) {
             if (this.node.getComponent(Script.EumlingMovement).getState() === Script.STATE.GROWN || _pointer.used) {

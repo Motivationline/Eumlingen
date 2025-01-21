@@ -129,11 +129,15 @@ declare namespace Script {
     export {};
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
     class EumlingData extends UpdateScriptComponent implements Clickable {
+        #private;
         static names: string[];
-        name: string;
         traits: Set<TRAIT>;
+        nameDisplay: ƒ.ComponentText;
         start(_e: CustomEvent<UpdateEvent>): void;
+        get name(): string;
+        set name(_name: string);
         shortTap(_pointer: Pointer): void;
         private showSelf;
     }
