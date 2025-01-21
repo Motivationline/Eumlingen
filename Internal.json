@@ -1123,7 +1123,7 @@
                 {
                   "ƒ.ComponentTransform": {
                     "local": {
-                      "translation": "[0, 1.5000000000000004, 0]",
+                      "translation": "[0, -0.12179514765739441, 0]",
                       "rotation": "[0, 0, 0]",
                       "scaling": "[1, 1, 1]"
                     },
@@ -1264,6 +1264,25 @@
       "url": "Assets\\Environment\\StoneVariation2.glb"
     }
   },
+  "GraphGLTF|2025-01-21T09:20:23.789Z|21816": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\PlainNaturStation.glb"
+    }
+  },
   "Graph|2025-01-15T14:48:41.922Z|40103": {
     "ƒ.Graph": {
       "name": "Workbench",
@@ -1327,25 +1346,6 @@
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb",
       "events": {}
-    }
-  },
-  "GraphGLTF|2025-01-21T09:20:23.789Z|21816": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentChangeMaterial": [
-          {
-            "Script.ComponentChangeMaterial": {
-              "active": true,
-              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-      "type": "GraphGLTF",
-      "url": "Assets\\Stations\\PlainNaturStation.glb"
     }
   }
 }
