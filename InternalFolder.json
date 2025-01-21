@@ -185,10 +185,18 @@
         "name": "Stations",
         "entries": [
           {
-            "name": "NatureOriginStation",
+            "name": "StationNatur",
             "entries": [
               {
                 "idResource": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
+              }
+            ]
+          },
+          {
+            "name": "StationGartenbau",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-21T15:01:08.033Z|95174"
               }
             ]
           }

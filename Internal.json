@@ -1347,5 +1347,24 @@
       "url": "Assets\\EumlingV1.glb",
       "events": {}
     }
+  },
+  "GraphGLTF|2025-01-21T15:01:08.033Z|95174": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationGartenbau.glb"
+    }
   }
 }
