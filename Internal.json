@@ -1283,6 +1283,25 @@
       "url": "Assets\\Stations\\PlainNaturStation.glb"
     }
   },
+  "GraphGLTF|2025-01-21T15:01:08.033Z|95174": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationGartenbau.glb"
+    }
+  },
   "Graph|2025-01-15T14:48:41.922Z|40103": {
     "ƒ.Graph": {
       "name": "Workbench",
@@ -1322,10 +1341,10 @@
             "Script.WorkbenchVisuals": {
               "active": true,
               "default": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "nature": "GraphGLTF|2024-11-26T10:12:05.429Z|21958",
-              "nature_animals": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "nature_farming": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "nature_gardening": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "nature": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "nature_animals": "GraphGLTF|2025-01-22T12:11:45.884Z|37765",
+              "nature_farming": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
+              "nature_gardening": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
               "craft": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
               "craft_mat_extr": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
               "craft_production": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
@@ -1348,7 +1367,50 @@
       "events": {}
     }
   },
-  "GraphGLTF|2025-01-21T15:01:08.033Z|95174": {
+  "GraphGLTF|2025-01-22T12:11:45.884Z|37765": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentAnimation": [
+          {
+            "ƒ.ComponentAnimation": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2025-01-22T12:11:45.884Z|93300",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ],
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-22T12:11:45.884Z|37765",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationTierwirtschaft.glb"
+    }
+  },
+  "AnimationGLTF|2025-01-22T12:11:45.884Z|93300": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-22T12:11:45.884Z|93300",
+      "name": "Sheeping",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Stations\\StationTierwirtschaft.glb",
+      "events": {}
+    }
+  },
+  "GraphGLTF|2025-01-22T12:15:28.947Z|41115": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
       "active": true,
@@ -1362,9 +1424,9 @@
           }
         ]
       },
-      "idResource": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
+      "idResource": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
       "type": "GraphGLTF",
-      "url": "Assets\\Stations\\StationGartenbau.glb"
+      "url": "Assets\\Stations\\StationLandwirtschaft.glb"
     }
   }
 }
