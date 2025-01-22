@@ -1670,7 +1670,8 @@ var Script;
             }
             this.fittingTraits++;
             Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "eumlingDevelopTrait", data: { fittingTraits: this.fittingTraits, traits: data.traits, eumling: this.assignee } } }));
-            this.assignee.getComponent(Script.EumlingWork).updateWorkAnimation(this.fittingTraits);
+            const ew = this.assignee.getComponent(Script.EumlingWork);
+            ew.updateWorkAnimation(ew.getWorkAnimation(this.fittingTraits));
         }
         assignNewEumling(_eumling) {
             this.unassignEumling();

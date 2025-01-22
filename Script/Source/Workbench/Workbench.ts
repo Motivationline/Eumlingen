@@ -205,7 +205,8 @@ namespace Script {
             }
             this.fittingTraits++;
             globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "eumlingDevelopTrait", data: { fittingTraits: this.fittingTraits, traits: data.traits, eumling: this.assignee } } }));
-            this.assignee.getComponent(EumlingWork).updateWorkAnimation(this.fittingTraits);
+            const ew = this.assignee.getComponent(EumlingWork)
+            ew.updateWorkAnimation(ew.getWorkAnimation(this.fittingTraits));
         }
 
         private assignNewEumling(_eumling: ƒ.Node) {
