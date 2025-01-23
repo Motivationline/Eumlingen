@@ -1049,14 +1049,6 @@
             }
           }
         ],
-        "ComponentPick": [
-          {
-            "ƒ.ComponentPick": {
-              "active": true,
-              "pick": "camera"
-            }
-          }
-        ],
         "EumlingData": [
           {
             "Script.EumlingData": {
@@ -1089,6 +1081,15 @@
           {
             "Script.EumlingWork": {
               "active": true
+            }
+          }
+        ],
+        "PickSphere": [
+          {
+            "Script.PickSphere": {
+              "active": true,
+              "radius": 0.40000000000000013,
+              "offset": "[0, 0.45000000000000007, 0]"
             }
           }
         ]
@@ -1302,71 +1303,6 @@
       "url": "Assets\\Stations\\StationGartenbau.glb"
     }
   },
-  "Graph|2025-01-15T14:48:41.922Z|40103": {
-    "ƒ.Graph": {
-      "name": "Workbench",
-      "active": true,
-      "components": {
-        "ComponentPick": [
-          {
-            "ƒ.ComponentPick": {
-              "active": true,
-              "pick": "camera"
-            }
-          }
-        ],
-        "Workbench": [
-          {
-            "Script.Workbench": {
-              "active": true
-            }
-          }
-        ],
-        "ComponentTransform": [
-          {
-            "ƒ.ComponentTransform": {
-              "local": {
-                "translation": "[0, 0, 0]",
-                "rotation": "[0, 0, 0]",
-                "scaling": "[1, 1, 1]"
-              },
-              "Component": {
-                "active": true
-              }
-            }
-          }
-        ],
-        "WorkbenchVisuals": [
-          {
-            "Script.WorkbenchVisuals": {
-              "active": true,
-              "default": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "nature": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "nature_animals": "GraphGLTF|2025-01-22T12:11:45.884Z|37765",
-              "nature_farming": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
-              "nature_gardening": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
-              "craft": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "craft_mat_extr": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "craft_production": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "craft_processing": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
-            }
-          }
-        ]
-      },
-      "children": [],
-      "idResource": "Graph|2025-01-15T14:48:41.922Z|40103",
-      "type": "Graph"
-    }
-  },
-  "AnimationGLTF|2025-01-15T14:56:23.860Z|47654": {
-    "ƒ.AnimationGLTF": {
-      "idResource": "AnimationGLTF|2025-01-15T14:56:23.860Z|47654",
-      "name": "WalkV2",
-      "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb",
-      "events": {}
-    }
-  },
   "GraphGLTF|2025-01-22T12:11:45.884Z|37765": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
@@ -1427,6 +1363,72 @@
       "idResource": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
       "type": "GraphGLTF",
       "url": "Assets\\Stations\\StationLandwirtschaft.glb"
+    }
+  },
+  "Graph|2025-01-15T14:48:41.922Z|40103": {
+    "ƒ.Graph": {
+      "name": "Workbench",
+      "active": true,
+      "components": {
+        "Workbench": [
+          {
+            "Script.Workbench": {
+              "active": true
+            }
+          }
+        ],
+        "ComponentTransform": [
+          {
+            "ƒ.ComponentTransform": {
+              "local": {
+                "translation": "[0, 0, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "Component": {
+                "active": true
+              }
+            }
+          }
+        ],
+        "WorkbenchVisuals": [
+          {
+            "Script.WorkbenchVisuals": {
+              "active": true,
+              "default": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "nature": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "nature_animals": "GraphGLTF|2025-01-22T12:11:45.884Z|37765",
+              "nature_farming": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
+              "nature_gardening": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
+              "craft": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_mat_extr": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_production": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_processing": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
+            }
+          }
+        ],
+        "PickSphere": [
+          {
+            "Script.PickSphere": {
+              "active": true,
+              "radius": 1,
+              "offset": "[0, 0, 0]"
+            }
+          }
+        ]
+      },
+      "children": [],
+      "idResource": "Graph|2025-01-15T14:48:41.922Z|40103",
+      "type": "Graph"
+    }
+  },
+  "AnimationGLTF|2025-01-15T14:56:23.860Z|47654": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-15T14:56:23.860Z|47654",
+      "name": "WalkV2",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   }
 }

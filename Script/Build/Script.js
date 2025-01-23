@@ -192,6 +192,7 @@ var Script;
     Script.globalEvents = new EventTarget();
     function start(_event) {
         Script.viewport = _event.detail;
+        // viewport.gizmosEnabled = true;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -645,6 +646,7 @@ var Script;
                 this.animator = this.node.getComponent(Script.EumlingAnimator);
                 let walkNode = this.node.getParent();
                 this.walkArea = walkNode?.getComponent(Script.WalkableArea);
+                this.pick = this.node.getComponent(Script.PickSphere);
                 this.setState(this.state);
             }
             ;
@@ -712,7 +714,7 @@ var Script;
                                 let pointer = this.pointer;
                                 this.pointer = undefined;
                                 //check if dropped over workbench
-                                let pickedNodes = Script.findAllPickedObjects(pointer);
+                                let pickedNodes = Script.findAllPickedObjectsUsingPickSphere(pointer);
                                 let wb = pickedNodes.find(n => !!n.getComponent(Script.Workbench));
                                 if (!wb)
                                     break;
@@ -766,6 +768,8 @@ var Script;
                     case STATE.GROWN:
                         this.node.mtxLocal.translateY(-0.95);
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.PICKED, 100);
+                        this.pick.offset.y = 1.20;
+                        this.pick.radius = 0.3;
                         break;
                 }
                 this.state = _state;
@@ -793,6 +797,8 @@ var Script;
                 if (this.state === STATE.GROWN) {
                     this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
                     this.setState(STATE.IDLE);
+                    this.pick.offset.y = 0.45;
+                    this.pick.radius = 0.4;
                     _pointer.used = true;
                     return;
                 }
@@ -1189,7 +1195,7 @@ var Script;
     function longTap(_e) {
         if (_e.detail.pointer.used)
             return;
-        let pickedNode = findFrontPickedObject(_e.detail.pointer);
+        let pickedNode = findAllPickedObjectsUsingPickSphere(_e.detail.pointer).pop();
         if (!pickedNode)
             return;
         pickedNode.getAllComponents()
@@ -1199,7 +1205,7 @@ var Script;
     function shortTap(_e) {
         if (_e.detail.pointer.used)
             return;
-        let pickedNode = findFrontPickedObject(_e.detail.pointer);
+        let pickedNode = findAllPickedObjectsUsingPickSphere(_e.detail.pointer).pop();
         if (!pickedNode)
             return;
         pickedNode.getAllComponents()
@@ -1207,40 +1213,41 @@ var Script;
             .forEach(c => c.shortTap(_e.detail.pointer));
     }
     function startTap(_e) {
-        let frontEumling = findAllPickedObjects(_e.detail.pointer).filter(n => n.getComponent(Script.EumlingMovement)).sort(sortByDistance).pop();
+        let frontEumling = findAllPickedObjectsUsingPickSphere(_e.detail.pointer).filter(n => n.getComponent(Script.EumlingMovement)).pop();
         if (frontEumling) {
             frontEumling.getComponent(Script.EumlingMovement).stopMoving();
         }
     }
-    function findFrontPickedObject(_p) {
-        let pickedNodes = findAllPickedObjects(_p);
-        pickedNodes.sort(sortByDistance);
-        return pickedNodes.pop();
+    // export function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined {
+    //     let pickedNodes = findAllPickedObjects(_p);
+    //     pickedNodes.sort(sortByDistance);
+    //     return pickedNodes.pop();
+    // }
+    // function sortByDistance(a: ƒ.Node, b: ƒ.Node) {
+    //     return a.mtxWorld.translation.z - b.mtxWorld.translation.z;
+    // }
+    // export function findAllPickedObjects(_pointer: Pointer): ƒ.Node[] {
+    //     const picks = ƒ.Picker.pickViewport(viewport, new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
+    //     let pickedNodes: ƒ.Node[] = [];
+    //     for (let pick of picks) {
+    //         let pickedNode = findPickableNodeInTree(pick.node);
+    //         if (!pickedNode) continue;
+    //         pickedNodes.push(pickedNode);
+    //     }
+    //     return pickedNodes;
+    // }
+    // function findPickableNodeInTree(node: ƒ.Node): ƒ.Node | undefined {
+    //     if (!node) return undefined;
+    //     let pick = node.getComponent(ƒ.ComponentPick);
+    //     if (pick) return node;
+    //     return findPickableNodeInTree(node.getParent());
+    // }
+    function findAllPickedObjectsUsingPickSphere(_pointer) {
+        const ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
+        const picks = Script.PickSphere.pick(ray, { sortBy: "distanceToRayOrigin" });
+        return picks.map((p) => p.node);
     }
-    Script.findFrontPickedObject = findFrontPickedObject;
-    function sortByDistance(a, b) {
-        return a.mtxWorld.translation.z - b.mtxWorld.translation.z;
-    }
-    function findAllPickedObjects(_pointer) {
-        const picks = ƒ.Picker.pickViewport(Script.viewport, new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
-        let pickedNodes = [];
-        for (let pick of picks) {
-            let pickedNode = findPickableNodeInTree(pick.node);
-            if (!pickedNode)
-                continue;
-            pickedNodes.push(pickedNode);
-        }
-        return pickedNodes;
-    }
-    Script.findAllPickedObjects = findAllPickedObjects;
-    function findPickableNodeInTree(node) {
-        if (!node)
-            return undefined;
-        let pick = node.getComponent(ƒ.ComponentPick);
-        if (pick)
-            return node;
-        return findPickableNodeInTree(node.getParent());
-    }
+    Script.findAllPickedObjectsUsingPickSphere = findAllPickedObjectsUsingPickSphere;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -1429,6 +1436,101 @@ var Script;
         return WalkableArea = _classThis;
     })();
     Script.WalkableArea = WalkableArea;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    let PickSphere = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = ƒ.Component;
+        let _instanceExtraInitializers = [];
+        let _get_radius_decorators;
+        let _offset_decorators;
+        let _offset_initializers = [];
+        var PickSphere = class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _get_radius_decorators = [ƒ.serialize(Number)];
+                _offset_decorators = [ƒ.serialize(ƒ.Vector3)];
+                __esDecorate(this, null, _get_radius_decorators, { kind: "getter", name: "radius", static: false, private: false, access: { has: obj => "radius" in obj, get: obj => obj.radius }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, null, _offset_decorators, { kind: "field", name: "offset", static: false, private: false, access: { has: obj => "offset" in obj, get: obj => obj.offset, set: (obj, value) => { obj.offset = value; } }, metadata: _metadata }, _offset_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                PickSphere = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            }
+            static { this.iSubclass = ƒ.Component.registerSubclass(PickSphere); }
+            constructor() {
+                super();
+                this.#radius = (__runInitializers(this, _instanceExtraInitializers), 1);
+                this.#radiusSquared = 1;
+                this.offset = __runInitializers(this, _offset_initializers, new ƒ.Vector3());
+                if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                    return;
+            }
+            #radius;
+            #radiusSquared;
+            get radius() {
+                return this.#radius;
+            }
+            set radius(_r) {
+                this.#radius = _r;
+                this.#radiusSquared = _r * _r;
+            }
+            get radiusSquared() {
+                return this.#radiusSquared;
+            }
+            get mtxPick() {
+                return this.node.mtxWorld.clone.translate(this.offset, true).scale(ƒ.Vector3.ONE(this.radius * 2));
+            }
+            drawGizmos(_cmpCamera) {
+                ƒ.Gizmos.drawWireSphere(this.mtxPick, ƒ.Color.CSS("red"));
+            }
+            /**
+             * finds all pickSpheres within the given ray
+             * @param ray the ray to check against
+             * @param options options
+             */
+            static pick(ray, options = {}) {
+                const picks = [];
+                options = { ...this.defaultOptions, ...options };
+                for (let node of options.branch) {
+                    let pckSph = node.getComponent(PickSphere);
+                    if (!pckSph)
+                        continue;
+                    let distance = ray.getDistance(pckSph.mtxPick.translation);
+                    if (distance.magnitudeSquared < pckSph.radiusSquared) {
+                        picks.push(pckSph);
+                    }
+                }
+                if (options.sortBy) {
+                    let distances = new Map();
+                    if (options.sortBy === "distanceToRayOrigin") {
+                        picks.forEach(p => distances.set(p, ray.origin.getDistance(p.node.mtxWorld.translation)));
+                    }
+                    else if (options.sortBy === "distanceToRay") {
+                        picks.forEach(p => distances.set(p, ray.getDistance(p.node.mtxWorld.translation).magnitudeSquared));
+                    }
+                    picks.sort((a, b) => distances.get(a) - distances.get(b));
+                }
+                return picks;
+            }
+            static get defaultOptions() {
+                return {
+                    branch: Script.viewport.getBranch(),
+                };
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+        };
+        return PickSphere = _classThis;
+    })();
+    Script.PickSphere = PickSphere;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

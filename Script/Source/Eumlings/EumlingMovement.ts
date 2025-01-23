@@ -23,6 +23,7 @@ namespace Script {
         private pointer: Pointer;
         private walkArea: WalkableArea;
         private velocity: ƒ.Vector3 = new ƒ.Vector3();
+        private pick: PickSphere;
 
         static maxVelocity: number = 10;
 
@@ -38,6 +39,7 @@ namespace Script {
 
             let walkNode = this.node.getParent();
             this.walkArea = walkNode?.getComponent(WalkableArea);
+            this.pick = this.node.getComponent(PickSphere);
 
             this.setState(this.state);
         };
@@ -102,7 +104,7 @@ namespace Script {
                             this.pointer = undefined;
 
                             //check if dropped over workbench
-                            let pickedNodes = findAllPickedObjects(pointer);
+                            let pickedNodes = findAllPickedObjectsUsingPickSphere(pointer);
                             let wb = pickedNodes.find(n => !!n.getComponent(Workbench))
                             if (!wb) break;
                             this.node.getComponent(EumlingWork).assign(wb.getComponent(Workbench));
@@ -155,6 +157,8 @@ namespace Script {
                 case STATE.GROWN:
                     this.node.mtxLocal.translateY(-0.95);
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.PICKED, 100);
+                    this.pick.offset.y = 1.20;
+                    this.pick.radius = 0.3;
                     break;
             }
 
@@ -189,6 +193,8 @@ namespace Script {
             if (this.state === STATE.GROWN) {
                 this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
                 this.setState(STATE.IDLE);
+                this.pick.offset.y = 0.45;
+                this.pick.radius = 0.4;
                 _pointer.used = true;
                 return;
             }

@@ -164,6 +164,7 @@ declare namespace Script {
         private pointer;
         private walkArea;
         private velocity;
+        private pick;
         static maxVelocity: number;
         constructor();
         start(): void;
@@ -235,8 +236,7 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined;
-    function findAllPickedObjects(_pointer: Pointer): ƒ.Node[];
+    function findAllPickedObjectsUsingPickSphere(_pointer: Pointer): ƒ.Node[];
     interface Clickable {
         shortTap?(_pointer: Pointer): void;
         longTap?(_pointer: Pointer): void;
@@ -276,6 +276,33 @@ declare namespace Script {
         get maxZ(): number;
         drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void;
     }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    export class PickSphere extends ƒ.Component {
+        #private;
+        static readonly iSubclass: number;
+        constructor();
+        get radius(): number;
+        set radius(_r: number);
+        get radiusSquared(): number;
+        offset: ƒ.Vector3;
+        get mtxPick(): ƒ.Matrix4x4;
+        drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void;
+        /**
+         * finds all pickSpheres within the given ray
+         * @param ray the ray to check against
+         * @param options options
+         */
+        static pick(ray: ƒ.Ray, options?: Partial<PickSpherePickOptions>): PickSphere[];
+        private static get defaultOptions();
+    }
+    interface PickSpherePickOptions {
+        /** Sets by what metric to sort the results. Unsorted if undefined */
+        sortBy?: "distanceToRay" | "distanceToRayOrigin";
+        branch: ƒ.Node;
+    }
+    export {};
 }
 declare namespace Script {
     import ƒ = FudgeCore;
