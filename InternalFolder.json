@@ -185,6 +185,14 @@
         "name": "Stations",
         "entries": [
           {
+            "name": "StationBase",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-23T13:03:44.877Z|05463"
+              }
+            ]
+          },
+          {
             "name": "StationNatur",
             "entries": [
               {

@@ -1395,7 +1395,7 @@
           {
             "Script.WorkbenchVisuals": {
               "active": true,
-              "default": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "default": "GraphGLTF|2025-01-23T13:03:44.877Z|05463",
               "nature": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
               "nature_animals": "GraphGLTF|2025-01-22T12:11:45.884Z|37765",
               "nature_farming": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
@@ -1429,6 +1429,25 @@
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb",
       "events": {}
+    }
+  },
+  "GraphGLTF|2025-01-23T13:03:44.877Z|05463": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-23T13:03:44.877Z|05463",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationBase.glb"
     }
   }
 }
