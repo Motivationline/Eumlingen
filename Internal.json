@@ -107,7 +107,7 @@
                     "direction": "diagonal",
                     "near": 0.1,
                     "far": 2000,
-                    "aspect": 1.6223776223776223,
+                    "aspect": 1.7230769230769232,
                     "pivot": {
                       "translation": "[-5, 2.6999999999999997, 14]",
                       "rotation": "[10, 180, 0]",
@@ -134,9 +134,9 @@
               "ComponentBloom": [
                 {
                   "ƒ.ComponentBloom": {
-                    "threshold": 0.9500000000000001,
-                    "intensity": 1,
-                    "desaturateHighlights": 0.5,
+                    "threshold": 0.9750000000000001,
+                    "intensity": 0.20000000000000004,
+                    "desaturateHighlights": 0,
                     "Component": {
                       "active": true
                     }
