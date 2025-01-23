@@ -24,6 +24,7 @@ namespace Script {
         craft_processing: ƒ.Graph;
 
         #graphs: Map<number, ƒ.Graph> = new Map();
+        #nodes: Map<number, ƒ.Node> = new Map();
         start(_e: CustomEvent<UpdateEvent>): void {
             this.#graphs.set(0, this.default);
 
@@ -37,21 +38,28 @@ namespace Script {
             this.#graphs.set(SUBCATEGORY.PROCESSING, this.craft_processing);
             this.#graphs.set(SUBCATEGORY.PRODUCTION, this.craft_production);
 
-            this.setVisual(0);
+            // using setTimeout because it's a workaround for https://github.com/hs-furtwangen/FUDGE/issues/56
+            setTimeout(() => { this.setVisual(0) }, 0);
 
-            this.node.addEventListener("setVisual", <EventListener>this.hndSetVisual);
+            this.node.addEventListener("setVisual", this.hndSetVisual);
         }
 
         private hndSetVisual = (_e: CustomEvent) => {
-            this.setVisual(_e.detail);
+            // using setTimeout because it's a workaround for https://github.com/hs-furtwangen/FUDGE/issues/56
+            setTimeout(() => { this.setVisual(_e.detail) }, 0);
         }
 
-        setVisual(_id: number) {
+        async setVisual(_id: number) {
             let graph = this.#graphs.get(_id);
             if (!graph) return;
+            let node = this.#nodes.get(_id);
+            if (!node) {
+                node = await ƒ.Project.createGraphInstance(graph);
+                this.#nodes.set(_id, node);
+            }
             this.node.removeAllChildren();
 
-            this.node.appendChild(graph);
+            this.node.appendChild(node);
         }
     }
 }

@@ -1843,8 +1843,10 @@ var Script;
                 this.craft_production = __runInitializers(this, _craft_production_initializers, void 0);
                 this.craft_processing = __runInitializers(this, _craft_processing_initializers, void 0);
                 this.#graphs = new Map();
+                this.#nodes = new Map();
                 this.hndSetVisual = (_e) => {
-                    this.setVisual(_e.detail);
+                    // using setTimeout because it's a workaround for https://github.com/hs-furtwangen/FUDGE/issues/56
+                    setTimeout(() => { this.setVisual(_e.detail); }, 0);
                 };
             }
             static {
@@ -1873,6 +1875,7 @@ var Script;
                 __runInitializers(_classThis, _classExtraInitializers);
             }
             #graphs;
+            #nodes;
             start(_e) {
                 this.#graphs.set(0, this.default);
                 this.#graphs.set(Script.CATEGORY.NATURE, this.nature);
@@ -1883,15 +1886,21 @@ var Script;
                 this.#graphs.set(Script.SUBCATEGORY.MATERIAL_EXTRACTION, this.craft_mat_extr);
                 this.#graphs.set(Script.SUBCATEGORY.PROCESSING, this.craft_processing);
                 this.#graphs.set(Script.SUBCATEGORY.PRODUCTION, this.craft_production);
-                this.setVisual(0);
+                // using setTimeout because it's a workaround for https://github.com/hs-furtwangen/FUDGE/issues/56
+                setTimeout(() => { this.setVisual(0); }, 0);
                 this.node.addEventListener("setVisual", this.hndSetVisual);
             }
-            setVisual(_id) {
+            async setVisual(_id) {
                 let graph = this.#graphs.get(_id);
                 if (!graph)
                     return;
+                let node = this.#nodes.get(_id);
+                if (!node) {
+                    node = await ƒ.Project.createGraphInstance(graph);
+                    this.#nodes.set(_id, node);
+                }
                 this.node.removeAllChildren();
-                this.node.appendChild(graph);
+                this.node.appendChild(node);
             }
         };
         return WorkbenchVisuals = _classThis;

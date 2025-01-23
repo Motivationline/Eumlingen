@@ -387,6 +387,6 @@ declare namespace Script {
         craft_processing: ƒ.Graph;
         start(_e: CustomEvent<UpdateEvent>): void;
         private hndSetVisual;
-        setVisual(_id: number): void;
+        setVisual(_id: number): Promise<void>;
     }
 }
