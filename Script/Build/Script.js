@@ -1195,7 +1195,7 @@ var Script;
     function longTap(_e) {
         if (_e.detail.pointer.used)
             return;
-        let pickedNode = findAllPickedObjectsUsingPickSphere(_e.detail.pointer).pop();
+        let pickedNode = findFirstEumlingOrOther(findAllPickedObjectsUsingPickSphere(_e.detail.pointer));
         if (!pickedNode)
             return;
         pickedNode.getAllComponents()
@@ -1205,7 +1205,7 @@ var Script;
     function shortTap(_e) {
         if (_e.detail.pointer.used)
             return;
-        let pickedNode = findAllPickedObjectsUsingPickSphere(_e.detail.pointer).pop();
+        let pickedNode = findFirstEumlingOrOther(findAllPickedObjectsUsingPickSphere(_e.detail.pointer));
         if (!pickedNode)
             return;
         pickedNode.getAllComponents()
@@ -1217,6 +1217,13 @@ var Script;
         if (frontEumling) {
             frontEumling.getComponent(Script.EumlingMovement).stopMoving();
         }
+    }
+    function findFirstEumlingOrOther(_nodes) {
+        for (let node of _nodes) {
+            if (node.getComponent(Script.EumlingData))
+                return node;
+        }
+        return _nodes[0];
     }
     // export function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined {
     //     let pickedNodes = findAllPickedObjects(_p);
