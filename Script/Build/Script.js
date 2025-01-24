@@ -584,9 +584,10 @@ var Script;
             static { _classThis = this; }
             constructor() {
                 super(...arguments);
-                this.volume = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _volume_initializers, 1));
+                this.singleton = (__runInitializers(this, _instanceExtraInitializers), false);
+                this.volume = __runInitializers(this, _volume_initializers, 1);
                 this.local = __runInitializers(this, _local_initializers, true);
-                this.addRandomness = __runInitializers(this, _addRandomness_initializers, true);
+                this.addRandomness = __runInitializers(this, _addRandomness_initializers, true); //TODO: turn this from boolean to number for variance, aka +/- this value
                 this.channel = __runInitializers(this, _channel_initializers, Script.AUDIO_CHANNEL.MASTER);
                 this.mtxPivot = __runInitializers(this, _mtxPivot_initializers, new ƒ.Matrix4x4());
                 this.boxSize = __runInitializers(this, _boxSize_initializers, new ƒ.Vector3());
@@ -614,6 +615,8 @@ var Script;
                 this.s19 = __runInitializers(this, _s19_initializers, void 0);
                 this.#audios = [];
                 this.playRandomSound = () => {
+                    if (!this.active)
+                        return;
                     let audio = Script.randomArrayElement(this.#audios);
                     if (!audio)
                         return;
@@ -840,6 +843,8 @@ var Script;
             start(_e) {
                 super.start(_e);
                 globalSoundEmitter.addEventListener(this.event, this.playRandomSound);
+                this.addEventListener(this.event, this.playRandomSound);
+                this.node.addEventListener(this.event, this.playRandomSound);
             }
             static {
                 __runInitializers(_classThis, _classExtraInitializers);
@@ -971,6 +976,7 @@ var Script;
                 let importedScene = this.node.getChild(0);
                 importedScene.getComponent(ƒ.ComponentAnimation).activate(false);
                 importedScene.addComponent(this.cmpAnim);
+                this.setupEvents();
             }
             transitionToAnimation(_anim, _time = 300) {
                 let anim = this.animations.get(_anim);
@@ -995,6 +1001,16 @@ var Script;
             }
             getOffset(_anim) {
                 return this.offsets.get(_anim) ?? ƒ.Vector3.ZERO();
+            }
+            setupEvents() {
+                this.walk.setEvent("leftStep", 0);
+                this.walk.setEvent("rightStep", this.walk.totalTime / 2);
+                this.cmpAnim.addEventListener("leftStep", () => {
+                    this.node.dispatchEvent(new Event("step"));
+                });
+                this.cmpAnim.addEventListener("rightStep", () => {
+                    this.node.dispatchEvent(new Event("step"));
+                });
             }
         };
         return EumlingAnimator = _classThis;

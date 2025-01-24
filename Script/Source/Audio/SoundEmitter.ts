@@ -8,13 +8,14 @@ namespace Script {
     @ƒ.serialize
     export abstract class SoundEmitter extends UpdateScriptComponent {
         public static readonly iSubclass: number = ƒ.Component.registerSubclass(SoundEmitter);
-        
+        protected singleton: boolean = false;
+
         @ƒ.serialize(Number)
         volume: number = 1;
         @ƒ.serialize(Boolean)
         local: boolean = true;
         @ƒ.serialize(Boolean)
-        addRandomness: boolean = true;
+        addRandomness: boolean = true; //TODO: turn this from boolean to number for variance, aka +/- this value
         @ƒ.serialize(AUDIO_CHANNEL)
         channel: AUDIO_CHANNEL = AUDIO_CHANNEL.MASTER;
         @ƒ.serialize(ƒ.Matrix4x4)
@@ -102,6 +103,7 @@ namespace Script {
         }
 
         playRandomSound = () => {
+            if (!this.active) return;
             let audio = randomArrayElement(this.#audios);
             if (!audio) return;
             this.#audioCmp.setAudio(audio);
@@ -122,11 +124,11 @@ namespace Script {
             )
             if (this.surfaceOfBoxOnly) {
                 const rand = Math.floor(Math.random() * 3);
-                if(rand === 0){
+                if (rand === 0) {
                     result.x = Math.sign(result.x) * this.boxSize.x / 2
-                } else if(rand === 1){
+                } else if (rand === 1) {
                     result.y = Math.sign(result.y) * this.boxSize.y / 2
-                } else if(rand === 2){
+                } else if (rand === 2) {
                     result.z = Math.sign(result.z) * this.boxSize.z / 2
                 }
             }
@@ -166,6 +168,8 @@ namespace Script {
         start(_e: CustomEvent<UpdateEvent>): void {
             super.start(_e);
             globalSoundEmitter.addEventListener(this.event, this.playRandomSound);
+            this.addEventListener(this.event, this.playRandomSound);
+            this.node.addEventListener(this.event, this.playRandomSound);
         }
     }
 }

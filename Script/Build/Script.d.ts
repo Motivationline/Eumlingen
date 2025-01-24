@@ -121,6 +121,7 @@ declare namespace Script {
     abstract class SoundEmitter extends UpdateScriptComponent {
         #private;
         static readonly iSubclass: number;
+        protected singleton: boolean;
         volume: number;
         local: boolean;
         addRandomness: boolean;
@@ -194,6 +195,7 @@ declare namespace Script {
         private timeout;
         overlayAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
         getOffset(_anim: EumlingAnimator.ANIMATIONS): ƒ.Vector3;
+        private setupEvents;
     }
     namespace EumlingAnimator {
         enum ANIMATIONS {

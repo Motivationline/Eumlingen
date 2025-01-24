@@ -66,6 +66,8 @@ namespace Script {
             let importedScene = this.node.getChild(0);
             importedScene.getComponent(ƒ.ComponentAnimation).activate(false);
             importedScene.addComponent(this.cmpAnim);
+
+            this.setupEvents();
         }
 
         public transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time: number = 300) {
@@ -93,6 +95,17 @@ namespace Script {
 
         public getOffset(_anim: EumlingAnimator.ANIMATIONS): ƒ.Vector3 {
             return this.offsets.get(_anim) ?? ƒ.Vector3.ZERO();
+        }
+
+        private setupEvents() {
+            this.walk.setEvent("leftStep", 0);
+            this.walk.setEvent("rightStep", this.walk.totalTime / 2);
+            this.cmpAnim.addEventListener("leftStep", () => {
+                this.node.dispatchEvent(new Event("step"))
+            });
+            this.cmpAnim.addEventListener("rightStep", () => {
+                this.node.dispatchEvent(new Event("step"))
+            });
         }
     }
 
