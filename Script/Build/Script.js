@@ -192,6 +192,7 @@ var Script;
     Script.globalEvents = new EventTarget();
     function start(_event) {
         Script.viewport = _event.detail;
+        // viewport.gizmosEnabled = true;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -358,12 +359,20 @@ var Script;
         let _fall_initializers = [];
         let _work_build_decorators;
         let _work_build_initializers = [];
+        let _work_build_offset_decorators;
+        let _work_build_offset_initializers = [];
         let _work_bad_decorators;
         let _work_bad_initializers = [];
+        let _work_bad_offset_decorators;
+        let _work_bad_offset_initializers = [];
         let _work_normal_decorators;
         let _work_normal_initializers = [];
+        let _work_normal_offset_decorators;
+        let _work_normal_offset_initializers = [];
         let _work_good_decorators;
         let _work_good_initializers = [];
+        let _work_good_offset_decorators;
+        let _work_good_offset_initializers = [];
         var EumlingAnimator = class extends _classSuper {
             static { _classThis = this; }
             constructor() {
@@ -375,11 +384,16 @@ var Script;
                 this.pick = __runInitializers(this, _pick_initializers, void 0);
                 this.fall = __runInitializers(this, _fall_initializers, void 0);
                 this.work_build = __runInitializers(this, _work_build_initializers, void 0);
+                this.work_build_offset = __runInitializers(this, _work_build_offset_initializers, new ƒ.Vector3());
                 this.work_bad = __runInitializers(this, _work_bad_initializers, void 0);
+                this.work_bad_offset = __runInitializers(this, _work_bad_offset_initializers, new ƒ.Vector3());
                 this.work_normal = __runInitializers(this, _work_normal_initializers, void 0);
+                this.work_normal_offset = __runInitializers(this, _work_normal_offset_initializers, new ƒ.Vector3());
                 this.work_good = __runInitializers(this, _work_good_initializers, void 0);
+                this.work_good_offset = __runInitializers(this, _work_good_offset_initializers, new ƒ.Vector3());
                 this.activeAnimation = EumlingAnimator.ANIMATIONS.IDLE;
                 this.animations = new Map();
+                this.offsets = new Map();
                 this.timeout = undefined;
             }
             static {
@@ -391,9 +405,13 @@ var Script;
                 _pick_decorators = [ƒ.serialize(ƒ.Animation)];
                 _fall_decorators = [ƒ.serialize(ƒ.Animation)];
                 _work_build_decorators = [ƒ.serialize(ƒ.Animation)];
+                _work_build_offset_decorators = [ƒ.serialize(ƒ.Vector3)];
                 _work_bad_decorators = [ƒ.serialize(ƒ.Animation)];
+                _work_bad_offset_decorators = [ƒ.serialize(ƒ.Vector3)];
                 _work_normal_decorators = [ƒ.serialize(ƒ.Animation)];
+                _work_normal_offset_decorators = [ƒ.serialize(ƒ.Vector3)];
                 _work_good_decorators = [ƒ.serialize(ƒ.Animation)];
+                _work_good_offset_decorators = [ƒ.serialize(ƒ.Vector3)];
                 __esDecorate(null, null, _idle_decorators, { kind: "field", name: "idle", static: false, private: false, access: { has: obj => "idle" in obj, get: obj => obj.idle, set: (obj, value) => { obj.idle = value; } }, metadata: _metadata }, _idle_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _walk_decorators, { kind: "field", name: "walk", static: false, private: false, access: { has: obj => "walk" in obj, get: obj => obj.walk, set: (obj, value) => { obj.walk = value; } }, metadata: _metadata }, _walk_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _clickedOn_decorators, { kind: "field", name: "clickedOn", static: false, private: false, access: { has: obj => "clickedOn" in obj, get: obj => obj.clickedOn, set: (obj, value) => { obj.clickedOn = value; } }, metadata: _metadata }, _clickedOn_initializers, _instanceExtraInitializers);
@@ -401,9 +419,13 @@ var Script;
                 __esDecorate(null, null, _pick_decorators, { kind: "field", name: "pick", static: false, private: false, access: { has: obj => "pick" in obj, get: obj => obj.pick, set: (obj, value) => { obj.pick = value; } }, metadata: _metadata }, _pick_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _fall_decorators, { kind: "field", name: "fall", static: false, private: false, access: { has: obj => "fall" in obj, get: obj => obj.fall, set: (obj, value) => { obj.fall = value; } }, metadata: _metadata }, _fall_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_build_decorators, { kind: "field", name: "work_build", static: false, private: false, access: { has: obj => "work_build" in obj, get: obj => obj.work_build, set: (obj, value) => { obj.work_build = value; } }, metadata: _metadata }, _work_build_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _work_build_offset_decorators, { kind: "field", name: "work_build_offset", static: false, private: false, access: { has: obj => "work_build_offset" in obj, get: obj => obj.work_build_offset, set: (obj, value) => { obj.work_build_offset = value; } }, metadata: _metadata }, _work_build_offset_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_bad_decorators, { kind: "field", name: "work_bad", static: false, private: false, access: { has: obj => "work_bad" in obj, get: obj => obj.work_bad, set: (obj, value) => { obj.work_bad = value; } }, metadata: _metadata }, _work_bad_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _work_bad_offset_decorators, { kind: "field", name: "work_bad_offset", static: false, private: false, access: { has: obj => "work_bad_offset" in obj, get: obj => obj.work_bad_offset, set: (obj, value) => { obj.work_bad_offset = value; } }, metadata: _metadata }, _work_bad_offset_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_normal_decorators, { kind: "field", name: "work_normal", static: false, private: false, access: { has: obj => "work_normal" in obj, get: obj => obj.work_normal, set: (obj, value) => { obj.work_normal = value; } }, metadata: _metadata }, _work_normal_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _work_normal_offset_decorators, { kind: "field", name: "work_normal_offset", static: false, private: false, access: { has: obj => "work_normal_offset" in obj, get: obj => obj.work_normal_offset, set: (obj, value) => { obj.work_normal_offset = value; } }, metadata: _metadata }, _work_normal_offset_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_good_decorators, { kind: "field", name: "work_good", static: false, private: false, access: { has: obj => "work_good" in obj, get: obj => obj.work_good, set: (obj, value) => { obj.work_good = value; } }, metadata: _metadata }, _work_good_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _work_good_offset_decorators, { kind: "field", name: "work_good_offset", static: false, private: false, access: { has: obj => "work_good_offset" in obj, get: obj => obj.work_good_offset, set: (obj, value) => { obj.work_good_offset = value; } }, metadata: _metadata }, _work_good_offset_initializers, _instanceExtraInitializers);
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 EumlingAnimator = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -421,6 +443,10 @@ var Script;
                 this.animations.set(EumlingAnimator.ANIMATIONS.WORK_BAD, new ƒ.AnimationNodeAnimation(this.work_bad));
                 this.animations.set(EumlingAnimator.ANIMATIONS.WORK_NORMAL, new ƒ.AnimationNodeAnimation(this.work_normal));
                 this.animations.set(EumlingAnimator.ANIMATIONS.WORK_GOOD, new ƒ.AnimationNodeAnimation(this.work_good));
+                this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_BUILD, this.work_build_offset);
+                this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_BAD, this.work_bad_offset);
+                this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_NORMAL, this.work_normal_offset);
+                this.offsets.set(EumlingAnimator.ANIMATIONS.WORK_GOOD, this.work_good_offset);
                 this.animPlaying = new ƒ.AnimationNodeTransition(this.animations.get(this.activeAnimation));
                 this.animOverlay = new ƒ.AnimationNodeTransition(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY));
                 let rootAnim = new ƒ.AnimationNodeBlend([this.animPlaying, this.animOverlay]);
@@ -449,6 +475,9 @@ var Script;
                     this.timeout = undefined;
                     this.animOverlay.transit(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY), 100);
                 });
+            }
+            getOffset(_anim) {
+                return this.offsets.get(_anim) ?? ƒ.Vector3.ZERO();
             }
         };
         return EumlingAnimator = _classThis;
@@ -501,18 +530,28 @@ var Script;
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
 /// <reference path="../Eumlings/Traits.ts" />
 (function (Script) {
+    var ƒ = FudgeCore;
     class EumlingData extends Script.UpdateScriptComponent {
         constructor() {
             super(...arguments);
-            this.name = "";
+            this.#name = "";
             this.traits = new Set();
         }
         static { this.names = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst", "Aluni", "Lyraen", "Nivrel", "Elvaris", "Sylin", "Veyla", "Auren", "Liriel", "Riva", "Moraen", "Tynel", "Lymra", "Ondis", "Floren", "Nymra", "Aeris", "Erya", "Thyra", "Nyra", "Velin", "Fenya", "Arion", "Sylva", "Caelis", "Plenna", "Quira", "Lumel", "Flimra", "Vonae", "Tivra", "Elna", "Myrel"]; }
+        #name;
         start(_e) {
-            this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
             while (this.traits.size < 2) {
                 this.traits.add(Script.randomEnum(Script.TRAIT));
             }
+            this.nameDisplay = this.node.getChildrenByName("Name")[0].getComponent(ƒ.ComponentText);
+            this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
+        }
+        get name() {
+            return this.#name;
+        }
+        set name(_name) {
+            this.#name = _name;
+            this.nameDisplay.texture.text = this.#name;
         }
         shortTap(_pointer) {
             if (this.node.getComponent(Script.EumlingMovement).getState() === Script.STATE.GROWN || _pointer.used) {
@@ -607,10 +646,13 @@ var Script;
                 this.animator = this.node.getComponent(Script.EumlingAnimator);
                 let walkNode = this.node.getParent();
                 this.walkArea = walkNode?.getComponent(Script.WalkableArea);
+                this.pick = this.node.getComponent(Script.PickSphere);
                 this.setState(this.state);
             }
             ;
             update(_e) {
+                if (Script.eumlingCameraActive)
+                    return;
                 let now = ƒ.Time.game.get();
                 let deltaTimeSeconds = _e.detail.deltaTime / 1000;
                 switch (this.state) {
@@ -672,7 +714,7 @@ var Script;
                                 let pointer = this.pointer;
                                 this.pointer = undefined;
                                 //check if dropped over workbench
-                                let pickedNodes = Script.findAllPickedObjects(pointer);
+                                let pickedNodes = Script.findAllPickedObjectsUsingPickSphere(pointer);
                                 let wb = pickedNodes.find(n => !!n.getComponent(Script.Workbench));
                                 if (!wb)
                                     break;
@@ -726,6 +768,8 @@ var Script;
                     case STATE.GROWN:
                         this.node.mtxLocal.translateY(-0.95);
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.PICKED, 100);
+                        this.pick.offset.y = 1.20;
+                        this.pick.radius = 0.3;
                         break;
                 }
                 this.state = _state;
@@ -753,6 +797,8 @@ var Script;
                 if (this.state === STATE.GROWN) {
                     this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
                     this.setState(STATE.IDLE);
+                    this.pick.offset.y = 0.45;
+                    this.pick.radius = 0.4;
                     _pointer.used = true;
                     return;
                 }
@@ -776,8 +822,13 @@ var Script;
                 this.targetPosition = ƒ.Vector3.DIFFERENCE(_pos, this.walkArea.node.mtxWorld.translation);
                 this.setState(STATE.WALK);
             }
-            teleportTo(_pos) {
+            teleportTo(_pos, _rot) {
                 this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
+                if (_rot)
+                    this.node.mtxLocal.rotate(ƒ.Vector3.DIFFERENCE(_rot, this.node.mtxWorld.rotation), false);
+            }
+            teleportBy(_dif, _local) {
+                this.node.mtxLocal.translate(_dif, _local);
             }
             stopMoving() {
                 if (this.state === STATE.WALK) {
@@ -869,23 +920,29 @@ var Script;
             assign(_wb) {
                 let fittingTraits = _wb.work(this.node, 0);
                 this.workbench = _wb;
-                this.moveComp.teleportTo(_wb.node.mtxWorld.translation);
+                const anim = this.getWorkAnimation(fittingTraits);
+                this.moveComp.teleportTo(_wb.node.mtxWorld.translation, _wb.node.mtxWorld.rotation);
+                this.moveComp.teleportBy(this.animator.getOffset(anim), true);
                 this.moveComp.setState(Script.STATE.WORK);
-                this.updateWorkAnimation(fittingTraits);
+                this.updateWorkAnimation(anim);
             }
-            updateWorkAnimation(_fittingTraits) {
+            getWorkAnimation(_fittingTraits) {
                 if (this.workbench.needsAssembly) {
-                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_BUILD, 100);
+                    return Script.EumlingAnimator.ANIMATIONS.WORK_BUILD;
                 }
                 else if (_fittingTraits === 0) {
-                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_BAD, 100);
+                    return Script.EumlingAnimator.ANIMATIONS.WORK_BAD;
                 }
                 else if (_fittingTraits === 1) {
-                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_NORMAL, 100);
+                    return Script.EumlingAnimator.ANIMATIONS.WORK_NORMAL;
                 }
                 else if (_fittingTraits === 2) {
-                    this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.WORK_GOOD, 100);
+                    return Script.EumlingAnimator.ANIMATIONS.WORK_GOOD;
                 }
+                return Script.EumlingAnimator.ANIMATIONS.WORK_GOOD;
+            }
+            updateWorkAnimation(_anim) {
+                this.animator.transitionToAnimation(_anim, 100);
             }
             work(_timeMS) {
                 if (!this.workbench)
@@ -1138,7 +1195,7 @@ var Script;
     function longTap(_e) {
         if (_e.detail.pointer.used)
             return;
-        let pickedNode = findFrontPickedObject(_e.detail.pointer);
+        let pickedNode = findFirstEumlingOrOther(findAllPickedObjectsUsingPickSphere(_e.detail.pointer));
         if (!pickedNode)
             return;
         pickedNode.getAllComponents()
@@ -1148,7 +1205,7 @@ var Script;
     function shortTap(_e) {
         if (_e.detail.pointer.used)
             return;
-        let pickedNode = findFrontPickedObject(_e.detail.pointer);
+        let pickedNode = findFirstEumlingOrOther(findAllPickedObjectsUsingPickSphere(_e.detail.pointer));
         if (!pickedNode)
             return;
         pickedNode.getAllComponents()
@@ -1156,40 +1213,48 @@ var Script;
             .forEach(c => c.shortTap(_e.detail.pointer));
     }
     function startTap(_e) {
-        let frontEumling = findAllPickedObjects(_e.detail.pointer).filter(n => n.getComponent(Script.EumlingMovement)).sort(sortByDistance).pop();
+        let frontEumling = findAllPickedObjectsUsingPickSphere(_e.detail.pointer).filter(n => n.getComponent(Script.EumlingMovement)).pop();
         if (frontEumling) {
             frontEumling.getComponent(Script.EumlingMovement).stopMoving();
         }
     }
-    function findFrontPickedObject(_p) {
-        let pickedNodes = findAllPickedObjects(_p);
-        pickedNodes.sort(sortByDistance);
-        return pickedNodes.pop();
-    }
-    Script.findFrontPickedObject = findFrontPickedObject;
-    function sortByDistance(a, b) {
-        return a.mtxWorld.translation.z - b.mtxWorld.translation.z;
-    }
-    function findAllPickedObjects(_pointer) {
-        const picks = ƒ.Picker.pickViewport(Script.viewport, new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
-        let pickedNodes = [];
-        for (let pick of picks) {
-            let pickedNode = findPickableNodeInTree(pick.node);
-            if (!pickedNode)
-                continue;
-            pickedNodes.push(pickedNode);
+    function findFirstEumlingOrOther(_nodes) {
+        for (let node of _nodes) {
+            if (node.getComponent(Script.EumlingData))
+                return node;
         }
-        return pickedNodes;
+        return _nodes[0];
     }
-    Script.findAllPickedObjects = findAllPickedObjects;
-    function findPickableNodeInTree(node) {
-        if (!node)
-            return undefined;
-        let pick = node.getComponent(ƒ.ComponentPick);
-        if (pick)
-            return node;
-        return findPickableNodeInTree(node.getParent());
+    // export function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined {
+    //     let pickedNodes = findAllPickedObjects(_p);
+    //     pickedNodes.sort(sortByDistance);
+    //     return pickedNodes.pop();
+    // }
+    // function sortByDistance(a: ƒ.Node, b: ƒ.Node) {
+    //     return a.mtxWorld.translation.z - b.mtxWorld.translation.z;
+    // }
+    // export function findAllPickedObjects(_pointer: Pointer): ƒ.Node[] {
+    //     const picks = ƒ.Picker.pickViewport(viewport, new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
+    //     let pickedNodes: ƒ.Node[] = [];
+    //     for (let pick of picks) {
+    //         let pickedNode = findPickableNodeInTree(pick.node);
+    //         if (!pickedNode) continue;
+    //         pickedNodes.push(pickedNode);
+    //     }
+    //     return pickedNodes;
+    // }
+    // function findPickableNodeInTree(node: ƒ.Node): ƒ.Node | undefined {
+    //     if (!node) return undefined;
+    //     let pick = node.getComponent(ƒ.ComponentPick);
+    //     if (pick) return node;
+    //     return findPickableNodeInTree(node.getParent());
+    // }
+    function findAllPickedObjectsUsingPickSphere(_pointer) {
+        const ray = Script.viewport.getRayFromClient(new ƒ.Vector2(_pointer.currentX, _pointer.currentY));
+        const picks = Script.PickSphere.pick(ray, { sortBy: "distanceToRayOrigin" });
+        return picks.map((p) => p.node);
     }
+    Script.findAllPickedObjectsUsingPickSphere = findAllPickedObjectsUsingPickSphere;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -1382,6 +1447,101 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    let PickSphere = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = ƒ.Component;
+        let _instanceExtraInitializers = [];
+        let _get_radius_decorators;
+        let _offset_decorators;
+        let _offset_initializers = [];
+        var PickSphere = class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _get_radius_decorators = [ƒ.serialize(Number)];
+                _offset_decorators = [ƒ.serialize(ƒ.Vector3)];
+                __esDecorate(this, null, _get_radius_decorators, { kind: "getter", name: "radius", static: false, private: false, access: { has: obj => "radius" in obj, get: obj => obj.radius }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, null, _offset_decorators, { kind: "field", name: "offset", static: false, private: false, access: { has: obj => "offset" in obj, get: obj => obj.offset, set: (obj, value) => { obj.offset = value; } }, metadata: _metadata }, _offset_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                PickSphere = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            }
+            static { this.iSubclass = ƒ.Component.registerSubclass(PickSphere); }
+            constructor() {
+                super();
+                this.#radius = (__runInitializers(this, _instanceExtraInitializers), 1);
+                this.#radiusSquared = 1;
+                this.offset = __runInitializers(this, _offset_initializers, new ƒ.Vector3());
+                if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                    return;
+            }
+            #radius;
+            #radiusSquared;
+            get radius() {
+                return this.#radius;
+            }
+            set radius(_r) {
+                this.#radius = _r;
+                this.#radiusSquared = _r * _r;
+            }
+            get radiusSquared() {
+                return this.#radiusSquared;
+            }
+            get mtxPick() {
+                return this.node.mtxWorld.clone.translate(this.offset, true).scale(ƒ.Vector3.ONE(this.radius * 2));
+            }
+            drawGizmos(_cmpCamera) {
+                ƒ.Gizmos.drawWireSphere(this.mtxPick, ƒ.Color.CSS("red"));
+            }
+            /**
+             * finds all pickSpheres within the given ray
+             * @param ray the ray to check against
+             * @param options options
+             */
+            static pick(ray, options = {}) {
+                const picks = [];
+                options = { ...this.defaultOptions, ...options };
+                for (let node of options.branch) {
+                    let pckSph = node.getComponent(PickSphere);
+                    if (!pckSph)
+                        continue;
+                    let distance = ray.getDistance(pckSph.mtxPick.translation);
+                    if (distance.magnitudeSquared < pckSph.radiusSquared) {
+                        picks.push(pckSph);
+                    }
+                }
+                if (options.sortBy) {
+                    let distances = new Map();
+                    if (options.sortBy === "distanceToRayOrigin") {
+                        picks.forEach(p => distances.set(p, ray.origin.getDistance(p.node.mtxWorld.translation)));
+                    }
+                    else if (options.sortBy === "distanceToRay") {
+                        picks.forEach(p => distances.set(p, ray.getDistance(p.node.mtxWorld.translation).magnitudeSquared));
+                    }
+                    picks.sort((a, b) => distances.get(a) - distances.get(b));
+                }
+                return picks;
+            }
+            static get defaultOptions() {
+                return {
+                    branch: Script.viewport.getBranch(),
+                };
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+        };
+        return PickSphere = _classThis;
+    })();
+    Script.PickSphere = PickSphere;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
     function findFirstCameraInGraph(_graph) {
         let cam = _graph.getComponent(ƒ.ComponentCamera);
         if (cam)
@@ -1445,12 +1605,12 @@ var Script;
     })(CATEGORY = Script.CATEGORY || (Script.CATEGORY = {}));
     let SUBCATEGORY;
     (function (SUBCATEGORY) {
-        SUBCATEGORY[SUBCATEGORY["ANIMALS"] = 1] = "ANIMALS";
-        SUBCATEGORY[SUBCATEGORY["FARMING"] = 2] = "FARMING";
-        SUBCATEGORY[SUBCATEGORY["GARDENING"] = 3] = "GARDENING";
-        SUBCATEGORY[SUBCATEGORY["MATERIAL_EXTRACTION"] = 4] = "MATERIAL_EXTRACTION";
-        SUBCATEGORY[SUBCATEGORY["PRODUCTION"] = 5] = "PRODUCTION";
-        SUBCATEGORY[SUBCATEGORY["PROCESSING"] = 6] = "PROCESSING";
+        SUBCATEGORY[SUBCATEGORY["ANIMALS"] = 100] = "ANIMALS";
+        SUBCATEGORY[SUBCATEGORY["FARMING"] = 101] = "FARMING";
+        SUBCATEGORY[SUBCATEGORY["GARDENING"] = 102] = "GARDENING";
+        SUBCATEGORY[SUBCATEGORY["MATERIAL_EXTRACTION"] = 103] = "MATERIAL_EXTRACTION";
+        SUBCATEGORY[SUBCATEGORY["PRODUCTION"] = 104] = "PRODUCTION";
+        SUBCATEGORY[SUBCATEGORY["PROCESSING"] = 105] = "PROCESSING";
     })(SUBCATEGORY = Script.SUBCATEGORY || (Script.SUBCATEGORY = {}));
     class Workbench extends Script.UpdateScriptComponent {
         constructor() {
@@ -1486,7 +1646,6 @@ var Script;
             },
         ]; }
         start(_e) {
-            this.matColor = this.node.getComponent(ƒ.ComponentMaterial).clrPrimary;
         }
         shortTap(_pointer) {
             this.displayWorkbenchInfo();
@@ -1556,12 +1715,13 @@ var Script;
             }
             else if (this.subcategory === undefined) {
                 this.subcategory = _id;
+                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: _id }));
             }
         }
         resetAll() {
             this.category = this.subcategory = undefined;
-            this.matColor.b = 0;
             this.buildProgress = 0;
+            this.node.dispatchEvent(new CustomEvent("setVisual", { detail: 0 }));
         }
         static getCategoryFromId(_id) {
             return this.categories.find(c => c.id === _id);
@@ -1587,9 +1747,9 @@ var Script;
             else if (!this.subcategory) {
                 if (this.buildProgress < 1) {
                     this.buildProgress += this.buildSpeed * _timeMS / 1000;
-                    this.matColor.b = this.buildProgress;
                 }
                 else {
+                    this.node.dispatchEvent(new CustomEvent("setVisual", { detail: this.category }));
                     this.unassignEumling();
                 }
             }
@@ -1619,7 +1779,8 @@ var Script;
             }
             this.fittingTraits++;
             Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "eumlingDevelopTrait", data: { fittingTraits: this.fittingTraits, traits: data.traits, eumling: this.assignee } } }));
-            this.assignee.getComponent(Script.EumlingWork).updateWorkAnimation(this.fittingTraits);
+            const ew = this.assignee.getComponent(Script.EumlingWork);
+            ew.updateWorkAnimation(ew.getWorkAnimation(this.fittingTraits));
         }
         assignNewEumling(_eumling) {
             this.unassignEumling();
@@ -1645,5 +1806,112 @@ var Script;
         }
     }
     Script.Workbench = Workbench;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    let WorkbenchVisuals = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = Script.UpdateScriptComponent;
+        let _instanceExtraInitializers = [];
+        let _default_decorators;
+        let _default_initializers = [];
+        let _nature_decorators;
+        let _nature_initializers = [];
+        let _nature_animals_decorators;
+        let _nature_animals_initializers = [];
+        let _nature_farming_decorators;
+        let _nature_farming_initializers = [];
+        let _nature_gardening_decorators;
+        let _nature_gardening_initializers = [];
+        let _craft_decorators;
+        let _craft_initializers = [];
+        let _craft_mat_extr_decorators;
+        let _craft_mat_extr_initializers = [];
+        let _craft_production_decorators;
+        let _craft_production_initializers = [];
+        let _craft_processing_decorators;
+        let _craft_processing_initializers = [];
+        var WorkbenchVisuals = class extends _classSuper {
+            static { _classThis = this; }
+            constructor() {
+                super(...arguments);
+                this.default = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _default_initializers, void 0));
+                this.nature = __runInitializers(this, _nature_initializers, void 0);
+                this.nature_animals = __runInitializers(this, _nature_animals_initializers, void 0);
+                this.nature_farming = __runInitializers(this, _nature_farming_initializers, void 0);
+                this.nature_gardening = __runInitializers(this, _nature_gardening_initializers, void 0);
+                this.craft = __runInitializers(this, _craft_initializers, void 0);
+                this.craft_mat_extr = __runInitializers(this, _craft_mat_extr_initializers, void 0);
+                this.craft_production = __runInitializers(this, _craft_production_initializers, void 0);
+                this.craft_processing = __runInitializers(this, _craft_processing_initializers, void 0);
+                this.#graphs = new Map();
+                this.#nodes = new Map();
+                this.hndSetVisual = (_e) => {
+                    // using setTimeout because it's a workaround for https://github.com/hs-furtwangen/FUDGE/issues/56
+                    setTimeout(() => { this.setVisual(_e.detail); }, 0);
+                };
+            }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _default_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_animals_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_farming_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_gardening_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_mat_extr_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_production_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_processing_decorators = [ƒ.serialize(ƒ.Graph)];
+                __esDecorate(null, null, _default_decorators, { kind: "field", name: "default", static: false, private: false, access: { has: obj => "default" in obj, get: obj => obj.default, set: (obj, value) => { obj.default = value; } }, metadata: _metadata }, _default_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_decorators, { kind: "field", name: "nature", static: false, private: false, access: { has: obj => "nature" in obj, get: obj => obj.nature, set: (obj, value) => { obj.nature = value; } }, metadata: _metadata }, _nature_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_animals_decorators, { kind: "field", name: "nature_animals", static: false, private: false, access: { has: obj => "nature_animals" in obj, get: obj => obj.nature_animals, set: (obj, value) => { obj.nature_animals = value; } }, metadata: _metadata }, _nature_animals_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_farming_decorators, { kind: "field", name: "nature_farming", static: false, private: false, access: { has: obj => "nature_farming" in obj, get: obj => obj.nature_farming, set: (obj, value) => { obj.nature_farming = value; } }, metadata: _metadata }, _nature_farming_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_gardening_decorators, { kind: "field", name: "nature_gardening", static: false, private: false, access: { has: obj => "nature_gardening" in obj, get: obj => obj.nature_gardening, set: (obj, value) => { obj.nature_gardening = value; } }, metadata: _metadata }, _nature_gardening_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_decorators, { kind: "field", name: "craft", static: false, private: false, access: { has: obj => "craft" in obj, get: obj => obj.craft, set: (obj, value) => { obj.craft = value; } }, metadata: _metadata }, _craft_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_mat_extr_decorators, { kind: "field", name: "craft_mat_extr", static: false, private: false, access: { has: obj => "craft_mat_extr" in obj, get: obj => obj.craft_mat_extr, set: (obj, value) => { obj.craft_mat_extr = value; } }, metadata: _metadata }, _craft_mat_extr_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_production_decorators, { kind: "field", name: "craft_production", static: false, private: false, access: { has: obj => "craft_production" in obj, get: obj => obj.craft_production, set: (obj, value) => { obj.craft_production = value; } }, metadata: _metadata }, _craft_production_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_processing_decorators, { kind: "field", name: "craft_processing", static: false, private: false, access: { has: obj => "craft_processing" in obj, get: obj => obj.craft_processing, set: (obj, value) => { obj.craft_processing = value; } }, metadata: _metadata }, _craft_processing_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                WorkbenchVisuals = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            #graphs;
+            #nodes;
+            start(_e) {
+                this.#graphs.set(0, this.default);
+                this.#graphs.set(Script.CATEGORY.NATURE, this.nature);
+                this.#graphs.set(Script.SUBCATEGORY.ANIMALS, this.nature_animals);
+                this.#graphs.set(Script.SUBCATEGORY.FARMING, this.nature_farming);
+                this.#graphs.set(Script.SUBCATEGORY.GARDENING, this.nature_gardening);
+                this.#graphs.set(Script.CATEGORY.CRAFT, this.craft);
+                this.#graphs.set(Script.SUBCATEGORY.MATERIAL_EXTRACTION, this.craft_mat_extr);
+                this.#graphs.set(Script.SUBCATEGORY.PROCESSING, this.craft_processing);
+                this.#graphs.set(Script.SUBCATEGORY.PRODUCTION, this.craft_production);
+                // using setTimeout because it's a workaround for https://github.com/hs-furtwangen/FUDGE/issues/56
+                setTimeout(() => { this.setVisual(0); }, 0);
+                this.node.addEventListener("setVisual", this.hndSetVisual);
+            }
+            async setVisual(_id) {
+                let graph = this.#graphs.get(_id);
+                if (!graph)
+                    return;
+                let node = this.#nodes.get(_id);
+                if (!node) {
+                    node = await ƒ.Project.createGraphInstance(graph);
+                    this.#nodes.set(_id, node);
+                }
+                this.node.removeAllChildren();
+                this.node.appendChild(node);
+            }
+        };
+        return WorkbenchVisuals = _classThis;
+    })();
+    Script.WorkbenchVisuals = WorkbenchVisuals;
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

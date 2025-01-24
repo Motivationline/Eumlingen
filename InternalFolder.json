@@ -40,11 +40,29 @@
               },
               {
                 "idResource": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808"
+              },
+              {
+                "idResource": "AnimationGLTF|2025-01-20T13:44:22.477Z|09086"
+              },
+              {
+                "idResource": "AnimationGLTF|2025-01-20T13:44:22.484Z|42105"
+              },
+              {
+                "idResource": "AnimationGLTF|2025-01-20T13:44:22.493Z|83835"
+              },
+              {
+                "idResource": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255"
               }
             ]
           },
           {
             "idResource": "Graph|2024-12-19T13:00:19.847Z|01650"
+          },
+          {
+            "idResource": "MeshQuad|2025-01-21T10:38:04.319Z|68327"
+          },
+          {
+            "idResource": "Material|2025-01-21T10:38:19.483Z|37759"
           }
         ]
       },
@@ -162,6 +180,54 @@
       },
       {
         "idResource": "Material|2024-12-20T12:33:52.056Z|05556"
+      },
+      {
+        "name": "Stations",
+        "entries": [
+          {
+            "name": "StationBase",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-23T13:03:44.877Z|05463"
+              }
+            ]
+          },
+          {
+            "name": "StationNatur",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
+              }
+            ]
+          },
+          {
+            "name": "StationGartenbau",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-21T15:01:08.033Z|95174"
+              }
+            ]
+          },
+          {
+            "name": "StationTierwirtschaft",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-22T12:11:45.884Z|37765"
+              },
+              {
+                "idResource": "AnimationGLTF|2025-01-22T12:11:45.884Z|93300"
+              }
+            ]
+          },
+          {
+            "name": "StationLandwirtschaft",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-22T12:15:28.947Z|41115"
+              }
+            ]
+          }
+        ]
       }
     ]
   }

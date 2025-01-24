@@ -2,15 +2,26 @@
 /// <reference path="../Eumlings/Traits.ts" />
 
 namespace Script {
+    import ƒ = FudgeCore;
     export class EumlingData extends UpdateScriptComponent implements Clickable {
         static names: string[] = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst", "Aluni", "Lyraen", "Nivrel", "Elvaris", "Sylin", "Veyla", "Auren", "Liriel", "Riva", "Moraen", "Tynel", "Lymra", "Ondis", "Floren", "Nymra", "Aeris", "Erya", "Thyra", "Nyra", "Velin", "Fenya", "Arion", "Sylva", "Caelis", "Plenna", "Quira", "Lumel", "Flimra", "Vonae", "Tivra", "Elna", "Myrel"]
-        name: string = "";
+        #name: string = "";
         traits: Set<TRAIT> = new Set<TRAIT>();
+        nameDisplay: ƒ.ComponentText;
         start(_e: CustomEvent<UpdateEvent>): void {
-            this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
             while (this.traits.size < 2) {
                 this.traits.add(randomEnum(TRAIT));
             }
+            this.nameDisplay = this.node.getChildrenByName("Name")[0].getComponent(ƒ.ComponentText);
+            this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
+        }
+
+        get name(): string {
+            return this.#name;
+        }        
+        set name(_name) {
+            this.#name = _name;
+            this.nameDisplay.texture.text = this.#name;
         }
 
 

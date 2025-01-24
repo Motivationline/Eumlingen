@@ -81,11 +81,16 @@ declare namespace Script {
         pick: ƒ.Animation;
         fall: ƒ.Animation;
         work_build: ƒ.Animation;
+        work_build_offset: ƒ.Vector3;
         work_bad: ƒ.Animation;
+        work_bad_offset: ƒ.Vector3;
         work_normal: ƒ.Animation;
+        work_normal_offset: ƒ.Vector3;
         work_good: ƒ.Animation;
+        work_good_offset: ƒ.Vector3;
         activeAnimation: EumlingAnimator.ANIMATIONS;
         private animations;
+        private offsets;
         private animPlaying;
         private animOverlay;
         private cmpAnim;
@@ -93,6 +98,7 @@ declare namespace Script {
         transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
         private timeout;
         overlayAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
+        getOffset(_anim: EumlingAnimator.ANIMATIONS): ƒ.Vector3;
     }
     namespace EumlingAnimator {
         enum ANIMATIONS {
@@ -129,11 +135,15 @@ declare namespace Script {
     export {};
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
     class EumlingData extends UpdateScriptComponent implements Clickable {
+        #private;
         static names: string[];
-        name: string;
         traits: Set<TRAIT>;
+        nameDisplay: ƒ.ComponentText;
         start(_e: CustomEvent<UpdateEvent>): void;
+        get name(): string;
+        set name(_name: string);
         shortTap(_pointer: Pointer): void;
         private showSelf;
     }
@@ -154,6 +164,7 @@ declare namespace Script {
         private pointer;
         private walkArea;
         private velocity;
+        private pick;
         static maxVelocity: number;
         constructor();
         start(): void;
@@ -165,7 +176,8 @@ declare namespace Script {
         longTap(_pointer: Pointer): void;
         walkAway(): void;
         walkTo(_pos: ƒ.Vector3): void;
-        teleportTo(_pos: ƒ.Vector3): void;
+        teleportTo(_pos: ƒ.Vector3, _rot?: ƒ.Vector3): void;
+        teleportBy(_dif: ƒ.Vector3, _local?: boolean): void;
         stopMoving(): void;
         getState(): STATE;
     }
@@ -195,7 +207,8 @@ declare namespace Script {
         update(_e: CustomEvent<UpdateEvent>): void;
         unassign(): void;
         assign(_wb: Workbench): void;
-        updateWorkAnimation(_fittingTraits: number): void;
+        getWorkAnimation(_fittingTraits: number): EumlingAnimator.ANIMATIONS;
+        updateWorkAnimation(_anim: EumlingAnimator.ANIMATIONS): void;
         work(_timeMS: number): void;
     }
 }
@@ -223,8 +236,7 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    function findFrontPickedObject(_p: Pointer): ƒ.Node | undefined;
-    function findAllPickedObjects(_pointer: Pointer): ƒ.Node[];
+    function findAllPickedObjectsUsingPickSphere(_pointer: Pointer): ƒ.Node[];
     interface Clickable {
         shortTap?(_pointer: Pointer): void;
         longTap?(_pointer: Pointer): void;
@@ -267,6 +279,33 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
+    export class PickSphere extends ƒ.Component {
+        #private;
+        static readonly iSubclass: number;
+        constructor();
+        get radius(): number;
+        set radius(_r: number);
+        get radiusSquared(): number;
+        offset: ƒ.Vector3;
+        get mtxPick(): ƒ.Matrix4x4;
+        drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void;
+        /**
+         * finds all pickSpheres within the given ray
+         * @param ray the ray to check against
+         * @param options options
+         */
+        static pick(ray: ƒ.Ray, options?: Partial<PickSpherePickOptions>): PickSphere[];
+        private static get defaultOptions();
+    }
+    interface PickSpherePickOptions {
+        /** Sets by what metric to sort the results. Unsorted if undefined */
+        sortBy?: "distanceToRay" | "distanceToRayOrigin";
+        branch: ƒ.Node;
+    }
+    export {};
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     export function findFirstCameraInGraph(_graph: ƒ.Node): ƒ.ComponentCamera;
     export function randomEnum<T extends object>(anEnum: T): T[keyof T];
     export function mobileOrTabletCheck(): boolean;
@@ -286,27 +325,27 @@ declare namespace Script {
         name: string;
         id: number;
     }
-    export interface Category extends BaseCategory {
+    interface Category extends BaseCategory {
         id: CATEGORY;
         subcategories: Subcategory[];
     }
-    export interface Subcategory extends BaseCategory {
+    interface Subcategory extends BaseCategory {
         id: SUBCATEGORY;
         preferredTraits: TRAIT[];
     }
-    export enum CATEGORY {
+    enum CATEGORY {
         NATURE = 1,
         CRAFT = 2
     }
-    export enum SUBCATEGORY {
-        ANIMALS = 1,
-        FARMING = 2,
-        GARDENING = 3,
-        MATERIAL_EXTRACTION = 4,
-        PRODUCTION = 5,
-        PROCESSING = 6
+    enum SUBCATEGORY {
+        ANIMALS = 100,
+        FARMING = 101,
+        GARDENING = 102,
+        MATERIAL_EXTRACTION = 103,
+        PRODUCTION = 104,
+        PROCESSING = 105
     }
-    export class Workbench extends UpdateScriptComponent implements Clickable {
+    class Workbench extends UpdateScriptComponent implements Clickable {
         static categories: Category[];
         private readonly buildSpeed;
         private readonly traitUnlockChancePerSecond;
@@ -314,7 +353,6 @@ declare namespace Script {
         private subcategory;
         private buildProgress;
         private assignee;
-        private matColor;
         private fittingTraits;
         private startWorkTime;
         start(_e: CustomEvent<UpdateEvent>): void;
@@ -333,5 +371,22 @@ declare namespace Script {
         private assignNewEumling;
         unassignEumling(): void;
     }
-    export {};
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
+    class WorkbenchVisuals extends UpdateScriptComponent {
+        #private;
+        default: ƒ.Graph;
+        nature: ƒ.Graph;
+        nature_animals: ƒ.Graph;
+        nature_farming: ƒ.Graph;
+        nature_gardening: ƒ.Graph;
+        craft: ƒ.Graph;
+        craft_mat_extr: ƒ.Graph;
+        craft_production: ƒ.Graph;
+        craft_processing: ƒ.Graph;
+        start(_e: CustomEvent<UpdateEvent>): void;
+        private hndSetVisual;
+        setVisual(_id: number): Promise<void>;
+    }
 }

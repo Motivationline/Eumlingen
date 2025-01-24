@@ -23,6 +23,7 @@ namespace Script {
         private pointer: Pointer;
         private walkArea: WalkableArea;
         private velocity: ƒ.Vector3 = new ƒ.Vector3();
+        private pick: PickSphere;
 
         static maxVelocity: number = 10;
 
@@ -38,10 +39,12 @@ namespace Script {
 
             let walkNode = this.node.getParent();
             this.walkArea = walkNode?.getComponent(WalkableArea);
+            this.pick = this.node.getComponent(PickSphere);
 
             this.setState(this.state);
         };
         override update(_e: CustomEvent<UpdateEvent>) {
+            if (eumlingCameraActive) return;
             let now = ƒ.Time.game.get();
             let deltaTimeSeconds: number = _e.detail.deltaTime / 1000;
             switch (this.state) {
@@ -101,7 +104,7 @@ namespace Script {
                             this.pointer = undefined;
 
                             //check if dropped over workbench
-                            let pickedNodes = findAllPickedObjects(pointer);
+                            let pickedNodes = findAllPickedObjectsUsingPickSphere(pointer);
                             let wb = pickedNodes.find(n => !!n.getComponent(Workbench))
                             if (!wb) break;
                             this.node.getComponent(EumlingWork).assign(wb.getComponent(Workbench));
@@ -154,6 +157,8 @@ namespace Script {
                 case STATE.GROWN:
                     this.node.mtxLocal.translateY(-0.95);
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.PICKED, 100);
+                    this.pick.offset.y = 1.20;
+                    this.pick.radius = 0.3;
                     break;
             }
 
@@ -188,6 +193,8 @@ namespace Script {
             if (this.state === STATE.GROWN) {
                 this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
                 this.setState(STATE.IDLE);
+                this.pick.offset.y = 0.45;
+                this.pick.radius = 0.4;
                 _pointer.used = true;
                 return;
             }
@@ -214,8 +221,13 @@ namespace Script {
             this.setState(STATE.WALK);
         }
 
-        teleportTo(_pos: ƒ.Vector3) {
+        teleportTo(_pos: ƒ.Vector3, _rot?: ƒ.Vector3) {
             this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
+            if(_rot)
+                this.node.mtxLocal.rotate(ƒ.Vector3.DIFFERENCE(_rot, this.node.mtxWorld.rotation), false);
+        }
+        teleportBy(_dif: ƒ.Vector3, _local?: boolean) {
+            this.node.mtxLocal.translate(_dif, _local);
         }
 
         stopMoving() {

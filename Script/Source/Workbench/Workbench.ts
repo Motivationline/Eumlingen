@@ -3,7 +3,7 @@
 namespace Script {
     import ƒ = FudgeCore;
 
-    interface BaseCategory {
+    export interface BaseCategory {
         img: string,
         name: string,
         id: number,
@@ -24,7 +24,7 @@ namespace Script {
         CRAFT,
     }
     export enum SUBCATEGORY {
-        ANIMALS = 1,
+        ANIMALS = 100,
         FARMING,
         GARDENING,
         MATERIAL_EXTRACTION,
@@ -62,12 +62,10 @@ namespace Script {
         private subcategory: SUBCATEGORY | undefined = undefined;
         private buildProgress: number = 0;
         private assignee: ƒ.Node;
-        private matColor: ƒ.Color;
         private fittingTraits: number = 0;
         private startWorkTime: number = 0;
 
         start(_e: CustomEvent<UpdateEvent>): void {
-            this.matColor = this.node.getComponent(ƒ.ComponentMaterial).clrPrimary;
         }
 
         shortTap(_pointer: Pointer): void {
@@ -144,12 +142,14 @@ namespace Script {
                 this.category = _id;
             } else if (this.subcategory === undefined) {
                 this.subcategory = _id;
+                this.node.dispatchEvent(new CustomEvent("setVisual", {detail: _id}));
             }
         }
         private resetAll() {
             this.category = this.subcategory = undefined;
-            this.matColor.b = 0;
             this.buildProgress = 0;
+            
+            this.node.dispatchEvent(new CustomEvent("setVisual", {detail: 0}));
         }
 
         static getCategoryFromId(_id: CATEGORY): Category {
@@ -176,8 +176,8 @@ namespace Script {
             } else if (!this.subcategory) {
                 if (this.buildProgress < 1) {
                     this.buildProgress += this.buildSpeed * _timeMS / 1000;
-                    this.matColor.b = this.buildProgress;
                 } else {
+                    this.node.dispatchEvent(new CustomEvent("setVisual", {detail: this.category}));
                     this.unassignEumling();
                 }
             }
@@ -205,7 +205,8 @@ namespace Script {
             }
             this.fittingTraits++;
             globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "eumlingDevelopTrait", data: { fittingTraits: this.fittingTraits, traits: data.traits, eumling: this.assignee } } }));
-            this.assignee.getComponent(EumlingWork).updateWorkAnimation(this.fittingTraits);
+            const ew = this.assignee.getComponent(EumlingWork)
+            ew.updateWorkAnimation(ew.getWorkAnimation(this.fittingTraits));
         }
 
         private assignNewEumling(_eumling: ƒ.Node) {

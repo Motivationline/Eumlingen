@@ -25,24 +25,31 @@ namespace Script {
         public assign(_wb: Workbench) {
             let fittingTraits = _wb.work(this.node, 0);
             this.workbench = _wb;
-            this.moveComp.teleportTo(_wb.node.mtxWorld.translation);
+            const anim = this.getWorkAnimation(fittingTraits);
+            this.moveComp.teleportTo(_wb.node.mtxWorld.translation, _wb.node.mtxWorld.rotation);
+            this.moveComp.teleportBy(this.animator.getOffset(anim), true);
             this.moveComp.setState(STATE.WORK);
-            this.updateWorkAnimation(fittingTraits);
+            this.updateWorkAnimation(anim);
         }
         
-        public updateWorkAnimation(_fittingTraits: number) {
+        public getWorkAnimation(_fittingTraits: number): EumlingAnimator.ANIMATIONS {
             if(this.workbench.needsAssembly){
-                this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WORK_BUILD, 100);
+                return EumlingAnimator.ANIMATIONS.WORK_BUILD;
             }
             else if(_fittingTraits === 0){
-                this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WORK_BAD, 100);
+                return EumlingAnimator.ANIMATIONS.WORK_BAD;
             }
             else if(_fittingTraits === 1){
-                this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WORK_NORMAL, 100);
+                return EumlingAnimator.ANIMATIONS.WORK_NORMAL;
             }
             else if(_fittingTraits === 2){
-                this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.WORK_GOOD, 100);
+                return EumlingAnimator.ANIMATIONS.WORK_GOOD;
             }
+            return EumlingAnimator.ANIMATIONS.WORK_GOOD;
+        }
+        
+        public updateWorkAnimation(_anim: EumlingAnimator.ANIMATIONS) {
+            this.animator.transitionToAnimation(_anim, 100);
         }
 
         public work(_timeMS: number) {

@@ -30,7 +30,8 @@
       "idResource": "AnimationGLTF|2024-11-26T10:12:05.444Z|94426",
       "name": "IdleV1",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2024-11-26T10:12:05.429Z|70191": {
@@ -38,7 +39,8 @@
       "idResource": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
       "name": "Fishing",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2024-11-26T10:12:05.438Z|84941": {
@@ -46,7 +48,8 @@
       "idResource": "AnimationGLTF|2024-11-26T10:12:05.438Z|84941",
       "name": "FishingCast",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2024-11-26T10:12:05.457Z|72466": {
@@ -54,7 +57,8 @@
       "idResource": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466",
       "name": "Sit",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "MeshCube|2024-12-20T12:33:42.882Z|93243": {
@@ -103,7 +107,7 @@
                     "direction": "diagonal",
                     "near": 0.1,
                     "far": 2000,
-                    "aspect": 1.510172143974961,
+                    "aspect": 1.7230769230769232,
                     "pivot": {
                       "translation": "[-5, 2.6999999999999997, 14]",
                       "rotation": "[10, 180, 0]",
@@ -130,9 +134,9 @@
               "ComponentBloom": [
                 {
                   "ƒ.ComponentBloom": {
-                    "threshold": 0.9500000000000001,
-                    "intensity": 1,
-                    "desaturateHighlights": 0.5,
+                    "threshold": 0.9750000000000001,
+                    "intensity": 0.20000000000000004,
+                    "desaturateHighlights": 0,
                     "Component": {
                       "active": true
                     }
@@ -429,6 +433,36 @@
                                       "local": {
                                         "translation": "[-2.536552906036377, -0.15047197043895721, 5.3606038093566895]",
                                         "rotation": "[0, -81.21995366793581, -11.31777696779826]",
+                                        "scaling": "[1, 1, 1]"
+                                      },
+                                      "Component": {
+                                        "active": true
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "children": [
+                                {
+                                  "ƒ.GraphInstance": {
+                                    "deserializeFromSource": true,
+                                    "idSource": "GraphGLTF|2025-01-10T11:23:09.621Z|21884"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "ƒ.Node": {
+                              "name": "Monument3",
+                              "active": true,
+                              "components": {
+                                "ComponentTransform": [
+                                  {
+                                    "ƒ.ComponentTransform": {
+                                      "local": {
+                                        "translation": "[-12.420828819274902, 0.33342763781547546, 3.903961658477783]",
+                                        "rotation": "[0.0000023115945926261677, -81.21995471158672, 7.547688789636379]",
                                         "scaling": "[1, 1, 1]"
                                       },
                                       "Component": {
@@ -888,7 +922,8 @@
       "idResource": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
       "name": "WalkV1",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2025-01-14T09:33:32.705Z|59264": {
@@ -896,7 +931,8 @@
       "idResource": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
       "name": "ClickBlockout",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2025-01-16T12:50:29.974Z|66904": {
@@ -904,7 +940,8 @@
       "idResource": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
       "name": "Drag",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2025-01-16T12:50:29.977Z|96548": {
@@ -912,7 +949,8 @@
       "idResource": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
       "name": "Drop",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
     }
   },
   "AnimationGLTF|2025-01-15T14:56:23.841Z|15808": {
@@ -920,7 +958,63 @@
       "idResource": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808",
       "name": "InteractingBlockingPolishingV1",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.411Z|76255": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255",
+      "name": "Craft",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.477Z|09086": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.477Z|09086",
+      "name": "work_bad",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.484Z|42105": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.484Z|42105",
+      "name": "work_okay",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "AnimationGLTF|2025-01-20T13:44:22.493Z|83835": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-20T13:44:22.493Z|83835",
+      "name": "work_perfect",
+      "type": "AnimationGLTF",
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "MeshQuad|2025-01-21T10:38:04.319Z|68327": {
+    "ƒ.MeshQuad": {
+      "idResource": "MeshQuad|2025-01-21T10:38:04.319Z|68327",
+      "name": "MeshName"
+    }
+  },
+  "Material|2025-01-21T10:38:19.483Z|37759": {
+    "ƒ.Material": {
+      "name": "ShaderName",
+      "idResource": "Material|2025-01-21T10:38:19.483Z|37759",
+      "shader": "ShaderLitTextured",
+      "coat": {
+        "ƒ.CoatTextured": {
+          "color": "[1, 1, 1, 1]"
+        }
+      },
+      "alphaClip": 0.01
     }
   },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
@@ -955,14 +1049,6 @@
             }
           }
         ],
-        "ComponentPick": [
-          {
-            "ƒ.ComponentPick": {
-              "active": true,
-              "pick": "camera"
-            }
-          }
-        ],
         "EumlingData": [
           {
             "Script.EumlingData": {
@@ -980,10 +1066,14 @@
               "sit": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466",
               "pick": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
               "fall": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
-              "work_build": "AnimationGLTF|2024-11-26T10:12:05.438Z|84941",
-              "work_bad": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
-              "work_normal": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
-              "work_good": "AnimationGLTF|2025-01-15T14:56:23.841Z|15808"
+              "work_build": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255",
+              "work_build_offset": "[0, 0, -1]",
+              "work_bad": "AnimationGLTF|2025-01-20T13:44:22.477Z|09086",
+              "work_bad_offset": "[0, 0, 0]",
+              "work_normal": "AnimationGLTF|2025-01-20T13:44:22.484Z|42105",
+              "work_normal_offset": "[0, 0, 0]",
+              "work_good": "AnimationGLTF|2025-01-20T13:44:22.493Z|83835",
+              "work_good_offset": "[0, 0, 0]"
             }
           }
         ],
@@ -993,6 +1083,15 @@
               "active": true
             }
           }
+        ],
+        "PickSphere": [
+          {
+            "Script.PickSphere": {
+              "active": true,
+              "radius": 0.40000000000000013,
+              "offset": "[0, 0.45000000000000007, 0]"
+            }
+          }
         ]
       },
       "children": [
@@ -1000,6 +1099,83 @@
           "ƒ.GraphInstance": {
             "deserializeFromSource": true,
             "idSource": "GraphGLTF|2024-11-26T10:12:05.429Z|21958"
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Name",
+            "active": true,
+            "components": {
+              "ComponentText": [
+                {
+                  "ƒ.ComponentText": {
+                    "active": true,
+                    "texture": {
+                      "mipmap": 3,
+                      "wrap": 0,
+                      "text": "Name",
+                      "font": "100px Verdana"
+                    },
+                    "fixedSize": false
+                  }
+                }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, -0.12179514765739441, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshQuad|2025-01-21T10:38:04.319Z|68327",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[0.20000000000000015, 0.20000000000000015, 0.20000000000000015]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2025-01-21T10:38:19.483Z|37759"
+                  }
+                }
+              ],
+              "ComponentFaceCamera": [
+                {
+                  "ƒ.ComponentFaceCamera": {
+                    "active": true
+                  }
+                }
+              ]
+            },
+            "children": []
           }
         }
       ],
@@ -1089,52 +1265,111 @@
       "url": "Assets\\Environment\\StoneVariation2.glb"
     }
   },
+  "GraphGLTF|2025-01-21T09:20:23.789Z|21816": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\PlainNaturStation.glb"
+    }
+  },
+  "GraphGLTF|2025-01-21T15:01:08.033Z|95174": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationGartenbau.glb"
+    }
+  },
+  "GraphGLTF|2025-01-22T12:11:45.884Z|37765": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentAnimation": [
+          {
+            "ƒ.ComponentAnimation": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "AnimationGLTF|2025-01-22T12:11:45.884Z|93300",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ],
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-22T12:11:45.884Z|37765",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationTierwirtschaft.glb"
+    }
+  },
+  "AnimationGLTF|2025-01-22T12:11:45.884Z|93300": {
+    "ƒ.AnimationGLTF": {
+      "idResource": "AnimationGLTF|2025-01-22T12:11:45.884Z|93300",
+      "name": "Sheeping",
+      "type": "AnimationGLTF",
+      "url": "Assets\\Stations\\StationTierwirtschaft.glb",
+      "events": {}
+    }
+  },
+  "GraphGLTF|2025-01-22T12:15:28.947Z|41115": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationLandwirtschaft.glb"
+    }
+  },
   "Graph|2025-01-15T14:48:41.922Z|40103": {
     "ƒ.Graph": {
       "name": "Workbench",
       "active": true,
       "components": {
-        "ComponentMesh": [
-          {
-            "ƒ.ComponentMesh": {
-              "idMesh": "MeshCube|2024-12-20T12:33:42.882Z|93243",
-              "pivot": {
-                "translation": "[0, 0.20000000000000004, 0]",
-                "rotation": "[0, 0, 0]",
-                "scaling": "[0.5, 0.5, 0.5]"
-              },
-              "Component": {
-                "active": true
-              }
-            }
-          }
-        ],
-        "ComponentMaterial": [
-          {
-            "ƒ.ComponentMaterial": {
-              "sortForAlpha": false,
-              "clrPrimary": "[0.4980392156862745, 0.5058823529411764, 0, 1]",
-              "clrSecondary": "[1, 1, 1, 1]",
-              "pivot": {
-                "translation": "[0, 0]",
-                "rotation": 0,
-                "scaling": "[1, 1]"
-              },
-              "Component": {
-                "active": true
-              },
-              "idMaterial": "Material|2024-12-20T12:33:52.056Z|05556"
-            }
-          }
-        ],
-        "ComponentPick": [
-          {
-            "ƒ.ComponentPick": {
-              "active": true,
-              "pick": "camera"
-            }
-          }
-        ],
         "Workbench": [
           {
             "Script.Workbench": {
@@ -1155,6 +1390,31 @@
               }
             }
           }
+        ],
+        "WorkbenchVisuals": [
+          {
+            "Script.WorkbenchVisuals": {
+              "active": true,
+              "default": "GraphGLTF|2025-01-23T13:03:44.877Z|05463",
+              "nature": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "nature_animals": "GraphGLTF|2025-01-22T12:11:45.884Z|37765",
+              "nature_farming": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
+              "nature_gardening": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
+              "craft": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_mat_extr": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_production": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft_processing": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
+            }
+          }
+        ],
+        "PickSphere": [
+          {
+            "Script.PickSphere": {
+              "active": true,
+              "radius": 1,
+              "offset": "[0, 0, 0]"
+            }
+          }
         ]
       },
       "children": [],
@@ -1167,7 +1427,27 @@
       "idResource": "AnimationGLTF|2025-01-15T14:56:23.860Z|47654",
       "name": "WalkV2",
       "type": "AnimationGLTF",
-      "url": "Assets\\EumlingV1.glb"
+      "url": "Assets\\EumlingV1.glb",
+      "events": {}
+    }
+  },
+  "GraphGLTF|2025-01-23T13:03:44.877Z|05463": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-23T13:03:44.877Z|05463",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationBase.glb"
     }
   }
 }
