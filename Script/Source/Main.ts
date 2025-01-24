@@ -14,7 +14,7 @@ namespace Script {
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
-    // viewport.gizmosEnabled = true;
+    viewport.gizmosEnabled = true;
 
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -85,9 +85,7 @@ namespace Script {
 
     viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     
-    ƒ.AudioManager.default.listenTo(viewport.getBranch());
-    ƒ.AudioManager.default.listenWith(cameraNode.getComponent(ƒ.ComponentAudioListener));
-    // ƒ.AudioManager.default.
+    setupSounds();
   }
 
   let currentCameraSpeed: number = 0;
@@ -135,6 +133,17 @@ namespace Script {
     document.getElementById("eumlingSpawn").addEventListener("click", () => {
       viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     })
+  }
+
+  function setupSounds(){
+    ƒ.AudioManager.default.listenTo(viewport.getBranch());
+    ƒ.AudioManager.default.listenWith(cameraNode.getComponent(ƒ.ComponentAudioListener));
+
+    const backgroundAudio = new ComponentAudioMixed(new ƒ.Audio("Assets/Audio/SFX/SFX_BG_Base_loop.ogg"), true, true, undefined, AUDIO_CHANNEL.ENVIRONMENT);
+    backgroundAudio.connect(true);
+
+    const backgroundWaterAudio = new ComponentAudioMixed(new ƒ.Audio("Assets/Audio/SFX/SFX_River_loop.ogg"), true, true, undefined, AUDIO_CHANNEL.ENVIRONMENT);
+    backgroundWaterAudio.connect(true);
   }
 
 }

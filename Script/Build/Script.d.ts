@@ -92,6 +92,7 @@ declare namespace Script {
     import ƒ = FudgeCore;
     class ComponentAudioMixed extends ƒ.ComponentAudio {
         #private;
+        static readonly iSubclass: number;
         private gainTarget;
         private isConnected;
         constructor(_audio?: ƒ.Audio, _loop?: boolean, _start?: boolean, _audioManager?: ƒ.AudioManager, _channel?: AUDIO_CHANNEL);
@@ -99,6 +100,7 @@ declare namespace Script {
         set channel(_channel: AUDIO_CHANNEL);
         setGainTarget(node: AudioNode): void;
         connect(_on: boolean): void;
+        drawGizmos(): void;
     }
 }
 declare namespace Script {
@@ -118,9 +120,14 @@ declare namespace Script {
     import ƒ = FudgeCore;
     abstract class SoundEmitter extends UpdateScriptComponent {
         #private;
+        static readonly iSubclass: number;
+        volume: number;
         local: boolean;
         addRandomness: boolean;
         channel: AUDIO_CHANNEL;
+        mtxPivot: ƒ.Matrix4x4;
+        boxSize: ƒ.Vector3;
+        surfaceOfBoxOnly: boolean;
         s0: ƒ.Audio;
         s1: ƒ.Audio;
         s2: ƒ.Audio;
@@ -143,14 +150,18 @@ declare namespace Script {
         s19: ƒ.Audio;
         start(_e: CustomEvent<UpdateEvent>): void;
         playRandomSound: () => void;
+        private getTranslation;
+        drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void;
     }
     class SoundEmitterInterval extends SoundEmitter {
+        static readonly iSubclass: number;
         minWaitTimeMS: number;
         maxWaitTimeMS: number;
         start(_e: CustomEvent<UpdateEvent>): void;
         private startTimer;
     }
     class SoundEmitterOnEvent extends SoundEmitter {
+        static readonly iSubclass: number;
         event: string;
         start(_e: CustomEvent<UpdateEvent>): void;
     }

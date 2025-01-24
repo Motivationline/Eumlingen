@@ -7,12 +7,22 @@ namespace Script {
 
     @ƒ.serialize
     export abstract class SoundEmitter extends UpdateScriptComponent {
+        public static readonly iSubclass: number = ƒ.Component.registerSubclass(SoundEmitter);
+        
+        @ƒ.serialize(Number)
+        volume: number = 1;
         @ƒ.serialize(Boolean)
         local: boolean = true;
         @ƒ.serialize(Boolean)
         addRandomness: boolean = true;
         @ƒ.serialize(AUDIO_CHANNEL)
         channel: AUDIO_CHANNEL = AUDIO_CHANNEL.MASTER;
+        @ƒ.serialize(ƒ.Matrix4x4)
+        mtxPivot: ƒ.Matrix4x4 = new ƒ.Matrix4x4();
+        @ƒ.serialize(ƒ.Vector3)
+        boxSize: ƒ.Vector3 = new ƒ.Vector3();
+        @ƒ.serialize(Boolean)
+        surfaceOfBoxOnly: boolean = false;
 
         // lots of different audios because we can't do arrays in the editor yet.
         @ƒ.serialize(ƒ.Audio)
@@ -62,7 +72,12 @@ namespace Script {
 
         start(_e: CustomEvent<UpdateEvent>): void {
             this.#audioCmp = new ComponentAudioMixed(undefined, false, false, undefined, this.channel);
-            this.node.addComponent(this.#audioCmp);
+            if (this.local) {
+                this.node.addComponent(this.#audioCmp);
+            } else {
+                this.#audioCmp.connect(true);
+            }
+            this.#audioCmp.volume = this.volume;
 
             if (this.s0) this.#audios.push(this.s0);
             if (this.s1) this.#audios.push(this.s1);
@@ -92,12 +107,41 @@ namespace Script {
             this.#audioCmp.setAudio(audio);
             if (this.addRandomness)
                 this.#audioCmp.playbackRate = randomRange(0.75, 1.25);
+            this.#audioCmp.mtxPivot.copy(this.mtxPivot);
+            this.#audioCmp.mtxPivot.translate(this.getTranslation());
             this.#audioCmp.play(true);
+        }
+
+        private getTranslation(): ƒ.Vector3 {
+            const result = ƒ.Recycler.reuse(ƒ.Vector3);
+
+            result.set(
+                randomRange(0, this.boxSize.x) - this.boxSize.x / 2,
+                randomRange(0, this.boxSize.y) - this.boxSize.y / 2,
+                randomRange(0, this.boxSize.z) - this.boxSize.z / 2
+            )
+            if (this.surfaceOfBoxOnly) {
+                const rand = Math.floor(Math.random() * 3);
+                if(rand === 0){
+                    result.x = Math.sign(result.x) * this.boxSize.x / 2
+                } else if(rand === 1){
+                    result.y = Math.sign(result.y) * this.boxSize.y / 2
+                } else if(rand === 2){
+                    result.z = Math.sign(result.z) * this.boxSize.z / 2
+                }
+            }
+            ƒ.Recycler.store(result);
+            return result;
+        }
+
+        drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void {
+            ƒ.Gizmos.drawWireCube((new ƒ.Matrix4x4()).multiply(this.node.mtxWorld).multiply(this.mtxPivot).scale(this.boxSize), ƒ.Color.CSS("blue"));
         }
     }
 
     @ƒ.serialize
     export class SoundEmitterInterval extends SoundEmitter {
+        public static readonly iSubclass: number = ƒ.Component.registerSubclass(SoundEmitterInterval);
         @ƒ.serialize(Number)
         minWaitTimeMS: number;
         @ƒ.serialize(Number)
@@ -115,6 +159,7 @@ namespace Script {
     }
     @ƒ.serialize
     export class SoundEmitterOnEvent extends SoundEmitter {
+        public static readonly iSubclass: number = ƒ.Component.registerSubclass(SoundEmitterOnEvent);
         @ƒ.serialize(String)
         event: string;
 

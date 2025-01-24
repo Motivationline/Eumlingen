@@ -192,7 +192,7 @@ var Script;
     Script.globalEvents = new EventTarget();
     function start(_event) {
         Script.viewport = _event.detail;
-        // viewport.gizmosEnabled = true;
+        Script.viewport.gizmosEnabled = true;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -252,9 +252,7 @@ var Script;
         Script.eumlingCamera.mtxPivot.rotateY(180);
         Script.eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
         viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
-        ƒ.AudioManager.default.listenTo(viewport.getBranch());
-        ƒ.AudioManager.default.listenWith(cameraNode.getComponent(ƒ.ComponentAudioListener));
-        // ƒ.AudioManager.default.
+        setupSounds();
     }
     let currentCameraSpeed = 0;
     const maxCameraSpeed = 10;
@@ -298,6 +296,14 @@ var Script;
         document.getElementById("eumlingSpawn").addEventListener("click", () => {
             Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
         });
+    }
+    function setupSounds() {
+        ƒ.AudioManager.default.listenTo(Script.viewport.getBranch());
+        ƒ.AudioManager.default.listenWith(cameraNode.getComponent(ƒ.ComponentAudioListener));
+        const backgroundAudio = new Script.ComponentAudioMixed(new ƒ.Audio("Assets/Audio/SFX/SFX_BG_Base_loop.ogg"), true, true, undefined, Script.AUDIO_CHANNEL.ENVIRONMENT);
+        backgroundAudio.connect(true);
+        const backgroundWaterAudio = new Script.ComponentAudioMixed(new ƒ.Audio("Assets/Audio/SFX/SFX_River_loop.ogg"), true, true, undefined, Script.AUDIO_CHANNEL.ENVIRONMENT);
+        backgroundWaterAudio.connect(true);
     }
 })(Script || (Script = {}));
 var Script;
@@ -425,8 +431,8 @@ var Script;
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 ComponentAudioMixed = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
             }
+            static { this.iSubclass = ƒ.Component.registerSubclass(ComponentAudioMixed); }
             #channel = (__runInitializers(this, _instanceExtraInitializers), Script.AUDIO_CHANNEL.MASTER);
             constructor(_audio, _loop, _start, _audioManager = ƒ.AudioManager.default, _channel = Script.AUDIO_CHANNEL.MASTER) {
                 super(_audio, _loop, _start, _audioManager);
@@ -457,6 +463,13 @@ var Script;
                 else
                     this.gain.disconnect(this.gainTarget ?? this.audioManager.gain);
                 this.isConnected = _on;
+            }
+            drawGizmos() {
+                if (this.isPlaying)
+                    super.drawGizmos();
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
             }
         };
         return ComponentAudioMixed = _classThis;
@@ -513,12 +526,20 @@ var Script;
         let _classThis;
         let _classSuper = Script.UpdateScriptComponent;
         let _instanceExtraInitializers = [];
+        let _volume_decorators;
+        let _volume_initializers = [];
         let _local_decorators;
         let _local_initializers = [];
         let _addRandomness_decorators;
         let _addRandomness_initializers = [];
         let _channel_decorators;
         let _channel_initializers = [];
+        let _mtxPivot_decorators;
+        let _mtxPivot_initializers = [];
+        let _boxSize_decorators;
+        let _boxSize_initializers = [];
+        let _surfaceOfBoxOnly_decorators;
+        let _surfaceOfBoxOnly_initializers = [];
         let _s0_decorators;
         let _s0_initializers = [];
         let _s1_decorators;
@@ -563,9 +584,13 @@ var Script;
             static { _classThis = this; }
             constructor() {
                 super(...arguments);
-                this.local = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _local_initializers, true));
+                this.volume = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _volume_initializers, 1));
+                this.local = __runInitializers(this, _local_initializers, true);
                 this.addRandomness = __runInitializers(this, _addRandomness_initializers, true);
                 this.channel = __runInitializers(this, _channel_initializers, Script.AUDIO_CHANNEL.MASTER);
+                this.mtxPivot = __runInitializers(this, _mtxPivot_initializers, new ƒ.Matrix4x4());
+                this.boxSize = __runInitializers(this, _boxSize_initializers, new ƒ.Vector3());
+                this.surfaceOfBoxOnly = __runInitializers(this, _surfaceOfBoxOnly_initializers, false);
                 // lots of different audios because we can't do arrays in the editor yet.
                 this.s0 = __runInitializers(this, _s0_initializers, void 0);
                 this.s1 = __runInitializers(this, _s1_initializers, void 0);
@@ -595,14 +620,20 @@ var Script;
                     this.#audioCmp.setAudio(audio);
                     if (this.addRandomness)
                         this.#audioCmp.playbackRate = Script.randomRange(0.75, 1.25);
+                    this.#audioCmp.mtxPivot.copy(this.mtxPivot);
+                    this.#audioCmp.mtxPivot.translate(this.getTranslation());
                     this.#audioCmp.play(true);
                 };
             }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _volume_decorators = [ƒ.serialize(Number)];
                 _local_decorators = [ƒ.serialize(Boolean)];
                 _addRandomness_decorators = [ƒ.serialize(Boolean)];
                 _channel_decorators = [ƒ.serialize(Script.AUDIO_CHANNEL)];
+                _mtxPivot_decorators = [ƒ.serialize(ƒ.Matrix4x4)];
+                _boxSize_decorators = [ƒ.serialize(ƒ.Vector3)];
+                _surfaceOfBoxOnly_decorators = [ƒ.serialize(Boolean)];
                 _s0_decorators = [ƒ.serialize(ƒ.Audio)];
                 _s1_decorators = [ƒ.serialize(ƒ.Audio)];
                 _s2_decorators = [ƒ.serialize(ƒ.Audio)];
@@ -623,9 +654,13 @@ var Script;
                 _s17_decorators = [ƒ.serialize(ƒ.Audio)];
                 _s18_decorators = [ƒ.serialize(ƒ.Audio)];
                 _s19_decorators = [ƒ.serialize(ƒ.Audio)];
+                __esDecorate(null, null, _volume_decorators, { kind: "field", name: "volume", static: false, private: false, access: { has: obj => "volume" in obj, get: obj => obj.volume, set: (obj, value) => { obj.volume = value; } }, metadata: _metadata }, _volume_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _local_decorators, { kind: "field", name: "local", static: false, private: false, access: { has: obj => "local" in obj, get: obj => obj.local, set: (obj, value) => { obj.local = value; } }, metadata: _metadata }, _local_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _addRandomness_decorators, { kind: "field", name: "addRandomness", static: false, private: false, access: { has: obj => "addRandomness" in obj, get: obj => obj.addRandomness, set: (obj, value) => { obj.addRandomness = value; } }, metadata: _metadata }, _addRandomness_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _channel_decorators, { kind: "field", name: "channel", static: false, private: false, access: { has: obj => "channel" in obj, get: obj => obj.channel, set: (obj, value) => { obj.channel = value; } }, metadata: _metadata }, _channel_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _mtxPivot_decorators, { kind: "field", name: "mtxPivot", static: false, private: false, access: { has: obj => "mtxPivot" in obj, get: obj => obj.mtxPivot, set: (obj, value) => { obj.mtxPivot = value; } }, metadata: _metadata }, _mtxPivot_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _boxSize_decorators, { kind: "field", name: "boxSize", static: false, private: false, access: { has: obj => "boxSize" in obj, get: obj => obj.boxSize, set: (obj, value) => { obj.boxSize = value; } }, metadata: _metadata }, _boxSize_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _surfaceOfBoxOnly_decorators, { kind: "field", name: "surfaceOfBoxOnly", static: false, private: false, access: { has: obj => "surfaceOfBoxOnly" in obj, get: obj => obj.surfaceOfBoxOnly, set: (obj, value) => { obj.surfaceOfBoxOnly = value; } }, metadata: _metadata }, _surfaceOfBoxOnly_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _s0_decorators, { kind: "field", name: "s0", static: false, private: false, access: { has: obj => "s0" in obj, get: obj => obj.s0, set: (obj, value) => { obj.s0 = value; } }, metadata: _metadata }, _s0_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _s1_decorators, { kind: "field", name: "s1", static: false, private: false, access: { has: obj => "s1" in obj, get: obj => obj.s1, set: (obj, value) => { obj.s1 = value; } }, metadata: _metadata }, _s1_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _s2_decorators, { kind: "field", name: "s2", static: false, private: false, access: { has: obj => "s2" in obj, get: obj => obj.s2, set: (obj, value) => { obj.s2 = value; } }, metadata: _metadata }, _s2_initializers, _instanceExtraInitializers);
@@ -649,13 +684,19 @@ var Script;
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 SoundEmitter = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
             }
+            static { this.iSubclass = ƒ.Component.registerSubclass(SoundEmitter); }
             #audioCmp;
             #audios;
             start(_e) {
                 this.#audioCmp = new Script.ComponentAudioMixed(undefined, false, false, undefined, this.channel);
-                this.node.addComponent(this.#audioCmp);
+                if (this.local) {
+                    this.node.addComponent(this.#audioCmp);
+                }
+                else {
+                    this.#audioCmp.connect(true);
+                }
+                this.#audioCmp.volume = this.volume;
                 if (this.s0)
                     this.#audios.push(this.s0);
                 if (this.s1)
@@ -697,6 +738,30 @@ var Script;
                 if (this.s19)
                     this.#audios.push(this.s9);
             }
+            getTranslation() {
+                const result = ƒ.Recycler.reuse(ƒ.Vector3);
+                result.set(Script.randomRange(0, this.boxSize.x) - this.boxSize.x / 2, Script.randomRange(0, this.boxSize.y) - this.boxSize.y / 2, Script.randomRange(0, this.boxSize.z) - this.boxSize.z / 2);
+                if (this.surfaceOfBoxOnly) {
+                    const rand = Math.floor(Math.random() * 3);
+                    if (rand === 0) {
+                        result.x = Math.sign(result.x) * this.boxSize.x / 2;
+                    }
+                    else if (rand === 1) {
+                        result.y = Math.sign(result.y) * this.boxSize.y / 2;
+                    }
+                    else if (rand === 2) {
+                        result.z = Math.sign(result.z) * this.boxSize.z / 2;
+                    }
+                }
+                ƒ.Recycler.store(result);
+                return result;
+            }
+            drawGizmos(_cmpCamera) {
+                ƒ.Gizmos.drawWireCube((new ƒ.Matrix4x4()).multiply(this.node.mtxWorld).multiply(this.mtxPivot).scale(this.boxSize), ƒ.Color.CSS("blue"));
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
         };
         return SoundEmitter = _classThis;
     })();
@@ -734,11 +799,14 @@ var Script;
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 SoundEmitterInterval = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
             }
+            static { this.iSubclass = ƒ.Component.registerSubclass(SoundEmitterInterval); }
             start(_e) {
                 super.start(_e);
                 this.startTimer();
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
             }
         };
         return SoundEmitterInterval = _classThis;
@@ -767,11 +835,14 @@ var Script;
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
                 SoundEmitterOnEvent = _classThis = _classDescriptor.value;
                 if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
             }
+            static { this.iSubclass = ƒ.Component.registerSubclass(SoundEmitterOnEvent); }
             start(_e) {
                 super.start(_e);
                 globalSoundEmitter.addEventListener(this.event, this.playRandomSound);
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
             }
         };
         return SoundEmitterOnEvent = _classThis;

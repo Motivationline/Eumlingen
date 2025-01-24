@@ -81,6 +81,38 @@
       "alphaClip": 0.01
     }
   },
+  "Audio|2025-01-24T14:11:53.625Z|65268": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_GustofWind_01.ogg",
+      "idResource": "Audio|2025-01-24T14:11:53.625Z|65268",
+      "name": "Assets\\Audio\\SFX\\SFX_GustofWind_01.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:53.625Z|03029": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_GustofWind_02.ogg",
+      "idResource": "Audio|2025-01-24T14:11:53.625Z|03029",
+      "name": "Assets\\Audio\\SFX\\SFX_GustofWind_02.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:53.625Z|66924": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_GustofWind_03.ogg",
+      "idResource": "Audio|2025-01-24T14:11:53.625Z|66924",
+      "name": "Assets\\Audio\\SFX\\SFX_GustofWind_03.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:53.625Z|24410": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_GustofWind_04.ogg",
+      "idResource": "Audio|2025-01-24T14:11:53.625Z|24410",
+      "name": "Assets\\Audio\\SFX\\SFX_GustofWind_04.ogg",
+      "type": "Audio"
+    }
+  },
   "Graph|2024-11-26T10:13:50.337Z|26526": {
     "ƒ.Graph": {
       "name": "LakeMap",
@@ -165,7 +197,86 @@
                 }
               ]
             },
-            "children": []
+            "children": [
+              {
+                "ƒ.Node": {
+                  "name": "Audio",
+                  "active": true,
+                  "components": {},
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "Wind",
+                        "active": true,
+                        "components": {
+                          "SoundEmitterInterval": [
+                            {
+                              "Script.SoundEmitterInterval": {
+                                "active": true,
+                                "volume": 1,
+                                "local": true,
+                                "addRandomness": true,
+                                "channel": 0,
+                                "mtxPivot": {
+                                  "translation": "[0, 0, 0]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "boxSize": "[3, 2, 3]",
+                                "surfaceOfBoxOnly": true,
+                                "s0": "Audio|2025-01-24T14:11:53.625Z|65268",
+                                "s1": "Audio|2025-01-24T14:11:53.625Z|03029",
+                                "s2": "Audio|2025-01-24T14:11:53.625Z|66924",
+                                "s3": "Audio|2025-01-24T14:11:53.625Z|24410",
+                                "minWaitTimeMS": 20000,
+                                "maxWaitTimeMS": 50000
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Birds",
+                        "active": true,
+                        "components": {
+                          "SoundEmitterInterval": [
+                            {
+                              "Script.SoundEmitterInterval": {
+                                "active": true,
+                                "volume": 1,
+                                "local": true,
+                                "addRandomness": true,
+                                "channel": 0,
+                                "mtxPivot": {
+                                  "translation": "[0, 0, 0]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "boxSize": "[3, 3, 3]",
+                                "surfaceOfBoxOnly": true,
+                                "s0": "Audio|2025-01-24T14:11:38.048Z|83502",
+                                "s1": "Audio|2025-01-24T14:11:38.048Z|52732",
+                                "s2": "Audio|2025-01-24T14:11:38.049Z|85163",
+                                "s3": "Audio|2025-01-24T14:11:38.049Z|08431",
+                                "s4": "Audio|2025-01-24T14:11:38.050Z|60660",
+                                "s5": "Audio|2025-01-24T14:11:38.050Z|42470",
+                                "s6": "Audio|2025-01-24T14:11:38.050Z|48217",
+                                "minWaitTimeMS": 10000,
+                                "maxWaitTimeMS": 20000
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -1253,7 +1364,7 @@
           {
             "Script.PickSphere": {
               "active": true,
-              "radius": 0.40000000000000013,
+              "radius": 0.4,
               "offset": "[0, 0.45000000000000007, 0]"
             }
           }
@@ -1262,9 +1373,17 @@
           {
             "Script.SoundEmitterInterval": {
               "active": true,
+              "volume": 1,
               "local": true,
               "addRandomness": true,
               "channel": 1,
+              "mtxPivot": {
+                "translation": "[0, 0.5, 0]",
+                "rotation": "[0, 0, 0]",
+                "scaling": "[1, 1, 1]"
+              },
+              "boxSize": "[0, 0, 0]",
+              "surfaceOfBoxOnly": false,
               "s0": "Audio|2025-01-24T08:46:16.109Z|75113",
               "s1": "Audio|2025-01-24T08:46:16.109Z|44665",
               "s2": "Audio|2025-01-24T08:46:16.109Z|06077",
@@ -1643,6 +1762,102 @@
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb",
       "events": {}
+    }
+  },
+  "Audio|2025-01-24T14:11:38.048Z|83502": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_birdsong_01.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.048Z|83502",
+      "name": "Assets\\Audio\\SFX\\SFX_env_birdsong_01.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.048Z|52732": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_birdsong_02.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.048Z|52732",
+      "name": "Assets\\Audio\\SFX\\SFX_env_birdsong_02.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.049Z|85163": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_birdsong_03.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.049Z|85163",
+      "name": "Assets\\Audio\\SFX\\SFX_env_birdsong_03.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.049Z|08431": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_birdsong_04.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.049Z|08431",
+      "name": "Assets\\Audio\\SFX\\SFX_env_birdsong_04.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.050Z|60660": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_birdsong_05.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.050Z|60660",
+      "name": "Assets\\Audio\\SFX\\SFX_env_birdsong_05.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.050Z|42470": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_birdsong_06.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.050Z|42470",
+      "name": "Assets\\Audio\\SFX\\SFX_env_birdsong_06.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.050Z|48217": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_birdsong_07.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.050Z|48217",
+      "name": "Assets\\Audio\\SFX\\SFX_env_birdsong_07.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.050Z|37678": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_splash_01.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.050Z|37678",
+      "name": "Assets\\Audio\\SFX\\SFX_env_splash_01.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.051Z|10253": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_splash_02.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.051Z|10253",
+      "name": "Assets\\Audio\\SFX\\SFX_env_splash_02.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.051Z|15002": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_splash_03.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.051Z|15002",
+      "name": "Assets\\Audio\\SFX\\SFX_env_splash_03.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.051Z|04519": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_splash_04.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.051Z|04519",
+      "name": "Assets\\Audio\\SFX\\SFX_env_splash_04.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T14:11:38.052Z|61796": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_env_splash_05.ogg",
+      "idResource": "Audio|2025-01-24T14:11:38.052Z|61796",
+      "name": "Assets\\Audio\\SFX\\SFX_env_splash_05.ogg",
+      "type": "Audio"
     }
   }
 }

@@ -3,6 +3,7 @@ namespace Script {
 
     @ƒ.serialize
     export class ComponentAudioMixed extends ƒ.ComponentAudio {
+        public static readonly iSubclass: number = ƒ.Component.registerSubclass(ComponentAudioMixed);
         #channel: AUDIO_CHANNEL = AUDIO_CHANNEL.MASTER;
 
         private gainTarget: AudioNode;
@@ -43,6 +44,11 @@ namespace Script {
                 this.gain.disconnect(this.gainTarget ?? this.audioManager.gain);
 
             this.isConnected = _on;
+        }
+
+        drawGizmos(): void {
+            if (this.isPlaying)
+                super.drawGizmos();
         }
     }
 }
