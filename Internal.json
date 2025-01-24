@@ -107,10 +107,10 @@
                     "direction": "diagonal",
                     "near": 0.1,
                     "far": 2000,
-                    "aspect": 1.7230769230769232,
+                    "aspect": 1.510172143974961,
                     "pivot": {
-                      "translation": "[-5, 2.6999999999999997, 14]",
-                      "rotation": "[10, 180, 0]",
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
                       "scaling": "[1, 1, 1]"
                     },
                     "Component": {
@@ -137,6 +137,27 @@
                     "threshold": 0.9750000000000001,
                     "intensity": 0.20000000000000004,
                     "desaturateHighlights": 0,
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentAudioListener": [
+                {
+                  "ƒ.ComponentAudioListener": {
+                    "active": true
+                  }
+                }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[-5, 2.7, 14]",
+                      "rotation": "[10, 180, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
                     "Component": {
                       "active": true
                     }
@@ -1017,6 +1038,150 @@
       "alphaClip": 0.01
     }
   },
+  "Audio|2025-01-24T08:46:16.109Z|75113": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-01.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.109Z|75113",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-01.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.109Z|44665": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-02.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.109Z|44665",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-02.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.109Z|06077": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-03.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.109Z|06077",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-03.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.109Z|11673": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-04.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.109Z|11673",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-04.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.110Z|37095": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-05.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.110Z|37095",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-05.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.110Z|67245": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-06.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.110Z|67245",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-06.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.110Z|82581": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-07.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.110Z|82581",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-07.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.110Z|81659": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-08.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.110Z|81659",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-08.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.110Z|47994": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-09.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.110Z|47994",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-09.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.110Z|82121": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-10.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.110Z|82121",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-10.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.110Z|42264": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-11.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.110Z|42264",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-11.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.111Z|86790": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-12.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.111Z|86790",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-12.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.111Z|64546": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-13.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.111Z|64546",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-13.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.111Z|01728": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-14.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.111Z|01728",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-14.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.111Z|16937": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-15.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.111Z|16937",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-15.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.111Z|63751": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-16.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.111Z|63751",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-16.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.111Z|78449": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-17.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.111Z|78449",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-17.ogg",
+      "type": "Audio"
+    }
+  },
+  "Audio|2025-01-24T08:46:16.112Z|74346": {
+    "ƒ.Audio": {
+      "url": "Assets\\Audio\\SFX\\SFX_EumlingSounds-18.ogg",
+      "idResource": "Audio|2025-01-24T08:46:16.112Z|74346",
+      "name": "Assets\\Audio\\SFX\\SFX_EumlingSounds-18.ogg",
+      "type": "Audio"
+    }
+  },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
     "ƒ.Graph": {
       "name": "Eumling",
@@ -1090,6 +1255,36 @@
               "active": true,
               "radius": 0.40000000000000013,
               "offset": "[0, 0.45000000000000007, 0]"
+            }
+          }
+        ],
+        "SoundEmitterInterval": [
+          {
+            "Script.SoundEmitterInterval": {
+              "active": true,
+              "local": true,
+              "addRandomness": true,
+              "channel": 1,
+              "s0": "Audio|2025-01-24T08:46:16.109Z|75113",
+              "s1": "Audio|2025-01-24T08:46:16.109Z|44665",
+              "s2": "Audio|2025-01-24T08:46:16.109Z|06077",
+              "s3": "Audio|2025-01-24T08:46:16.109Z|11673",
+              "s4": "Audio|2025-01-24T08:46:16.110Z|37095",
+              "s5": "Audio|2025-01-24T08:46:16.110Z|67245",
+              "s6": "Audio|2025-01-24T08:46:16.110Z|82581",
+              "s7": "Audio|2025-01-24T08:46:16.110Z|81659",
+              "s8": "Audio|2025-01-24T08:46:16.110Z|47994",
+              "s9": "Audio|2025-01-24T08:46:16.110Z|82121",
+              "s10": "Audio|2025-01-24T08:46:16.110Z|42264",
+              "s11": "Audio|2025-01-24T08:46:16.111Z|86790",
+              "s12": "Audio|2025-01-24T08:46:16.111Z|64546",
+              "s13": "Audio|2025-01-24T08:46:16.111Z|01728",
+              "s14": "Audio|2025-01-24T08:46:16.111Z|16937",
+              "s15": "Audio|2025-01-24T08:46:16.111Z|63751",
+              "s16": "Audio|2025-01-24T08:46:16.111Z|78449",
+              "s17": "Audio|2025-01-24T08:46:16.112Z|74346",
+              "minWaitTimeMS": 5000,
+              "maxWaitTimeMS": 10000
             }
           }
         ]
@@ -1365,6 +1560,25 @@
       "url": "Assets\\Stations\\StationLandwirtschaft.glb"
     }
   },
+  "GraphGLTF|2025-01-23T13:03:44.877Z|05463": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-23T13:03:44.877Z|05463",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationBase.glb"
+    }
+  },
   "Graph|2025-01-15T14:48:41.922Z|40103": {
     "ƒ.Graph": {
       "name": "Workbench",
@@ -1429,25 +1643,6 @@
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb",
       "events": {}
-    }
-  },
-  "GraphGLTF|2025-01-23T13:03:44.877Z|05463": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentChangeMaterial": [
-          {
-            "Script.ComponentChangeMaterial": {
-              "active": true,
-              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2025-01-23T13:03:44.877Z|05463",
-      "type": "GraphGLTF",
-      "url": "Assets\\Stations\\StationBase.glb"
     }
   }
 }

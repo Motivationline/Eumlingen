@@ -41,7 +41,7 @@ namespace Script {
     }
   }
 
-  let camera: ƒ.ComponentCamera;
+  let cameraNode: ƒ.Node;
   let gameMode: boolean = false;
   export const eumlingCamera: ƒ.ComponentCamera = new ƒ.ComponentCamera();
   export const eumlingViewport = new ƒ.Viewport();
@@ -64,7 +64,8 @@ namespace Script {
     let graph: ƒ.Graph = <ƒ.Graph>ƒ.Project.resources[graphId];
     let canvas = <HTMLCanvasElement>document.getElementById("game-canvas");
     let viewport = new ƒ.Viewport();
-    camera = findFirstCameraInGraph(graph);
+    let camera = findFirstCameraInGraph(graph);
+    cameraNode = camera.node;
 
     viewport.initialize("GameViewport", graph, camera, canvas);
 
@@ -83,6 +84,10 @@ namespace Script {
     eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
 
     viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
+    
+    ƒ.AudioManager.default.listenTo(viewport.getBranch());
+    ƒ.AudioManager.default.listenWith(cameraNode.getComponent(ƒ.ComponentAudioListener));
+    // ƒ.AudioManager.default.
   }
 
   let currentCameraSpeed: number = 0;
@@ -110,7 +115,7 @@ namespace Script {
     currentCameraSpeed = Math.min(maxCameraSpeed, Math.max(0, cameraAcelleration * timeScale + currentCameraSpeed));
 
     let step = speed * currentCameraSpeed * timeScale;
-    let currentX = camera.mtxPivot.translation.x;
+    let currentX = cameraNode.mtxWorld.translation.x;
     let nextPos = currentX + step;
     if (cameraBoundaryX[0] > nextPos) {
       step = cameraBoundaryX[0] - currentX;
@@ -118,7 +123,7 @@ namespace Script {
     if (cameraBoundaryX[1] < nextPos) {
       step = cameraBoundaryX[1] - currentX;
     }
-    camera.mtxPivot.translateX(-step);
+    cameraNode.mtxLocal.translateX(-step);
   }
 
 
@@ -131,6 +136,5 @@ namespace Script {
       viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     })
   }
-
 
 }

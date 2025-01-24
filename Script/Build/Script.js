@@ -1,4 +1,11 @@
 "use strict";
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
     function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
@@ -25,13 +32,6 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
     }
     if (target) Object.defineProperty(target, contextIn.name, descriptor);
     done = true;
-};
-var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
-    var useValue = arguments.length > 2;
-    for (var i = 0; i < initializers.length; i++) {
-        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
 };
 var Script;
 (function (Script) {
@@ -215,7 +215,7 @@ var Script;
             moveCamera(Script.upInput.pointerList);
         }
     }
-    let camera;
+    let cameraNode;
     let gameMode = false;
     Script.eumlingCamera = new ƒ.ComponentCamera();
     Script.eumlingViewport = new ƒ.Viewport();
@@ -237,7 +237,8 @@ var Script;
         let graph = ƒ.Project.resources[graphId];
         let canvas = document.getElementById("game-canvas");
         let viewport = new ƒ.Viewport();
-        camera = Script.findFirstCameraInGraph(graph);
+        let camera = Script.findFirstCameraInGraph(graph);
+        cameraNode = camera.node;
         viewport.initialize("GameViewport", graph, camera, canvas);
         canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
         Script.upInput.initialize(document.getElementById("game-canvas"));
@@ -251,6 +252,9 @@ var Script;
         Script.eumlingCamera.mtxPivot.rotateY(180);
         Script.eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
         viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
+        ƒ.AudioManager.default.listenTo(viewport.getBranch());
+        ƒ.AudioManager.default.listenWith(cameraNode.getComponent(ƒ.ComponentAudioListener));
+        // ƒ.AudioManager.default.
     }
     let currentCameraSpeed = 0;
     const maxCameraSpeed = 10;
@@ -276,7 +280,7 @@ var Script;
         }
         currentCameraSpeed = Math.min(maxCameraSpeed, Math.max(0, cameraAcelleration * timeScale + currentCameraSpeed));
         let step = speed * currentCameraSpeed * timeScale;
-        let currentX = camera.mtxPivot.translation.x;
+        let currentX = cameraNode.mtxWorld.translation.x;
         let nextPos = currentX + step;
         if (cameraBoundaryX[0] > nextPos) {
             step = cameraBoundaryX[0] - currentX;
@@ -284,7 +288,7 @@ var Script;
         if (cameraBoundaryX[1] < nextPos) {
             step = cameraBoundaryX[1] - currentX;
         }
-        camera.mtxPivot.translateX(-step);
+        cameraNode.mtxLocal.translateX(-step);
     }
     window.addEventListener("load", init);
     function init() {
@@ -295,6 +299,169 @@ var Script;
             Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
         });
     }
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    function findFirstCameraInGraph(_graph) {
+        let cam = _graph.getComponent(ƒ.ComponentCamera);
+        if (cam)
+            return cam;
+        for (let child of _graph.getChildren()) {
+            cam = findFirstCameraInGraph(child);
+            if (cam)
+                return cam;
+        }
+        return undefined;
+    }
+    Script.findFirstCameraInGraph = findFirstCameraInGraph;
+    function enumToArray(anEnum) {
+        return Object.keys(anEnum)
+            .map(n => Number.parseInt(n))
+            .filter(n => !Number.isNaN(n));
+    }
+    Script.enumToArray = enumToArray;
+    function randomEnum(anEnum) {
+        const enumValues = enumToArray(anEnum);
+        const randomIndex = Math.floor(Math.random() * enumValues.length);
+        const randomEnumValue = enumValues[randomIndex];
+        return randomEnumValue;
+    }
+    Script.randomEnum = randomEnum;
+    function mobileOrTabletCheck() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+    Script.mobileOrTabletCheck = mobileOrTabletCheck;
+    function createElementAdvanced(_type, _options = {}) {
+        let el = document.createElement(_type);
+        if (_options.classes) {
+            el.classList.add(..._options.classes);
+        }
+        if (_options.innerHTML) {
+            el.innerHTML = _options.innerHTML;
+        }
+        return el;
+    }
+    Script.createElementAdvanced = createElementAdvanced;
+    function shuffleArray(_array) {
+        for (let i = _array.length - 1; i >= 0; i--) {
+            const k = Math.floor(Math.random() * (i + 1));
+            [_array[i], _array[k]] = [_array[k], _array[i]];
+        }
+        return _array;
+    }
+    Script.shuffleArray = shuffleArray;
+    async function waitMS(_ms) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, _ms);
+        });
+    }
+    Script.waitMS = waitMS;
+    function randomArrayElement(_array) {
+        if (_array.length === 0)
+            return undefined;
+        return _array[Math.floor(Math.random() * _array.length)];
+    }
+    Script.randomArrayElement = randomArrayElement;
+    function randomRange(min = 0, max = 1) {
+        const range = max - min;
+        return Math.random() * range + min;
+    }
+    Script.randomRange = randomRange;
+})(Script || (Script = {}));
+/// <reference path="../Plugins/Utils.ts" />
+var Script;
+/// <reference path="../Plugins/Utils.ts" />
+(function (Script) {
+    var ƒ = FudgeCore;
+    let AUDIO_CHANNEL;
+    (function (AUDIO_CHANNEL) {
+        AUDIO_CHANNEL[AUDIO_CHANNEL["MASTER"] = 0] = "MASTER";
+        AUDIO_CHANNEL[AUDIO_CHANNEL["EUMLING"] = 1] = "EUMLING";
+        AUDIO_CHANNEL[AUDIO_CHANNEL["ENVIRONMENT"] = 2] = "ENVIRONMENT";
+    })(AUDIO_CHANNEL = Script.AUDIO_CHANNEL || (Script.AUDIO_CHANNEL = {}));
+    class AudioManager {
+        static { this.Instance = new AudioManager(); }
+        constructor() {
+            this.gainNodes = {};
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            if (AudioManager.Instance)
+                return AudioManager.Instance;
+            for (let channel of Script.enumToArray(AUDIO_CHANNEL)) {
+                this.gainNodes[channel] = ƒ.AudioManager.default.createGain();
+                if (channel === AUDIO_CHANNEL.MASTER) {
+                    this.gainNodes[channel].connect(ƒ.AudioManager.default.gain);
+                }
+                else {
+                    this.gainNodes[channel].connect(this.gainNodes[AUDIO_CHANNEL.MASTER]);
+                }
+            }
+        }
+        static addAudioCmpToChannel(_cmpAudio, _channel) {
+            _cmpAudio.setGainTarget(AudioManager.Instance.gainNodes[_channel]);
+        }
+    }
+    Script.AudioManager = AudioManager;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    let ComponentAudioMixed = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = ƒ.ComponentAudio;
+        let _instanceExtraInitializers = [];
+        let _get_channel_decorators;
+        var ComponentAudioMixed = class extends _classSuper {
+            static { _classThis = this; }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _get_channel_decorators = [ƒ.serialize(Script.AUDIO_CHANNEL)];
+                __esDecorate(this, null, _get_channel_decorators, { kind: "getter", name: "channel", static: false, private: false, access: { has: obj => "channel" in obj, get: obj => obj.channel }, metadata: _metadata }, null, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                ComponentAudioMixed = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            #channel = (__runInitializers(this, _instanceExtraInitializers), Script.AUDIO_CHANNEL.MASTER);
+            constructor(_audio, _loop, _start, _audioManager = ƒ.AudioManager.default, _channel = Script.AUDIO_CHANNEL.MASTER) {
+                super(_audio, _loop, _start, _audioManager);
+                this.gainTarget = _audioManager.gain;
+                if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                    return;
+                this.channel = _channel;
+            }
+            get channel() {
+                return this.#channel;
+            }
+            set channel(_channel) {
+                this.#channel = _channel;
+                Script.AudioManager.addAudioCmpToChannel(this, this.#channel);
+            }
+            setGainTarget(node) {
+                if (this.isConnected) {
+                    this.gain.disconnect(this.gainTarget);
+                }
+                this.gainTarget = node;
+                if (this.isConnected) {
+                    this.gain.connect(this.gainTarget);
+                }
+            }
+            connect(_on) {
+                if (_on)
+                    this.gain.connect(this.gainTarget ?? this.audioManager.gain);
+                else
+                    this.gain.disconnect(this.gainTarget ?? this.audioManager.gain);
+                this.isConnected = _on;
+            }
+        };
+        return ComponentAudioMixed = _classThis;
+    })();
+    Script.ComponentAudioMixed = ComponentAudioMixed;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -331,6 +498,285 @@ var Script;
         }
     }
     Script.UpdateScriptComponent = UpdateScriptComponent;
+})(Script || (Script = {}));
+/// <reference path="../Plugins/UpdateScriptComponent.ts" />
+var Script;
+/// <reference path="../Plugins/UpdateScriptComponent.ts" />
+(function (Script) {
+    var ƒ = FudgeCore;
+    const globalSoundEmitter = new EventTarget();
+    let SoundEmitter = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = Script.UpdateScriptComponent;
+        let _instanceExtraInitializers = [];
+        let _local_decorators;
+        let _local_initializers = [];
+        let _addRandomness_decorators;
+        let _addRandomness_initializers = [];
+        let _channel_decorators;
+        let _channel_initializers = [];
+        let _s0_decorators;
+        let _s0_initializers = [];
+        let _s1_decorators;
+        let _s1_initializers = [];
+        let _s2_decorators;
+        let _s2_initializers = [];
+        let _s3_decorators;
+        let _s3_initializers = [];
+        let _s4_decorators;
+        let _s4_initializers = [];
+        let _s5_decorators;
+        let _s5_initializers = [];
+        let _s6_decorators;
+        let _s6_initializers = [];
+        let _s7_decorators;
+        let _s7_initializers = [];
+        let _s8_decorators;
+        let _s8_initializers = [];
+        let _s9_decorators;
+        let _s9_initializers = [];
+        let _s10_decorators;
+        let _s10_initializers = [];
+        let _s11_decorators;
+        let _s11_initializers = [];
+        let _s12_decorators;
+        let _s12_initializers = [];
+        let _s13_decorators;
+        let _s13_initializers = [];
+        let _s14_decorators;
+        let _s14_initializers = [];
+        let _s15_decorators;
+        let _s15_initializers = [];
+        let _s16_decorators;
+        let _s16_initializers = [];
+        let _s17_decorators;
+        let _s17_initializers = [];
+        let _s18_decorators;
+        let _s18_initializers = [];
+        let _s19_decorators;
+        let _s19_initializers = [];
+        var SoundEmitter = class extends _classSuper {
+            static { _classThis = this; }
+            constructor() {
+                super(...arguments);
+                this.local = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _local_initializers, true));
+                this.addRandomness = __runInitializers(this, _addRandomness_initializers, true);
+                this.channel = __runInitializers(this, _channel_initializers, Script.AUDIO_CHANNEL.MASTER);
+                // lots of different audios because we can't do arrays in the editor yet.
+                this.s0 = __runInitializers(this, _s0_initializers, void 0);
+                this.s1 = __runInitializers(this, _s1_initializers, void 0);
+                this.s2 = __runInitializers(this, _s2_initializers, void 0);
+                this.s3 = __runInitializers(this, _s3_initializers, void 0);
+                this.s4 = __runInitializers(this, _s4_initializers, void 0);
+                this.s5 = __runInitializers(this, _s5_initializers, void 0);
+                this.s6 = __runInitializers(this, _s6_initializers, void 0);
+                this.s7 = __runInitializers(this, _s7_initializers, void 0);
+                this.s8 = __runInitializers(this, _s8_initializers, void 0);
+                this.s9 = __runInitializers(this, _s9_initializers, void 0);
+                this.s10 = __runInitializers(this, _s10_initializers, void 0);
+                this.s11 = __runInitializers(this, _s11_initializers, void 0);
+                this.s12 = __runInitializers(this, _s12_initializers, void 0);
+                this.s13 = __runInitializers(this, _s13_initializers, void 0);
+                this.s14 = __runInitializers(this, _s14_initializers, void 0);
+                this.s15 = __runInitializers(this, _s15_initializers, void 0);
+                this.s16 = __runInitializers(this, _s16_initializers, void 0);
+                this.s17 = __runInitializers(this, _s17_initializers, void 0);
+                this.s18 = __runInitializers(this, _s18_initializers, void 0);
+                this.s19 = __runInitializers(this, _s19_initializers, void 0);
+                this.#audios = [];
+                this.playRandomSound = () => {
+                    let audio = Script.randomArrayElement(this.#audios);
+                    if (!audio)
+                        return;
+                    this.#audioCmp.setAudio(audio);
+                    if (this.addRandomness)
+                        this.#audioCmp.playbackRate = Script.randomRange(0.75, 1.25);
+                    this.#audioCmp.play(true);
+                };
+            }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _local_decorators = [ƒ.serialize(Boolean)];
+                _addRandomness_decorators = [ƒ.serialize(Boolean)];
+                _channel_decorators = [ƒ.serialize(Script.AUDIO_CHANNEL)];
+                _s0_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s1_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s2_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s3_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s4_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s5_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s6_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s7_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s8_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s9_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s10_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s11_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s12_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s13_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s14_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s15_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s16_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s17_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s18_decorators = [ƒ.serialize(ƒ.Audio)];
+                _s19_decorators = [ƒ.serialize(ƒ.Audio)];
+                __esDecorate(null, null, _local_decorators, { kind: "field", name: "local", static: false, private: false, access: { has: obj => "local" in obj, get: obj => obj.local, set: (obj, value) => { obj.local = value; } }, metadata: _metadata }, _local_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _addRandomness_decorators, { kind: "field", name: "addRandomness", static: false, private: false, access: { has: obj => "addRandomness" in obj, get: obj => obj.addRandomness, set: (obj, value) => { obj.addRandomness = value; } }, metadata: _metadata }, _addRandomness_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _channel_decorators, { kind: "field", name: "channel", static: false, private: false, access: { has: obj => "channel" in obj, get: obj => obj.channel, set: (obj, value) => { obj.channel = value; } }, metadata: _metadata }, _channel_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s0_decorators, { kind: "field", name: "s0", static: false, private: false, access: { has: obj => "s0" in obj, get: obj => obj.s0, set: (obj, value) => { obj.s0 = value; } }, metadata: _metadata }, _s0_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s1_decorators, { kind: "field", name: "s1", static: false, private: false, access: { has: obj => "s1" in obj, get: obj => obj.s1, set: (obj, value) => { obj.s1 = value; } }, metadata: _metadata }, _s1_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s2_decorators, { kind: "field", name: "s2", static: false, private: false, access: { has: obj => "s2" in obj, get: obj => obj.s2, set: (obj, value) => { obj.s2 = value; } }, metadata: _metadata }, _s2_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s3_decorators, { kind: "field", name: "s3", static: false, private: false, access: { has: obj => "s3" in obj, get: obj => obj.s3, set: (obj, value) => { obj.s3 = value; } }, metadata: _metadata }, _s3_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s4_decorators, { kind: "field", name: "s4", static: false, private: false, access: { has: obj => "s4" in obj, get: obj => obj.s4, set: (obj, value) => { obj.s4 = value; } }, metadata: _metadata }, _s4_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s5_decorators, { kind: "field", name: "s5", static: false, private: false, access: { has: obj => "s5" in obj, get: obj => obj.s5, set: (obj, value) => { obj.s5 = value; } }, metadata: _metadata }, _s5_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s6_decorators, { kind: "field", name: "s6", static: false, private: false, access: { has: obj => "s6" in obj, get: obj => obj.s6, set: (obj, value) => { obj.s6 = value; } }, metadata: _metadata }, _s6_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s7_decorators, { kind: "field", name: "s7", static: false, private: false, access: { has: obj => "s7" in obj, get: obj => obj.s7, set: (obj, value) => { obj.s7 = value; } }, metadata: _metadata }, _s7_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s8_decorators, { kind: "field", name: "s8", static: false, private: false, access: { has: obj => "s8" in obj, get: obj => obj.s8, set: (obj, value) => { obj.s8 = value; } }, metadata: _metadata }, _s8_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s9_decorators, { kind: "field", name: "s9", static: false, private: false, access: { has: obj => "s9" in obj, get: obj => obj.s9, set: (obj, value) => { obj.s9 = value; } }, metadata: _metadata }, _s9_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s10_decorators, { kind: "field", name: "s10", static: false, private: false, access: { has: obj => "s10" in obj, get: obj => obj.s10, set: (obj, value) => { obj.s10 = value; } }, metadata: _metadata }, _s10_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s11_decorators, { kind: "field", name: "s11", static: false, private: false, access: { has: obj => "s11" in obj, get: obj => obj.s11, set: (obj, value) => { obj.s11 = value; } }, metadata: _metadata }, _s11_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s12_decorators, { kind: "field", name: "s12", static: false, private: false, access: { has: obj => "s12" in obj, get: obj => obj.s12, set: (obj, value) => { obj.s12 = value; } }, metadata: _metadata }, _s12_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s13_decorators, { kind: "field", name: "s13", static: false, private: false, access: { has: obj => "s13" in obj, get: obj => obj.s13, set: (obj, value) => { obj.s13 = value; } }, metadata: _metadata }, _s13_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s14_decorators, { kind: "field", name: "s14", static: false, private: false, access: { has: obj => "s14" in obj, get: obj => obj.s14, set: (obj, value) => { obj.s14 = value; } }, metadata: _metadata }, _s14_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s15_decorators, { kind: "field", name: "s15", static: false, private: false, access: { has: obj => "s15" in obj, get: obj => obj.s15, set: (obj, value) => { obj.s15 = value; } }, metadata: _metadata }, _s15_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s16_decorators, { kind: "field", name: "s16", static: false, private: false, access: { has: obj => "s16" in obj, get: obj => obj.s16, set: (obj, value) => { obj.s16 = value; } }, metadata: _metadata }, _s16_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s17_decorators, { kind: "field", name: "s17", static: false, private: false, access: { has: obj => "s17" in obj, get: obj => obj.s17, set: (obj, value) => { obj.s17 = value; } }, metadata: _metadata }, _s17_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s18_decorators, { kind: "field", name: "s18", static: false, private: false, access: { has: obj => "s18" in obj, get: obj => obj.s18, set: (obj, value) => { obj.s18 = value; } }, metadata: _metadata }, _s18_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _s19_decorators, { kind: "field", name: "s19", static: false, private: false, access: { has: obj => "s19" in obj, get: obj => obj.s19, set: (obj, value) => { obj.s19 = value; } }, metadata: _metadata }, _s19_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                SoundEmitter = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            #audioCmp;
+            #audios;
+            start(_e) {
+                this.#audioCmp = new Script.ComponentAudioMixed(undefined, false, false, undefined, this.channel);
+                this.node.addComponent(this.#audioCmp);
+                if (this.s0)
+                    this.#audios.push(this.s0);
+                if (this.s1)
+                    this.#audios.push(this.s1);
+                if (this.s2)
+                    this.#audios.push(this.s2);
+                if (this.s3)
+                    this.#audios.push(this.s3);
+                if (this.s4)
+                    this.#audios.push(this.s4);
+                if (this.s5)
+                    this.#audios.push(this.s5);
+                if (this.s6)
+                    this.#audios.push(this.s6);
+                if (this.s7)
+                    this.#audios.push(this.s7);
+                if (this.s8)
+                    this.#audios.push(this.s8);
+                if (this.s9)
+                    this.#audios.push(this.s9);
+                if (this.s10)
+                    this.#audios.push(this.s0);
+                if (this.s11)
+                    this.#audios.push(this.s1);
+                if (this.s12)
+                    this.#audios.push(this.s2);
+                if (this.s13)
+                    this.#audios.push(this.s3);
+                if (this.s14)
+                    this.#audios.push(this.s4);
+                if (this.s15)
+                    this.#audios.push(this.s5);
+                if (this.s16)
+                    this.#audios.push(this.s6);
+                if (this.s17)
+                    this.#audios.push(this.s7);
+                if (this.s18)
+                    this.#audios.push(this.s8);
+                if (this.s19)
+                    this.#audios.push(this.s9);
+            }
+        };
+        return SoundEmitter = _classThis;
+    })();
+    Script.SoundEmitter = SoundEmitter;
+    let SoundEmitterInterval = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = SoundEmitter;
+        let _instanceExtraInitializers = [];
+        let _minWaitTimeMS_decorators;
+        let _minWaitTimeMS_initializers = [];
+        let _maxWaitTimeMS_decorators;
+        let _maxWaitTimeMS_initializers = [];
+        var SoundEmitterInterval = class extends _classSuper {
+            static { _classThis = this; }
+            constructor() {
+                super(...arguments);
+                this.minWaitTimeMS = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _minWaitTimeMS_initializers, void 0));
+                this.maxWaitTimeMS = __runInitializers(this, _maxWaitTimeMS_initializers, void 0);
+                this.startTimer = () => {
+                    const delay = Script.randomRange(this.minWaitTimeMS, this.maxWaitTimeMS);
+                    ƒ.Time.game.setTimer(delay, 1, this.startTimer);
+                    ƒ.Time.game.setTimer(delay, 1, this.playRandomSound);
+                };
+            }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _minWaitTimeMS_decorators = [ƒ.serialize(Number)];
+                _maxWaitTimeMS_decorators = [ƒ.serialize(Number)];
+                __esDecorate(null, null, _minWaitTimeMS_decorators, { kind: "field", name: "minWaitTimeMS", static: false, private: false, access: { has: obj => "minWaitTimeMS" in obj, get: obj => obj.minWaitTimeMS, set: (obj, value) => { obj.minWaitTimeMS = value; } }, metadata: _metadata }, _minWaitTimeMS_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _maxWaitTimeMS_decorators, { kind: "field", name: "maxWaitTimeMS", static: false, private: false, access: { has: obj => "maxWaitTimeMS" in obj, get: obj => obj.maxWaitTimeMS, set: (obj, value) => { obj.maxWaitTimeMS = value; } }, metadata: _metadata }, _maxWaitTimeMS_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                SoundEmitterInterval = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            start(_e) {
+                super.start(_e);
+                this.startTimer();
+            }
+        };
+        return SoundEmitterInterval = _classThis;
+    })();
+    Script.SoundEmitterInterval = SoundEmitterInterval;
+    let SoundEmitterOnEvent = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = SoundEmitter;
+        let _instanceExtraInitializers = [];
+        let _event_decorators;
+        let _event_initializers = [];
+        var SoundEmitterOnEvent = class extends _classSuper {
+            static { _classThis = this; }
+            constructor() {
+                super(...arguments);
+                this.event = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _event_initializers, void 0));
+            }
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _event_decorators = [ƒ.serialize(String)];
+                __esDecorate(null, null, _event_decorators, { kind: "field", name: "event", static: false, private: false, access: { has: obj => "event" in obj, get: obj => obj.event, set: (obj, value) => { obj.event = value; } }, metadata: _metadata }, _event_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                SoundEmitterOnEvent = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+            start(_e) {
+                super.start(_e);
+                globalSoundEmitter.addEventListener(this.event, this.playRandomSound);
+            }
+        };
+        return SoundEmitterOnEvent = _classThis;
+    })();
+    Script.SoundEmitterOnEvent = SoundEmitterOnEvent;
 })(Script || (Script = {}));
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
 var Script;
@@ -1538,60 +1984,6 @@ var Script;
         return PickSphere = _classThis;
     })();
     Script.PickSphere = PickSphere;
-})(Script || (Script = {}));
-var Script;
-(function (Script) {
-    var ƒ = FudgeCore;
-    function findFirstCameraInGraph(_graph) {
-        let cam = _graph.getComponent(ƒ.ComponentCamera);
-        if (cam)
-            return cam;
-        for (let child of _graph.getChildren()) {
-            cam = findFirstCameraInGraph(child);
-            if (cam)
-                return cam;
-        }
-        return undefined;
-    }
-    Script.findFirstCameraInGraph = findFirstCameraInGraph;
-    function randomEnum(anEnum) {
-        const enumValues = Object.keys(anEnum)
-            .map(n => Number.parseInt(n))
-            .filter(n => !Number.isNaN(n));
-        const randomIndex = Math.floor(Math.random() * enumValues.length);
-        const randomEnumValue = enumValues[randomIndex];
-        return randomEnumValue;
-    }
-    Script.randomEnum = randomEnum;
-    function mobileOrTabletCheck() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-    Script.mobileOrTabletCheck = mobileOrTabletCheck;
-    function createElementAdvanced(_type, _options = {}) {
-        let el = document.createElement(_type);
-        if (_options.classes) {
-            el.classList.add(..._options.classes);
-        }
-        if (_options.innerHTML) {
-            el.innerHTML = _options.innerHTML;
-        }
-        return el;
-    }
-    Script.createElementAdvanced = createElementAdvanced;
-    function shuffleArray(_array) {
-        for (let i = _array.length - 1; i >= 0; i--) {
-            const k = Math.floor(Math.random() * (i + 1));
-            [_array[i], _array[k]] = [_array[k], _array[i]];
-        }
-        return _array;
-    }
-    Script.shuffleArray = shuffleArray;
-    async function waitMS(_ms) {
-        return new Promise((resolve) => {
-            setTimeout(resolve, _ms);
-        });
-    }
-    Script.waitMS = waitMS;
 })(Script || (Script = {}));
 /// <reference path="../Eumlings/Traits.ts" />
 var Script;
