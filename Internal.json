@@ -1881,9 +1881,9 @@
               "nature_farming": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
               "nature_gardening": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
               "craft": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "craft_mat_extr": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "craft_production": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
-              "craft_processing": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
+              "craft_mat_extr": "GraphGLTF|2025-01-28T13:53:53.588Z|31119",
+              "craft_production": "GraphGLTF|2025-01-28T13:53:48.792Z|75268",
+              "craft_processing": "GraphGLTF|2025-01-28T13:54:00.263Z|53767"
             }
           }
         ],
@@ -1949,6 +1949,63 @@
       "idResource": "Audio|2025-01-24T14:11:38.052Z|61796",
       "name": "Assets\\Audio\\SFX\\SFX_env_splash_05.ogg",
       "type": "Audio"
+    }
+  },
+  "GraphGLTF|2025-01-28T13:53:48.792Z|75268": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-28T13:53:48.792Z|75268",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationProduktion.glb"
+    }
+  },
+  "GraphGLTF|2025-01-28T13:53:53.588Z|31119": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-28T13:53:53.588Z|31119",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationRohstoffgewinnung.glb"
+    }
+  },
+  "GraphGLTF|2025-01-28T13:54:00.263Z|53767": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-28T13:54:00.263Z|53767",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationVerarbeitung.glb"
     }
   }
 }

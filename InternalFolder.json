@@ -339,37 +339,71 @@
             ]
           },
           {
-            "name": "StationNatur",
+            "name": "Natur",
             "entries": [
               {
-                "idResource": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
-              }
-            ]
-          },
-          {
-            "name": "StationGartenbau",
-            "entries": [
-              {
-                "idResource": "GraphGLTF|2025-01-21T15:01:08.033Z|95174"
-              }
-            ]
-          },
-          {
-            "name": "StationTierwirtschaft",
-            "entries": [
-              {
-                "idResource": "GraphGLTF|2025-01-22T12:11:45.884Z|37765"
+                "name": "StationNatur",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-21T09:20:23.789Z|21816"
+                  }
+                ]
               },
               {
-                "idResource": "AnimationGLTF|2025-01-22T12:11:45.884Z|93300"
+                "name": "StationGartenbau",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-21T15:01:08.033Z|95174"
+                  }
+                ]
+              },
+              {
+                "name": "StationTierwirtschaft",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-22T12:11:45.884Z|37765"
+                  },
+                  {
+                    "idResource": "AnimationGLTF|2025-01-22T12:11:45.884Z|93300"
+                  }
+                ]
+              },
+              {
+                "name": "StationLandwirtschaft",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-22T12:15:28.947Z|41115"
+                  }
+                ]
               }
             ]
           },
           {
-            "name": "StationLandwirtschaft",
+            "name": "Handwerk",
             "entries": [
               {
-                "idResource": "GraphGLTF|2025-01-22T12:15:28.947Z|41115"
+                "name": "StationProduktion",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-28T13:53:48.792Z|75268"
+                  }
+                ]
+              },
+              {
+                "name": "StationVerarbeitung",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-28T13:54:00.263Z|53767"
+                  }
+                ]
+              },
+              {
+                "name": "StationRohstoff",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-28T13:53:53.588Z|31119"
+                  }
+                ]
               }
             ]
           }
