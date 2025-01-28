@@ -13,8 +13,8 @@ namespace Script {
 
     export function enumToArray<T extends object>(anEnum: T): T[keyof T][] {
         return Object.keys(anEnum)
-        .map(n => Number.parseInt(n))
-        .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][]
+            .map(n => Number.parseInt(n))
+            .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][]
     }
 
     export function randomEnum<T extends object>(anEnum: T): T[keyof T] {
@@ -30,16 +30,26 @@ namespace Script {
 
     interface CreateElementAdvancedOptions {
         classes: string[],
+        id: string,
         innerHTML: string,
+        attributes: [string, string][],
     }
     export function createElementAdvanced<K extends keyof HTMLElementTagNameMap>(_type: K, _options: Partial<CreateElementAdvancedOptions> = {}): HTMLElementTagNameMap[K] {
         let el = document.createElement(_type);
 
+        if (_options.id) {
+            el.id = _options.id;
+        }
         if (_options.classes) {
             el.classList.add(..._options.classes);
         }
         if (_options.innerHTML) {
             el.innerHTML = _options.innerHTML;
+        }
+        if (_options.attributes) {
+            for (let attribute of _options.attributes) {
+                el.setAttribute(attribute[0], attribute[1]);
+            }
         }
 
         return el;
@@ -67,5 +77,15 @@ namespace Script {
     export function randomRange(min: number = 0, max: number = 1): number {
         const range = max - min;
         return Math.random() * range + min;
+    }
+
+    export function randomString(length: number): string {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for (let counter = 0; counter < length; counter++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
     }
 }

@@ -66,13 +66,48 @@ declare namespace Script {
     export function mobileOrTabletCheck(): boolean;
     interface CreateElementAdvancedOptions {
         classes: string[];
+        id: string;
         innerHTML: string;
+        attributes: [string, string][];
     }
     export function createElementAdvanced<K extends keyof HTMLElementTagNameMap>(_type: K, _options?: Partial<CreateElementAdvancedOptions>): HTMLElementTagNameMap[K];
     export function shuffleArray<T>(_array: Array<T>): Array<T>;
     export function waitMS(_ms: number): Promise<void>;
     export function randomArrayElement<T>(_array: Array<T>): T | undefined;
     export function randomRange(min?: number, max?: number): number;
+    export function randomString(length: number): string;
+    export {};
+}
+declare namespace Script {
+    export type Setting = SettingCategory | SettingNumber | SettingString;
+    interface SettingsBase {
+        type: string;
+        name: string;
+    }
+    export interface SettingCategory extends SettingsBase {
+        type: "category";
+        settings: Setting[];
+    }
+    export interface SettingString extends SettingsBase {
+        type: "string";
+        value: string;
+    }
+    export interface SettingNumber extends SettingsBase {
+        type: "number";
+        value: number;
+        min: number;
+        max: number;
+        step: number;
+    }
+    export class Settings {
+        private static settings;
+        static proxySetting<T extends Setting>(_setting: T, onValueChange: (_old: any, _new: any) => void): T;
+        static addSettings(..._settings: Setting[]): void;
+        static generateHTML(_settings?: Setting[]): HTMLElement;
+        private static generateSingleHTML;
+        private static generateStringInput;
+        private static generateNumberInput;
+    }
     export {};
 }
 declare namespace Script {
@@ -86,6 +121,7 @@ declare namespace Script {
         private gainNodes;
         private constructor();
         static addAudioCmpToChannel(_cmpAudio: ComponentAudioMixed, _channel: AUDIO_CHANNEL): void;
+        static setChannelVolume(_channel: AUDIO_CHANNEL, _volume: number): void;
     }
 }
 declare namespace Script {
@@ -352,6 +388,7 @@ declare namespace Script {
 declare namespace Script {
     interface LayerOptions {
         onAdd: (_element: HTMLElement) => void;
+        onHide: (_element: HTMLElement) => void;
         onRemove: (_element: HTMLElement) => void;
     }
     export function showLayer(_layer: HTMLElement, _options?: Partial<LayerOptions>): void;

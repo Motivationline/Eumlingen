@@ -192,7 +192,7 @@ var Script;
     Script.globalEvents = new EventTarget();
     function start(_event) {
         Script.viewport = _event.detail;
-        Script.viewport.gizmosEnabled = true;
+        // viewport.gizmosEnabled = true;
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -253,6 +253,7 @@ var Script;
         Script.eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
         viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
         setupSounds();
+        document.getElementById("settings-overlay").appendChild(Script.Settings.generateHTML());
     }
     let currentCameraSpeed = 0;
     const maxCameraSpeed = 10;
@@ -340,11 +341,19 @@ var Script;
     Script.mobileOrTabletCheck = mobileOrTabletCheck;
     function createElementAdvanced(_type, _options = {}) {
         let el = document.createElement(_type);
+        if (_options.id) {
+            el.id = _options.id;
+        }
         if (_options.classes) {
             el.classList.add(..._options.classes);
         }
         if (_options.innerHTML) {
             el.innerHTML = _options.innerHTML;
+        }
+        if (_options.attributes) {
+            for (let attribute of _options.attributes) {
+                el.setAttribute(attribute[0], attribute[1]);
+            }
         }
         return el;
     }
@@ -374,10 +383,96 @@ var Script;
         return Math.random() * range + min;
     }
     Script.randomRange = randomRange;
+    function randomString(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for (let counter = 0; counter < length; counter++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+    Script.randomString = randomString;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    class Settings {
+        static { this.settings = []; }
+        static proxySetting(_setting, onValueChange) {
+            return new Proxy(_setting, {
+                set(target, prop, newValue, receiver) {
+                    if (prop === "value")
+                        onValueChange(target[prop], newValue);
+                    return Reflect.set(target, prop, newValue, receiver);
+                },
+            });
+        }
+        static addSettings(..._settings) {
+            _settings.forEach(setting => this.settings.push(setting));
+        }
+        static generateHTML(_settings = this.settings) {
+            const wrapper = Script.createElementAdvanced("div", { classes: ["settings-wrapper"], innerHTML: "<h2>Einstellungen</h2>" });
+            for (let setting of _settings) {
+                wrapper.appendChild(this.generateSingleHTML(setting));
+            }
+            return wrapper;
+        }
+        static generateSingleHTML(_setting) {
+            let element;
+            switch (_setting.type) {
+                case "string": {
+                    element = this.generateStringInput(_setting);
+                    break;
+                }
+                case "number": {
+                    element = this.generateNumberInput(_setting);
+                    break;
+                }
+                case "category": {
+                    element = Script.createElementAdvanced("div", { classes: ["settings-category"], innerHTML: `<span class="settings-category-name">${_setting.name}</span>` });
+                    for (let setting of _setting.settings) {
+                        element.appendChild(this.generateSingleHTML(setting));
+                    }
+                    break;
+                }
+                default: {
+                    element = Script.createElementAdvanced("div", { innerHTML: "Unknown Setting Type", classes: ["settings-unknown"] });
+                }
+            }
+            return element;
+        }
+        static generateStringInput(_setting) {
+            const id = Script.randomString(10);
+            const element = Script.createElementAdvanced("label", { classes: ["settings-string-wrapper", "settings-label"], innerHTML: `<span class="settings-string-label settings-label-text">${_setting.name}</span>`, attributes: [["for", id]] });
+            const input = Script.createElementAdvanced("input", { classes: ["settings-string-input", "settings-input"], attributes: [["type", "string"], ["value", _setting.value], ["name", id]], id });
+            element.appendChild(input);
+            input.addEventListener("change", () => {
+                _setting.value = input.value;
+            });
+            return element;
+        }
+        static generateNumberInput(_setting) {
+            const id = Script.randomString(10);
+            const element = Script.createElementAdvanced("label", { classes: ["settings-number-wrapper", "settings-label"], innerHTML: `<span class="settings-number-label settings-label-text">${_setting.name}</span>`, attributes: [["for", id]] });
+            const input = Script.createElementAdvanced("input", {
+                classes: ["settings-number-input", "settings-input"],
+                attributes: [["type", "range"], ["value", _setting.value.toString()], ["name", id], ["min", _setting.min.toString()], ["max", _setting.max.toString()], ["step", _setting.step.toString()]],
+                id
+            });
+            element.appendChild(input);
+            input.addEventListener("change", () => {
+                _setting.value = Number(input.value);
+            });
+            return element;
+        }
+    }
+    Script.Settings = Settings;
 })(Script || (Script = {}));
 /// <reference path="../Plugins/Utils.ts" />
+/// <reference path="../Plugins/Settings.ts" />
 var Script;
 /// <reference path="../Plugins/Utils.ts" />
+/// <reference path="../Plugins/Settings.ts" />
 (function (Script) {
     var ƒ = FudgeCore;
     let AUDIO_CHANNEL;
@@ -394,6 +489,7 @@ var Script;
                 return;
             if (AudioManager.Instance)
                 return AudioManager.Instance;
+            const settingCategory = { name: "Sounds", settings: [], type: "category" };
             for (let channel of Script.enumToArray(AUDIO_CHANNEL)) {
                 this.gainNodes[channel] = ƒ.AudioManager.default.createGain();
                 if (channel === AUDIO_CHANNEL.MASTER) {
@@ -402,10 +498,20 @@ var Script;
                 else {
                     this.gainNodes[channel].connect(this.gainNodes[AUDIO_CHANNEL.MASTER]);
                 }
+                let setting = { type: "number", max: 1, min: 0, name: AUDIO_CHANNEL[channel], step: 0.01, value: 1 };
+                setting = Script.Settings.proxySetting(setting, (_old, _new) => { AudioManager.setChannelVolume(channel, _new); });
+                settingCategory.settings.push(setting);
             }
+            Script.Settings.addSettings(settingCategory);
         }
         static addAudioCmpToChannel(_cmpAudio, _channel) {
             _cmpAudio.setGainTarget(AudioManager.Instance.gainNodes[_channel]);
+        }
+        static setChannelVolume(_channel, _volume) {
+            let channel = AudioManager.Instance.gainNodes[_channel];
+            if (!channel)
+                return;
+            channel.gain.value = _volume;
         }
     }
     Script.AudioManager = AudioManager;
@@ -1866,7 +1972,10 @@ var Script;
     Script.showLayer = showLayer;
     function removeTopLayer() {
         hideTopLayer();
-        activeLayers.pop();
+        let [layer, options] = activeLayers.pop();
+        if (options.onRemove)
+            options.onRemove(layer);
+        showTopLayer();
     }
     Script.removeTopLayer = removeTopLayer;
     function showTopLayer() {
@@ -1883,29 +1992,35 @@ var Script;
             return;
         let [layer, options] = activeLayers[activeLayers.length - 1];
         layer.classList.add("hidden");
-        if (options.onRemove)
-            options.onRemove(layer);
+        if (options.onHide)
+            options.onHide(layer);
         layer.style.zIndex = "";
     }
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".close-button").forEach(b => {
-            b.addEventListener("click", hideTopLayer);
-            b.addEventListener("click", unpauseGame);
+            b.addEventListener("click", removeTopLayer);
         });
         document.getElementById("achievement-button").addEventListener("click", () => { showLayer(document.getElementById("achievement-screen-overlay")); });
         document.getElementById("pause-button").addEventListener("click", pauseGame);
-        document.getElementById("pause-button").addEventListener("click", pauseGame);
+        document.getElementById("button-settings").addEventListener("click", openSettings);
+        document.getElementById("button-main-menu").addEventListener("click", returnToMainMenu);
         Script.GameData.updateDisplays();
     });
     function pauseGame() {
         Script.GameData.paused = true;
-        showLayer(document.getElementById("pause-overlay"));
+        showLayer(document.getElementById("pause-overlay"), { onRemove(_element) {
+                unpauseGame();
+            }, });
         ƒ.Time.game.setScale(0.000001);
     }
     function unpauseGame() {
         Script.GameData.paused = false;
         ƒ.Time.game.setScale(1);
     }
+    function openSettings() {
+        showLayer(document.getElementById("settings-overlay"));
+    }
+    function returnToMainMenu() { }
 })(Script || (Script = {}));
 var Script;
 (function (Script) {

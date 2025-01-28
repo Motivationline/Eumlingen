@@ -394,3 +394,29 @@ progress {
   0% {scale: 0;}
   100% {scale: 1;}
 }
+
+.settings-wrapper {
+  margin: 1rem;
+  max-width: 400px;
+}
+
+.settings-category {
+  margin: 1rem;
+}
+.settings-category-name {
+  /* margin-left: -1rem; */
+  font-size: larger;
+  font-weight: bolder;
+}
+.settings-label {
+  margin-left: 1rem;
+  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: var(--color);
+}
+
+.settings-label:hover {
+  --color: green;
+}

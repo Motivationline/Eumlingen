@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>Eumlingen</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="styles.css" />
 
     <!--Editor settings of this project-->
-    <meta type="settings" autoview="Graph|2024-11-26T10:13:50.337Z|26526" project="{'name':'Eumlingen','graphAutoView':'Graph|2024-11-26T10:13:50.337Z|26526'}" />
+    <meta type="settings" autoview="Graph|2024-11-26T10:13:50.337Z|26526"
+        project="{'name':'Eumlingen','graphAutoView':'Graph|2024-11-26T10:13:50.337Z|26526'}" />
 
     <!--Activate the following line to include the FUDGE-version of Oimo-Physics. You may want to download a local copy to work offline and be independent from future changes!-->
     <!--<script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/OimoPhysics.js"></script>-->
@@ -38,20 +40,20 @@
             <div>
                 <img src="Images/point.svg" alt="" />
                 <span class="point-display">
-</span>
+                </span>
             </div>
             <div>
                 <img src="Images/eumling.svg" alt="" />
                 <span class="eumling-display">
-</span>
+                </span>
             </div>
         </div>
         <div class="button interactable" id="pause-button">
-<img src="Images/pause.svg" alt="Pause" />
-</div>
+            <img src="Images/pause.svg" alt="Pause" />
+        </div>
         <div class="button interactable" id="achievement-button">
-<img src="Images/trophy.svg" alt="Achievements" />
-</div>
+            <img src="Images/trophy.svg" alt="Achievements" />
+        </div>
         <button id="eumlingSpawn" class="interactable">Spawn Eumling</button>
         <span>short tap for info, long tap to pick up</span>
     </div>
@@ -64,7 +66,7 @@
                     Name: <span id="eumling-name">blabla</span>
                 </h2>
                 <div id="eumling-traits">
-</div>
+                </div>
             </div>
         </div>
         <div class="close-button button">
@@ -105,14 +107,16 @@
     </div>
     <div id="pause-overlay" class="overlay hidden">
         <h1>Pause</h1>
+        <button id="button-settings">Einstellungen</button>
+        <button id="button-main-menu">Hauptmenü</button>
         <div class="close-button button">
-</div>
+        </div>
     </div>
     <div id="achievement-overlay" class="hidden no-interact">
-</div>
+    </div>
     <div id="achievement-screen-overlay" class="overlay hidden">
         <div id="achievement-list">
-</div>
+        </div>
         <div class="achievement-progress-wrapper">
             <div class="achievement-points-wrapper">
                 <span class="total-points-display">30</span>
@@ -121,12 +125,12 @@
             <div class="achievement-progress-bar-wrapper">
                 <div class="achievement-progress-bar">
                     <div class="achievement-progress-bar-now">
-</div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="close-button button">
-</div>
+        </div>
     </div>
     <div id="achievement-progress-overlay" class="no-interact hide hidden">
         <div class="achievement-progress-wrapper">
@@ -137,13 +141,18 @@
             <div class="achievement-progress-bar-wrapper">
                 <div class="achievement-progress-bar">
                     <div class="achievement-progress-bar-now">
-</div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay hidden">
+        <div class="close-button button"></div>
     </div>
     <!--Canvas for FUDGE to render to-->
     <canvas class="fullscreen" id="game-canvas">
     </canvas>
 </body>
+
 </html>

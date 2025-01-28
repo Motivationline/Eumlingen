@@ -14,7 +14,7 @@ namespace Script {
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
-    viewport.gizmosEnabled = true;
+    // viewport.gizmosEnabled = true;
 
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -86,6 +86,8 @@ namespace Script {
     viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     
     setupSounds();
+
+    document.getElementById("settings-overlay").appendChild(Settings.generateHTML());
   }
 
   let currentCameraSpeed: number = 0;
