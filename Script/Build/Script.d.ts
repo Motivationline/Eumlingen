@@ -307,6 +307,7 @@ declare namespace Script {
         private findPickPosition;
         shortTap(_pointer: Pointer): void;
         longTap(_pointer: Pointer): void;
+        private transitionOutOfGrown;
         walkAway(): void;
         walkTo(_pos: ƒ.Vector3): void;
         teleportTo(_pos: ƒ.Vector3, _rot?: ƒ.Vector3): void;
@@ -483,6 +484,7 @@ declare namespace Script {
         private displayWorkbenchInfo;
         private fillUpgradeOverlayWithInfo;
         private fillInfoOverlayWithInfo;
+        private deconstruct;
         private setCategory;
         private resetAll;
         static getCategoryFromId(_id: CATEGORY): Category;

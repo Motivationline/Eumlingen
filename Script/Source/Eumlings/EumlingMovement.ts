@@ -190,26 +190,27 @@ namespace Script {
         }
 
         shortTap(_pointer: Pointer): void {
-            if (this.state === STATE.GROWN) {
-                this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
-                this.setState(STATE.IDLE);
-                this.pick.offset.y = 0.45;
-                this.pick.radius = 0.4;
+            if (this.transitionOutOfGrown()) {
                 _pointer.used = true;
                 return;
             }
         }
 
         longTap(_pointer: Pointer): void {
-            if (this.state === STATE.GROWN) {
-                this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
-                this.setState(STATE.IDLE);
-                this.pick.offset.y = 0.45;
-                this.pick.radius = 0.4;
-                return;
-            }
+            if(this.transitionOutOfGrown()) return;
             this.setState(STATE.PICKED);
             this.pointer = _pointer;
+        }
+
+        private transitionOutOfGrown(): boolean {
+            if (this.state !== STATE.GROWN) {
+                return false;
+            }
+            this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
+            this.setState(STATE.IDLE);
+            this.pick.offset.y = 0.45;
+            this.pick.radius = 0.4;
+            return true;
         }
 
         walkAway() {
@@ -225,7 +226,7 @@ namespace Script {
 
         teleportTo(_pos: ƒ.Vector3, _rot?: ƒ.Vector3) {
             this.node.mtxLocal.translate(ƒ.Vector3.DIFFERENCE(_pos, this.node.mtxWorld.translation), false);
-            if(_rot)
+            if (_rot)
                 this.node.mtxLocal.rotate(ƒ.Vector3.DIFFERENCE(_rot, this.node.mtxWorld.rotation), false);
         }
         teleportBy(_dif: ƒ.Vector3, _local?: boolean) {

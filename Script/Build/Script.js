@@ -1430,25 +1430,26 @@ var Script;
                 return pos;
             }
             shortTap(_pointer) {
-                if (this.state === STATE.GROWN) {
-                    this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
-                    this.setState(STATE.IDLE);
-                    this.pick.offset.y = 0.45;
-                    this.pick.radius = 0.4;
+                if (this.transitionOutOfGrown()) {
                     _pointer.used = true;
                     return;
                 }
             }
             longTap(_pointer) {
-                if (this.state === STATE.GROWN) {
-                    this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
-                    this.setState(STATE.IDLE);
-                    this.pick.offset.y = 0.45;
-                    this.pick.radius = 0.4;
+                if (this.transitionOutOfGrown())
                     return;
-                }
                 this.setState(STATE.PICKED);
                 this.pointer = _pointer;
+            }
+            transitionOutOfGrown() {
+                if (this.state !== STATE.GROWN) {
+                    return false;
+                }
+                this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
+                this.setState(STATE.IDLE);
+                this.pick.offset.y = 0.45;
+                this.pick.radius = 0.4;
+                return true;
             }
             walkAway() {
                 this.targetPosition = this.getPositionToWalkTo();
@@ -2265,6 +2266,10 @@ var Script;
             this.buildProgress = 0;
             this.fittingTraits = 0;
             this.startWorkTime = 0;
+            this.deconstruct = () => {
+                this.resetAll();
+                Script.removeTopLayer();
+            };
         }
         static { this.categories = [
             {
@@ -2346,10 +2351,10 @@ var Script;
                 info.innerHTML += `<div class="workbench-category"><img src="Images/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
             }
             overlay.querySelector("progress").value = this.buildProgress;
-            overlay.querySelector("#workbench-deconstruct").addEventListener("click", () => {
-                this.resetAll();
-                Script.removeTopLayer();
-            });
+            let deconstructBtn = overlay.querySelector("#workbench-deconstruct");
+            let deconstructBtn2 = deconstructBtn.cloneNode(true);
+            deconstructBtn.replaceWith(deconstructBtn2);
+            deconstructBtn2.addEventListener("click", this.deconstruct);
             return overlay;
         }
         setCategory(_id) {

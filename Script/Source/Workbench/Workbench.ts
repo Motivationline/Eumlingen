@@ -129,12 +129,18 @@ namespace Script {
 
             overlay.querySelector("progress").value = this.buildProgress;
 
-            overlay.querySelector("#workbench-deconstruct").addEventListener("click", () => {
-                this.resetAll();
-                removeTopLayer();
-            })
-
+            let deconstructBtn = overlay.querySelector("#workbench-deconstruct");
+            let deconstructBtn2 = deconstructBtn.cloneNode(true);
+            deconstructBtn.replaceWith(deconstructBtn2);
+            
+            deconstructBtn2.addEventListener("click", this.deconstruct);
+            
             return overlay;
+        }
+        
+        private deconstruct = () => {
+            this.resetAll();
+            removeTopLayer();
         }
 
         private setCategory(_id: number) {
