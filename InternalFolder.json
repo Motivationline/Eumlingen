@@ -318,6 +318,28 @@
                 "idResource": "Audio|2025-01-24T14:11:53.625Z|24410"
               }
             ]
+          },
+          {
+            "name": "Clouds",
+            "entries": [
+              {
+                "idResource": "GraphGLTF|2025-01-29T12:11:58.993Z|69664"
+              },
+              {
+                "idResource": "Animation|2025-01-29T12:23:41.567Z|25626"
+              },
+              {
+                "name": "Variation",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-29T12:51:23.285Z|87482"
+                  },
+                  {
+                    "idResource": "Animation|2025-01-29T12:51:54.778Z|25764"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },

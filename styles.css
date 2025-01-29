@@ -2,8 +2,14 @@
   touch-action: none;
 } */
 
+@font-face {
+  font-family: "ChelaOne";
+  src: url(Assets/UI/ChelaOne-Regular.ttf);
+}
+
 * {
   box-sizing: border-box;
+  font-family: ChelaOne, Verdana, Geneva, Tahoma, sans-serif;
 }
 
 html,
@@ -15,7 +21,6 @@ body {
   overflow: hidden;
   --grid-gap: min(1rem, 10vh, 10vw);
   --border-radius: 1rem;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
   user-select: none;
 }
 
@@ -76,16 +81,6 @@ div.overlay.no-interact {
 }
 
 
-.button {
-  background-color: white;
-  cursor: pointer;
-  padding: var(--grid-gap);
-  border-radius: var(--border-radius);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 div.close-button {
   position: absolute;
   z-index: 1;
@@ -94,9 +89,14 @@ div.close-button {
   font-size: 2rem;
   width: 2em;
   height: 2em;
+}
+div.close-button::after {
+  content: "";
   background-image: url(Images/close.svg);
   background-repeat: no-repeat;
   background-position: center center;
+  width: 100%;
+  height: 100%;
 }
 
 .interactable {
@@ -104,19 +104,85 @@ div.close-button {
 }
 
 #start-screen {
-  display: flex;
-  place-items: center;
-  align-items: stretch;
+  overflow: hidden;
 }
 
-#start-screen button {
-  flex-grow: 1;
-  cursor: pointer;
-  margin: 1rem;
-  padding: 1rem;
-  background-color: aliceblue;
+#start-screen-foreground {
   display: grid;
   place-items: center;
+  grid-template-rows: 50vh 50vh;
+}
+#start-screen img.logo {
+  object-fit: contain;
+  max-height: 100%;
+  max-width: 100%;
+  padding: 1em;
+  filter: drop-shadow(1vh 1vh 1vh black);
+}
+
+div.start-background {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-position: 0 100%;
+  background-size: cover;
+}
+
+.start-background-rock {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  max-height: 50%;
+  z-index: 1;
+}
+.start-background-bush {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  max-height: 30%;
+  z-index: 1;
+}
+.start-background-eumling {
+  position: absolute;
+  bottom: 0;
+  transition: left 10s linear;
+}
+.start-background-eumling.reverse {
+  transform: rotateY(180deg);
+}
+
+#start-buttons > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: min(3em, 7.5vh);
+  z-index: 1;
+  position: relative;
+}
+
+.button,
+button {
+  font-size: inherit;
+  cursor: pointer;
+  margin: 0.25em 0.25em;
+  padding: var(--grid-gap);
+  background-color: transparent;
+  display: grid;
+  place-items: center;
+  
+  border-image-source: url("Assets/UI/MainMenu/Button.svg");
+  border-image-slice: 27% fill;
+  border-image-repeat: stretch;
+  border-image-width: 4rem;
+}
+
+.button {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #game-overlay {
@@ -419,4 +485,28 @@ progress {
 
 .settings-label:hover {
   --color: green;
+}
+
+.loading-spinner {
+  height: 2em;
+  width: 2em;
+  animation: alternate;
+  border: 3px solid black;
+  border-bottom-color: white;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  0% {rotate: 0deg;}
+  100% {rotate: 360deg;}
+}
+
+.move-cloud {
+  animation: move-cloud 100s infinite linear;
+}
+
+@keyframes move-cloud {
+  0% {background-position-x: 0;}
+  100% {background-position-x: -100vw;}
 }

@@ -46,14 +46,12 @@ namespace Script {
   export const eumlingCamera: ƒ.ComponentCamera = new ƒ.ComponentCamera();
   export const eumlingViewport = new ƒ.Viewport();
   async function startViewport(_event: MouseEvent) {
+    document.getElementById("start-start").classList.add("hidden");
+    document.getElementById("start-loading").classList.remove("hidden");
     if (mobileOrTabletCheck()) {
       document.documentElement.requestFullscreen();
     }
 
-    document.getElementById("start-screen").remove();
-    document.getElementById("game-overlay").classList.remove("hidden");
-    document.getElementById("achievement-overlay").classList.remove("hidden");
-    document.getElementById("achievement-progress-overlay").classList.remove("hidden");
     let graphId/* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView")
     if ((<HTMLElement>_event.target).id === "freecam") {
       //@ts-ignore
@@ -88,6 +86,8 @@ namespace Script {
     setupSounds();
 
     document.getElementById("settings-overlay").appendChild(Settings.generateHTML());
+
+    document.dispatchEvent(new CustomEvent("gameLoaded"));
   }
 
   let currentCameraSpeed: number = 0;
@@ -129,9 +129,7 @@ namespace Script {
 
   window.addEventListener("load", init);
   function init() {
-    for (let el of <HTMLCollectionOf<HTMLElement>>document.getElementsByClassName("start-button")) {
-      el.addEventListener("click", startViewport);
-    }
+    document.getElementById("start").addEventListener("click", startViewport);
     document.getElementById("eumlingSpawn").addEventListener("click", () => {
       viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     })
