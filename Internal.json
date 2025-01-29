@@ -195,7 +195,7 @@
                     "direction": "diagonal",
                     "near": 0.1,
                     "far": 2000,
-                    "aspect": 1.510172143974961,
+                    "aspect": 1.1468531468531469,
                     "pivot": {
                       "translation": "[0, 0, 0]",
                       "rotation": "[0, 0, 0]",
@@ -212,7 +212,7 @@
                   "ƒ.ComponentFog": {
                     "color": "[1, 1, 1, 1]",
                     "near": 45,
-                    "far": 113,
+                    "far": 140,
                     "Component": {
                       "active": true
                     }
@@ -222,8 +222,8 @@
               "ComponentBloom": [
                 {
                   "ƒ.ComponentBloom": {
-                    "threshold": 0.9750000000000001,
-                    "intensity": 0.20000000000000004,
+                    "threshold": 1,
+                    "intensity": 0.14999999999999997,
                     "desaturateHighlights": 0,
                     "Component": {
                       "active": true
@@ -668,6 +668,60 @@
                                   }
                                 }
                               ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "Clouds",
+                  "active": true,
+                  "components": {},
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "Wrapper",
+                        "active": true,
+                        "components": {},
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2025-01-29T12:11:58.993Z|69664"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "WrapperVariation",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[0, 4.79555082321167, -15.879886627197266]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "GraphGLTF|2025-01-29T12:51:23.285Z|87482"
                             }
                           }
                         ]
@@ -1902,6 +1956,25 @@
       "url": "Assets\\Stations\\StationVerarbeitung.glb"
     }
   },
+  "GraphGLTF|2025-01-29T11:39:04.455Z|25708": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-29T11:39:04.455Z|25708",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationPlainHandwerk.glb"
+    }
+  },
   "Graph|2025-01-15T14:48:41.922Z|40103": {
     "ƒ.Graph": {
       "name": "Workbench",
@@ -2008,25 +2081,6 @@
       "type": "Audio"
     }
   },
-  "GraphGLTF|2025-01-29T11:39:04.455Z|25708": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentChangeMaterial": [
-          {
-            "Script.ComponentChangeMaterial": {
-              "active": true,
-              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2025-01-29T11:39:04.455Z|25708",
-      "type": "GraphGLTF",
-      "url": "Assets\\Stations\\StationPlainHandwerk.glb"
-    }
-  },
   "GraphGLTF|2025-01-29T11:40:55.048Z|47583": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
@@ -2063,6 +2117,162 @@
       "idResource": "GraphGLTF|2025-01-29T11:41:01.013Z|51474",
       "type": "GraphGLTF",
       "url": "Assets\\Stations\\StationBaseNatur.glb"
+    }
+  },
+  "GraphGLTF|2025-01-29T12:11:58.993Z|69664": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ],
+        "ComponentAnimation": [
+          {
+            "ƒ.ComponentAnimation": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "Animation|2025-01-29T12:23:41.567Z|25626",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-29T12:11:58.993Z|69664",
+      "type": "GraphGLTF",
+      "url": "Assets\\Environment\\Clouds.glb"
+    }
+  },
+  "Animation|2025-01-29T12:23:41.567Z|25626": {
+    "ƒ.Animation": {
+      "idResource": "Animation|2025-01-29T12:23:41.567Z|25626",
+      "name": "CloudTurnin",
+      "labels": {},
+      "events": {},
+      "framesPerSecond": 60,
+      "animationStructure": {
+        "children": {
+          "Clouds": {
+            "components": {
+              "ComponentTransform": {
+                "0": {
+                  "mtxLocal": {
+                    "rotation": {
+                      "y": {
+                        "keys": [
+                          {
+                            "time": 0,
+                            "value": -2.510289192199707,
+                            "interpolation": 2,
+                            "slopeIn": 0.0005085294731588667,
+                            "slopeOut": 0.0005085294731588667
+                          },
+                          {
+                            "time": 600583.3333333334,
+                            "value": 360,
+                            "interpolation": 2,
+                            "slopeIn": 0.0005896623805574323,
+                            "slopeOut": 0.0005896623805574323
+                          }
+                        ],
+                        "animationSequence": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "GraphGLTF|2025-01-29T12:51:23.285Z|87482": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ],
+        "ComponentAnimation": [
+          {
+            "ƒ.ComponentAnimation": {
+              "Component": {
+                "active": true
+              },
+              "idAnimation": "Animation|2025-01-29T12:51:54.778Z|25764",
+              "playmode": "loop",
+              "quantization": "continous",
+              "scale": 1,
+              "scaleWithGameTime": true,
+              "animateInEditor": true
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-29T12:51:23.285Z|87482",
+      "type": "GraphGLTF",
+      "url": "Assets\\Environment\\Clouds.glb"
+    }
+  },
+  "Animation|2025-01-29T12:51:54.778Z|25764": {
+    "ƒ.Animation": {
+      "idResource": "Animation|2025-01-29T12:51:54.778Z|25764",
+      "name": "CloudTurning",
+      "labels": {},
+      "events": {},
+      "framesPerSecond": 60,
+      "animationStructure": {
+        "children": {
+          "Clouds": {
+            "components": {
+              "ComponentTransform": {
+                "0": {
+                  "mtxLocal": {
+                    "rotation": {
+                      "y": {
+                        "keys": [
+                          {
+                            "time": 0,
+                            "value": -2.510289192199707,
+                            "interpolation": 2,
+                            "slopeIn": 0.0010828222244678768,
+                            "slopeOut": 0.0010828222244678768
+                          },
+                          {
+                            "time": 299200,
+                            "value": 360,
+                            "interpolation": 2,
+                            "slopeIn": 0.0010232173313779018,
+                            "slopeOut": 0.0010232173313779018
+                          }
+                        ],
+                        "animationSequence": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
