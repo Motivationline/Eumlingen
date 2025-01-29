@@ -204,6 +204,8 @@ namespace Script {
             if (this.state === STATE.GROWN) {
                 this.node.mtxLocal.translateY(-this.node.mtxLocal.translation.y);
                 this.setState(STATE.IDLE);
+                this.pick.offset.y = 0.45;
+                this.pick.radius = 0.4;
                 return;
             }
             this.setState(STATE.PICKED);
