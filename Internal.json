@@ -1845,6 +1845,63 @@
       "url": "Assets\\Stations\\StationBase.glb"
     }
   },
+  "GraphGLTF|2025-01-28T13:53:53.588Z|31119": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-28T13:53:53.588Z|31119",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationRohstoffgewinnung.glb"
+    }
+  },
+  "GraphGLTF|2025-01-28T13:53:48.792Z|75268": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-28T13:53:48.792Z|75268",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationProduktion.glb"
+    }
+  },
+  "GraphGLTF|2025-01-28T13:54:00.263Z|53767": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-28T13:54:00.263Z|53767",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationVerarbeitung.glb"
+    }
+  },
   "Graph|2025-01-15T14:48:41.922Z|40103": {
     "ƒ.Graph": {
       "name": "Workbench",
@@ -1880,7 +1937,7 @@
               "nature_animals": "GraphGLTF|2025-01-22T12:11:45.884Z|37765",
               "nature_farming": "GraphGLTF|2025-01-22T12:15:28.947Z|41115",
               "nature_gardening": "GraphGLTF|2025-01-21T15:01:08.033Z|95174",
-              "craft": "GraphGLTF|2025-01-21T09:20:23.789Z|21816",
+              "craft": "GraphGLTF|2025-01-29T11:39:04.455Z|25708",
               "craft_mat_extr": "GraphGLTF|2025-01-28T13:53:53.588Z|31119",
               "craft_production": "GraphGLTF|2025-01-28T13:53:48.792Z|75268",
               "craft_processing": "GraphGLTF|2025-01-28T13:54:00.263Z|53767"
@@ -1951,7 +2008,7 @@
       "type": "Audio"
     }
   },
-  "GraphGLTF|2025-01-28T13:53:48.792Z|75268": {
+  "GraphGLTF|2025-01-29T11:39:04.455Z|25708": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
       "active": true,
@@ -1965,12 +2022,12 @@
           }
         ]
       },
-      "idResource": "GraphGLTF|2025-01-28T13:53:48.792Z|75268",
+      "idResource": "GraphGLTF|2025-01-29T11:39:04.455Z|25708",
       "type": "GraphGLTF",
-      "url": "Assets\\Stations\\StationProduktion.glb"
+      "url": "Assets\\Stations\\StationPlainHandwerk.glb"
     }
   },
-  "GraphGLTF|2025-01-28T13:53:53.588Z|31119": {
+  "GraphGLTF|2025-01-29T11:40:55.048Z|47583": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
       "active": true,
@@ -1984,12 +2041,12 @@
           }
         ]
       },
-      "idResource": "GraphGLTF|2025-01-28T13:53:53.588Z|31119",
+      "idResource": "GraphGLTF|2025-01-29T11:40:55.048Z|47583",
       "type": "GraphGLTF",
-      "url": "Assets\\Stations\\StationRohstoffgewinnung.glb"
+      "url": "Assets\\Stations\\StationBaseHandwerk.glb"
     }
   },
-  "GraphGLTF|2025-01-28T13:54:00.263Z|53767": {
+  "GraphGLTF|2025-01-29T11:41:01.013Z|51474": {
     "ƒ.GraphGLTF": {
       "name": "Scene",
       "active": true,
@@ -2003,9 +2060,9 @@
           }
         ]
       },
-      "idResource": "GraphGLTF|2025-01-28T13:54:00.263Z|53767",
+      "idResource": "GraphGLTF|2025-01-29T11:41:01.013Z|51474",
       "type": "GraphGLTF",
-      "url": "Assets\\Stations\\StationVerarbeitung.glb"
+      "url": "Assets\\Stations\\StationBaseNatur.glb"
     }
   }
 }

@@ -334,7 +334,28 @@
             "name": "StationBase",
             "entries": [
               {
-                "idResource": "GraphGLTF|2025-01-23T13:03:44.877Z|05463"
+                "name": "Base",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-23T13:03:44.877Z|05463"
+                  }
+                ]
+              },
+              {
+                "name": "Natur",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-29T11:41:01.013Z|51474"
+                  }
+                ]
+              },
+              {
+                "name": "Handwerk",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-29T11:40:55.048Z|47583"
+                  }
+                ]
               }
             ]
           },
@@ -402,6 +423,14 @@
                 "entries": [
                   {
                     "idResource": "GraphGLTF|2025-01-28T13:53:53.588Z|31119"
+                  }
+                ]
+              },
+              {
+                "name": "StationHandwerk",
+                "entries": [
+                  {
+                    "idResource": "GraphGLTF|2025-01-29T11:39:04.455Z|25708"
                   }
                 ]
               }
