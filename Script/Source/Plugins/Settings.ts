@@ -42,7 +42,7 @@ namespace Script {
         }
 
         static generateHTML(_settings: Setting[] = this.settings): HTMLElement {
-            const wrapper = createElementAdvanced("div", { classes: ["settings-wrapper"], innerHTML: "<h2>Einstellungen</h2>"});
+            const wrapper = createElementAdvanced("div", { classes: ["settings-wrapper"], innerHTML: "<h2 class='h'>Einstellungen</h2>"});
 
             for (let setting of _settings) {
                 wrapper.appendChild(this.generateSingleHTML(setting))

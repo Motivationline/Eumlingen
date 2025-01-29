@@ -34,13 +34,14 @@
     <div id="start-screen" class="overlay">
         <div id="start-screen-background">
             <div class="start-background" style="background-image: url('Assets/UI/MainMenu/Sky.png');"></div>
-            <div class="start-background move-cloud" style="background-image: url('Assets/UI/MainMenu/Cloud.png');"></div>
+            <div class="start-background move-cloud" style="background-image: url('Assets/UI/MainMenu/Cloud.png');">
+            </div>
             <div class="start-background" style="background-image: url('Assets/UI/MainMenu/Background.png');"></div>
             <img class="start-background-bush" src='Assets/UI/MainMenu/Bush.png' />
             <img class="start-background-rock" src='Assets/UI/MainMenu/Rock.png' />
         </div>
         <div id="start-screen-foreground">
-            <img src="Assets/UI/MainMenu/EumlingeLogoClean.png" alt="Die Eumlinge Logo" class="logo">
+            <img src="Assets/UI/MainMenu/EumlingeLogoClean.png" id="logo" alt="Die Eumlinge Logo" class="logo hidden">
             <div id="start-buttons">
                 <div id="start-start">
                     <button id="start">Start</button>
@@ -76,7 +77,7 @@
             <img src="Images/trophy.svg" alt="Achievements" />
         </div>
     </div>
-    <div id="eumling-upgrade-overlay" class="overlay hidden">
+    <div id="eumling-upgrade-overlay" class="overlay hidden blur-bg">
         <div id="eumling-upgrade-overlay-wrapper">
             <canvas id="eumling-canvas">
             </canvas>
@@ -89,9 +90,10 @@
             </div>
         </div>
         <div class="close-button button">
+            <img src="Assets/UI/Icons/Close.svg" alt="Close">
         </div>
     </div>
-    <div id="workbench-upgrade-overlay" class="overlay hidden">
+    <div id="workbench-upgrade-overlay" class="overlay hidden blur-bg">
         <div id="workbench-upgrade-overlay-wrapper">
             <h2 id="workbench-options-title">Titel</h2>
             <div id="workbench-options-wrapper">
@@ -110,9 +112,10 @@
             </div>
         </div>
         <div class="close-button button">
+            <img src="Assets/UI/Icons/Close.svg" alt="Close">
         </div>
     </div>
-    <div id="workbench-info-overlay" class="overlay hidden">
+    <div id="workbench-info-overlay" class="overlay hidden blur-bg">
         <div id="workbench-info-overlay-wrapper">
             <h2>Berufsstation Info</h2>
             <div id="workbench-info-categories">
@@ -122,22 +125,26 @@
             <div class="button" id="workbench-deconstruct">Abreißen</div>
         </div>
         <div class="close-button button">
+            <img src="Assets/UI/Icons/Close.svg" alt="Close">
         </div>
     </div>
-    <div id="pause-overlay" class="overlay hidden">
-        <h1>Pause</h1>
-        <button class="button-settings">Einstellungen</button>
-        <button id="button-main-menu">Hauptmenü</button>
-        <details>
-            <summary>Debug Optionen</summary>
-            <button id="eumlingSpawn" class="interactable">Eumling hinzufügen</button>
-        </details>
-        <div class="close-button button">
+    <div id="pause-overlay" class="overlay hidden blur-bg popover">
+        <div>
+            <h1 class="h">Pause</h1>
+            <button class="button-settings">Einstellungen</button>
+            <button id="button-main-menu">Hauptmenü</button>
+            <details>
+                <summary>Debug Optionen</summary>
+                <button id="eumlingSpawn" class="interactable">Eumling hinzufügen</button>
+            </details>
+            <div class="close-button button">
+                <img src="Assets/UI/Icons/Close.svg" alt="Close">
+            </div>
         </div>
     </div>
     <div id="achievement-overlay" class="hidden no-interact">
     </div>
-    <div id="achievement-screen-overlay" class="overlay hidden">
+    <div id="achievement-screen-overlay" class="overlay hidden blur-bg">
         <div id="achievement-list">
         </div>
         <div class="achievement-progress-wrapper">
@@ -153,6 +160,7 @@
             </div>
         </div>
         <div class="close-button button">
+            <img src="Assets/UI/Icons/Close.svg" alt="Close">
         </div>
     </div>
     <div id="achievement-progress-overlay" class="no-interact hide hidden">
@@ -170,8 +178,11 @@
         </div>
     </div>
 
-    <div id="settings-overlay" class="overlay hidden">
-        <div class="close-button button">
+    <div id="settings-overlay-wrapper" class="overlay hidden popover">
+        <div id="settings-overlay">
+            <div class="close-button button">
+                <img src="Assets/UI/Icons/Close.svg" alt="Close">
+            </div>
         </div>
     </div>
     <!--Canvas for FUDGE to render to-->

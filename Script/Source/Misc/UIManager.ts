@@ -9,7 +9,7 @@ namespace Script {
 
     export function showLayer(_layer: HTMLElement, _options: Partial<LayerOptions> = {}) {
         if (!_layer) return;
-        hideTopLayer();
+        // hideTopLayer();
         activeLayers.push([_layer, _options]);
         showTopLayer();
     }
@@ -32,7 +32,7 @@ namespace Script {
         let [layer, options] = activeLayers[activeLayers.length - 1];
         layer.classList.remove("hidden");
         if (options.onAdd) options.onAdd(layer);
-        layer.style.zIndex = "1000";
+        layer.style.zIndex = "" + (1000 + activeLayers.length);
     }
 
     function hideTopLayer() {
@@ -58,6 +58,8 @@ namespace Script {
     document.addEventListener("gameLoaded", () => {
         document.getElementById("start-loading").classList.add("hidden");
         document.getElementById("start-loaded").classList.remove("hidden");
+        document.getElementById("logo").classList.remove("hidden");
+        document.getElementById("start-screen-foreground").classList.add("with-logo");
         openMainMenu();
     });
 
@@ -77,24 +79,21 @@ namespace Script {
     }
 
     function openSettings() {
-        showLayer(document.getElementById("settings-overlay"));
+        showLayer(document.getElementById("settings-overlay-wrapper"));
     }
-
-    let spawnMainMenuEumlings: boolean = true;
 
     function openMainMenu() {
         removeAllLayers();
         showLayer(document.getElementById("start-screen"), {
             onAdd: () => {
-                spawnMainMenuEumlings = true;
                 spawnEumling();
                 document.getElementById("game-overlay").classList.add("hidden");
                 document.getElementById("achievement-overlay").classList.add("hidden");
                 document.getElementById("achievement-progress-overlay").classList.add("hidden");
                 pauseGame(undefined, false);
             },
-            onHide: () => {
-                spawnMainMenuEumlings = false;
+            onRemove: () => {
+                clearTimeout(spawnTimeout);
                 document.getElementById("game-overlay").classList.remove("hidden");
                 document.getElementById("achievement-overlay").classList.remove("hidden");
                 document.getElementById("achievement-progress-overlay").classList.remove("hidden");
@@ -103,15 +102,22 @@ namespace Script {
         })
     }
 
+    let spawnTimeout: number;
     export function spawnEumling() {
+        if(spawnTimeout) clearTimeout(spawnTimeout);
         const screen = document.getElementById("start-screen-background");
         const fromLeft: boolean = Math.random() > 0.5;
         const img = createElementAdvanced("img", { classes: ["start-background-eumling"], attributes: [["src", "Assets/UI/MainMenu/EumlingWalk.png?" + Date.now()]] });
         img.style.left = fromLeft ? "-250px" : "100vw";
+        img.style.transitionDuration = randomRange(5, 15) + "s";
         screen.appendChild(img);
         if (!fromLeft) { img.classList.add("reverse"); }
         setTimeout(() => { img.style.left = fromLeft ? "100vw" : "-250px" }, 100);
-        if (spawnMainMenuEumlings) setTimeout(spawnEumling, randomRange(1000, 7000));
-        setTimeout(() => { img.remove() }, 11000);
+        spawnTimeout = setTimeout(spawnEumling, randomRange(1000, 7000));
+        img.addEventListener("transitionend", removeEumling);
+        img.addEventListener("transitioncancel", removeEumling);
+        function removeEumling(){
+            img.remove();
+        }
     }
 }

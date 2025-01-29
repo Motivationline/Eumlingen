@@ -133,6 +133,7 @@ namespace Script {
     document.getElementById("eumlingSpawn").addEventListener("click", () => {
       viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     })
+    spawnEumling();
   }
 
   function setupSounds(){
