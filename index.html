@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>Eumlingen</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="styles.css" />
 
     <!--Editor settings of this project-->
-    <meta type="settings" autoview="Graph|2024-11-26T10:13:50.337Z|26526" project="{'name':'Eumlingen','graphAutoView':'Graph|2024-11-26T10:13:50.337Z|26526'}" />
+    <meta type="settings" autoview="Graph|2024-11-26T10:13:50.337Z|26526"
+        project="{'name':'Eumlingen','graphAutoView':'Graph|2024-11-26T10:13:50.337Z|26526'}" />
 
     <!--Activate the following line to include the FUDGE-version of Oimo-Physics. You may want to download a local copy to work offline and be independent from future changes!-->
     <!--<script type="text/javascript" src="https://hs-furtwangen.github.io/FUDGE/Distribution/OimoPhysics.js"></script>-->
@@ -30,8 +32,29 @@
 
 <body>
     <div id="start-screen" class="overlay">
-        <button id="freecam" class="start-button">Freecam</button>
-        <button id="gameplay" class="start-button">Gameplay</button>
+        <div id="start-screen-background">
+            <div class="start-background" style="background-image: url('Assets/UI/MainMenu/Sky.png');"></div>
+            <div class="start-background move-cloud" style="background-image: url('Assets/UI/MainMenu/Cloud.png');"></div>
+            <div class="start-background" style="background-image: url('Assets/UI/MainMenu/Background.png');"></div>
+            <img class="start-background-bush" src='Assets/UI/MainMenu/Bush.png' />
+            <img class="start-background-rock" src='Assets/UI/MainMenu/Rock.png' />
+        </div>
+        <div id="start-screen-foreground">
+            <img src="Assets/UI/MainMenu/EumlingeLogoClean.png" alt="Die Eumlinge Logo" class="logo">
+            <div id="start-buttons">
+                <div id="start-start">
+                    <button id="start">Start</button>
+                </div>
+                <div id="start-loading" class="hidden">
+                    <div class="loading-spinner"></div>
+                    <span>Laden...</span>
+                </div>
+                <div id="start-loaded" class="hidden">
+                    <button id="start-game">Spielen</button>
+                    <button class="button-settings">Einstellungen</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="game-overlay" class="overlay hidden no-interact">
         <div id="game-info-wrapper">
@@ -52,8 +75,6 @@
         <div class="button interactable" id="achievement-button">
             <img src="Images/trophy.svg" alt="Achievements" />
         </div>
-        <button id="eumlingSpawn" class="interactable">Spawn Eumling</button>
-        <span>short tap for info, long tap to pick up</span>
     </div>
     <div id="eumling-upgrade-overlay" class="overlay hidden">
         <div id="eumling-upgrade-overlay-wrapper">
@@ -105,8 +126,12 @@
     </div>
     <div id="pause-overlay" class="overlay hidden">
         <h1>Pause</h1>
-        <button id="button-settings">Einstellungen</button>
+        <button class="button-settings">Einstellungen</button>
         <button id="button-main-menu">Hauptmenü</button>
+        <details>
+            <summary>Debug Optionen</summary>
+            <button id="eumlingSpawn" class="interactable">Eumling hinzufügen</button>
+        </details>
         <div class="close-button button">
         </div>
     </div>
@@ -147,10 +172,11 @@
 
     <div id="settings-overlay" class="overlay hidden">
         <div class="close-button button">
-</div>
+        </div>
     </div>
     <!--Canvas for FUDGE to render to-->
     <canvas class="fullscreen" id="game-canvas">
     </canvas>
 </body>
+
 </html>

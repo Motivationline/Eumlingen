@@ -393,6 +393,8 @@ declare namespace Script {
     }
     export function showLayer(_layer: HTMLElement, _options?: Partial<LayerOptions>): void;
     export function removeTopLayer(): void;
+    export function removeAllLayers(): void;
+    export function spawnEumling(): void;
     export {};
 }
 declare namespace Script {

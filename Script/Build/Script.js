@@ -220,13 +220,11 @@ var Script;
     Script.eumlingCamera = new ƒ.ComponentCamera();
     Script.eumlingViewport = new ƒ.Viewport();
     async function startViewport(_event) {
+        document.getElementById("start-start").classList.add("hidden");
+        document.getElementById("start-loading").classList.remove("hidden");
         if (Script.mobileOrTabletCheck()) {
             document.documentElement.requestFullscreen();
         }
-        document.getElementById("start-screen").remove();
-        document.getElementById("game-overlay").classList.remove("hidden");
-        document.getElementById("achievement-overlay").classList.remove("hidden");
-        document.getElementById("achievement-progress-overlay").classList.remove("hidden");
         let graphId /* : string */ = document.head.querySelector("meta[autoView]").getAttribute("autoView");
         if (_event.target.id === "freecam") {
             //@ts-ignore
@@ -254,6 +252,7 @@ var Script;
         viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
         setupSounds();
         document.getElementById("settings-overlay").appendChild(Script.Settings.generateHTML());
+        document.dispatchEvent(new CustomEvent("gameLoaded"));
     }
     let currentCameraSpeed = 0;
     const maxCameraSpeed = 10;
@@ -291,9 +290,7 @@ var Script;
     }
     window.addEventListener("load", init);
     function init() {
-        for (let el of document.getElementsByClassName("start-button")) {
-            el.addEventListener("click", startViewport);
-        }
+        document.getElementById("start").addEventListener("click", startViewport);
         document.getElementById("eumlingSpawn").addEventListener("click", () => {
             Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
         });
@@ -1978,6 +1975,12 @@ var Script;
         showTopLayer();
     }
     Script.removeTopLayer = removeTopLayer;
+    function removeAllLayers() {
+        while (activeLayers.length > 0) {
+            removeTopLayer();
+        }
+    }
+    Script.removeAllLayers = removeAllLayers;
     function showTopLayer() {
         if (activeLayers.length == 0)
             return;
@@ -2002,15 +2005,24 @@ var Script;
         });
         document.getElementById("achievement-button").addEventListener("click", () => { showLayer(document.getElementById("achievement-screen-overlay")); });
         document.getElementById("pause-button").addEventListener("click", pauseGame);
-        document.getElementById("button-settings").addEventListener("click", openSettings);
-        document.getElementById("button-main-menu").addEventListener("click", returnToMainMenu);
+        document.querySelectorAll(".button-settings").forEach(e => e.addEventListener("click", openSettings));
+        document.getElementById("button-main-menu").addEventListener("click", openMainMenu);
+        document.getElementById("start-game").addEventListener("click", removeTopLayer);
         Script.GameData.updateDisplays();
     });
-    function pauseGame() {
+    document.addEventListener("gameLoaded", () => {
+        document.getElementById("start-loading").classList.add("hidden");
+        document.getElementById("start-loaded").classList.remove("hidden");
+        openMainMenu();
+    });
+    function pauseGame(_e, openPauseMenu = true) {
         Script.GameData.paused = true;
-        showLayer(document.getElementById("pause-overlay"), { onRemove(_element) {
-                unpauseGame();
-            }, });
+        if (openPauseMenu)
+            showLayer(document.getElementById("pause-overlay"), {
+                onRemove(_element) {
+                    unpauseGame();
+                },
+            });
         ƒ.Time.game.setScale(0.000001);
     }
     function unpauseGame() {
@@ -2020,7 +2032,42 @@ var Script;
     function openSettings() {
         showLayer(document.getElementById("settings-overlay"));
     }
-    function returnToMainMenu() { }
+    let spawnMainMenuEumlings = true;
+    function openMainMenu() {
+        removeAllLayers();
+        showLayer(document.getElementById("start-screen"), {
+            onAdd: () => {
+                spawnMainMenuEumlings = true;
+                spawnEumling();
+                document.getElementById("game-overlay").classList.add("hidden");
+                document.getElementById("achievement-overlay").classList.add("hidden");
+                document.getElementById("achievement-progress-overlay").classList.add("hidden");
+                pauseGame(undefined, false);
+            },
+            onHide: () => {
+                spawnMainMenuEumlings = false;
+                document.getElementById("game-overlay").classList.remove("hidden");
+                document.getElementById("achievement-overlay").classList.remove("hidden");
+                document.getElementById("achievement-progress-overlay").classList.remove("hidden");
+                unpauseGame();
+            },
+        });
+    }
+    function spawnEumling() {
+        const screen = document.getElementById("start-screen-background");
+        const fromLeft = Math.random() > 0.5;
+        const img = Script.createElementAdvanced("img", { classes: ["start-background-eumling"], attributes: [["src", "Assets/UI/MainMenu/EumlingWalk.png?" + Date.now()]] });
+        img.style.left = fromLeft ? "-250px" : "100vw";
+        screen.appendChild(img);
+        if (!fromLeft) {
+            img.classList.add("reverse");
+        }
+        setTimeout(() => { img.style.left = fromLeft ? "100vw" : "-250px"; }, 100);
+        if (spawnMainMenuEumlings)
+            setTimeout(spawnEumling, Script.randomRange(1000, 7000));
+        setTimeout(() => { img.remove(); }, 11000);
+    }
+    Script.spawnEumling = spawnEumling;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
