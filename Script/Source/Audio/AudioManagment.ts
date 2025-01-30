@@ -10,6 +10,13 @@ namespace Script {
         ENVIRONMENT,
     }
 
+    const enumToName: Map<AUDIO_CHANNEL, string> = new Map<AUDIO_CHANNEL, string>(
+        [
+            [AUDIO_CHANNEL.MASTER, "Gesamtlautstärke"],
+            [AUDIO_CHANNEL.EUMLING, "Eumlinge"],
+            [AUDIO_CHANNEL.ENVIRONMENT, "Umgebung"],
+        ]);
+
     export class AudioManager {
         private static Instance: AudioManager = new AudioManager();
         private gainNodes: Partial<Record<AUDIO_CHANNEL, GainNode>> = {};
@@ -26,7 +33,7 @@ namespace Script {
                 } else {
                     this.gainNodes[channel].connect(this.gainNodes[AUDIO_CHANNEL.MASTER]);
                 }
-                let setting: SettingNumber = { type: "number", max: 1, min: 0, name: AUDIO_CHANNEL[channel], step: 0.01, value: 1 };
+                let setting: SettingNumber = { type: "number", max: 1, min: 0, name: enumToName.get(channel), step: 0.01, value: 1 };
                 setting = Settings.proxySetting(setting, (_old: number, _new: number) => { AudioManager.setChannelVolume(channel, _new) });
                 settingCategory.settings.push(setting);
             }

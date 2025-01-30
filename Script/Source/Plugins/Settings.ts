@@ -42,7 +42,7 @@ namespace Script {
         }
 
         static generateHTML(_settings: Setting[] = this.settings): HTMLElement {
-            const wrapper = createElementAdvanced("div", { classes: ["settings-wrapper"], innerHTML: "<h2 class='h'>Einstellungen</h2>"});
+            const wrapper = createElementAdvanced("div", { classes: ["settings-wrapper"], innerHTML: "<h2 class='h'>Einstellungen</h2>" });
 
             for (let setting of _settings) {
                 wrapper.appendChild(this.generateSingleHTML(setting))
@@ -93,15 +93,17 @@ namespace Script {
             const id: string = randomString(10);
             const element = createElementAdvanced("label", { classes: ["settings-number-wrapper", "settings-label"], innerHTML: `<span class="settings-number-label settings-label-text">${_setting.name}</span>`, attributes: [["for", id]] });
             const input = createElementAdvanced("input", {
-                classes: ["settings-number-input", "settings-input"],
+                classes: ["settings-number-input", "settings-input", "slider"],
                 attributes: [["type", "range"], ["value", _setting.value.toString()], ["name", id], ["min", _setting.min.toString()], ["max", _setting.max.toString()], ["step", _setting.step.toString()]],
                 id
             });
 
             element.appendChild(input);
 
-            input.addEventListener("change", () => {
+            input.addEventListener("input", () => {
                 _setting.value = Number(input.value);
+                const percent = _setting.value / (_setting.max - _setting.min) * 100;
+                input.style.setProperty("--percent", `${percent}%`);
             });
             return element;
         }

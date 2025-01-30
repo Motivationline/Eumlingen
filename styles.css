@@ -100,7 +100,8 @@ div.close-button {
   width: 2em;
   height: 2em;
 }
-div.close-button > img {
+
+div.close-button>img {
   width: 1em;
   height: 1em;
 }
@@ -118,9 +119,11 @@ div.close-button > img {
   place-items: center;
   height: 100vh;
 }
+
 #start-screen-foreground.with-logo {
   grid-template-rows: 50vh 50vh;
 }
+
 #start-screen img.logo {
   animation: scaleUp 0.75s ease-in-out;
   object-fit: contain;
@@ -147,6 +150,7 @@ div.start-background {
   max-height: 50%;
   z-index: 1;
 }
+
 .start-background-bush {
   position: absolute;
   bottom: 0;
@@ -154,16 +158,18 @@ div.start-background {
   max-height: 30%;
   z-index: 1;
 }
+
 .start-background-eumling {
   position: absolute;
   bottom: 0;
   transition: left 10s linear;
 }
+
 .start-background-eumling.reverse {
   transform: rotateY(180deg);
 }
 
-#start-buttons > div {
+#start-buttons>div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,14 +186,14 @@ div.start-background {
 .button,
 button {
   font-size: inherit;
-  color: var(--text-color); 
+  color: var(--text-color);
   cursor: pointer;
   margin: 0.25em 0.25em;
   padding: 0.5em 1em;
   background-color: transparent;
   display: grid;
   place-items: center;
-  
+
   border-image-source: url("Assets/UI/MainMenu/Button.svg");
   border-image-slice: 27% fill;
   border-image-repeat: stretch;
@@ -308,11 +314,13 @@ button {
   gap: var(--grid-gap);
   display: grid;
 }
+
 .achievement {
   grid-template-areas: "icon title divider description reward";
   grid-template-columns: auto 1fr 0.3em 3fr auto;
   opacity: 0.6;
 }
+
 .achievement.achieved {
   opacity: 1;
 }
@@ -329,10 +337,12 @@ button {
   font-weight: bold;
   text-align: left;
 }
+
 .achievement-description {
   grid-area: description;
   text-align: left;
 }
+
 .achievement-reward {
   grid-area: reward;
   font-weight: bold;
@@ -341,6 +351,7 @@ button {
   flex-direction: column;
   /* align-items: center; */
 }
+
 .achievement-icon {
   grid-area: icon;
   max-height: 4em;
@@ -349,10 +360,12 @@ button {
   align-items: center;
   height: 100%;
 }
+
 .achievement-icon img {
   object-fit: contain;
   max-height: 100%;
 }
+
 .achievement-divider {
   border-radius: var(--border-radius);
   width: 0.3em;
@@ -365,7 +378,7 @@ button {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(0deg, rgba(120,120,120,1) 29%, rgba(119,119,119,0) 100%);
+  background: linear-gradient(0deg, rgba(120, 120, 120, 1) 29%, rgba(119, 119, 119, 0) 100%);
   height: 20vh;
   display: flex;
   padding: var(--grid-gap);
@@ -392,16 +405,19 @@ button {
   flex-direction: column;
   justify-content: center;
 }
+
 .achievement-progress-bar {
   width: 100%;
   /* background: red; */
   --fill-color: lightgray;
 }
+
 .achievement-progress-bar-now {
   --fill-color: black;
   width: 0%;
-  transition: width 1s ease-out;  
+  transition: width 1s ease-out;
 }
+
 .achievement-progress-bar,
 .achievement-progress-bar-now {
   height: 10vh;
@@ -417,17 +433,24 @@ button {
   left: 0;
   right: 0;
 }
+
 #achievement-progress-overlay .achievement-progress-wrapper {
   transition: bottom 1s ease;
   bottom: 0;
 }
+
 #achievement-progress-overlay.hide .achievement-progress-wrapper {
   bottom: -20vh;
 }
 
 @keyframes achievement-in {
-  0% {left: 100%}
-  100% {left: 0%}
+  0% {
+    left: 100%
+  }
+
+  100% {
+    left: 0%
+  }
 }
 
 progress {
@@ -439,6 +462,7 @@ progress {
   top: var(--grid-gap);
   right: var(--grid-gap);
 }
+
 #achievement-button {
   position: absolute;
   bottom: var(--grid-gap);
@@ -454,11 +478,13 @@ progress {
   filter: invert(100%);
   font-size: 2em;
 }
+
 #game-info-wrapper div {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 #game-info-wrapper img {
   width: 1em;
 }
@@ -466,15 +492,20 @@ progress {
 .flying-point {
   position: absolute;
   transition: left 1s, top 1s;
-  transition-timing-function: cubic-bezier(.42,-0.01,.71,-0.24);
+  transition-timing-function: cubic-bezier(.42, -0.01, .71, -0.24);
   animation: scaleUp 0.5s;
   animation-timing-function: linear(0, 0.402 7.4%, 0.711 15.3%, 0.929 23.7%, 1.008 28.2%, 1.067 33%, 1.099 36.9%, 1.12 41%, 1.13 45.4%, 1.13 50.1%, 1.111 58.5%, 1.019 83.2%, 1.004 91.3%, 1);
   filter: invert(31%) sepia(15%) saturate(2169%) hue-rotate(53deg) brightness(100%) contrast(88%);
 }
 
 @keyframes scaleUp {
-  0% {scale: 0;}
-  100% {scale: 1;}
+  0% {
+    scale: 0;
+  }
+
+  100% {
+    scale: 1;
+  }
 }
 
 .popover {
@@ -485,7 +516,8 @@ progress {
   height: 100vh;
   position: absolute;
 }
-.popover > div:first-child {
+
+.popover>div:first-child {
   position: relative;
 
   border-image-source: url("Assets/UI/MainMenu/PopUp.svg");
@@ -494,8 +526,10 @@ progress {
   border-image-width: 4rem;
 
   background-color: transparent;
+  min-width: 33%;
 }
-.popover > div:first-child div.close-button {
+
+.popover>div:first-child div.close-button {
   top: -1em;
   right: -1em;
 }
@@ -509,6 +543,7 @@ progress {
   font-size: var(--font-size);
   padding: var(--grid-gap);
 }
+
 .settings-wrapper {
   margin: 1rem;
   max-width: 400px;
@@ -516,23 +551,27 @@ progress {
 
 .settings-category {
   margin: 1rem;
+  font-size: 0.7em;
 }
+
 .settings-category-name {
   /* margin-left: -1rem; */
   font-size: larger;
   font-weight: bolder;
 }
+
 .settings-label {
   margin-left: 1rem;
   display: block;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   color: var(--color);
 }
 
 .settings-label:hover {
-  --color: green;
+  --color: var(--text-color-heading);
+  --text-color: var(--text-color-heading);
 }
 
 .loading-spinner {
@@ -546,8 +585,13 @@ progress {
 }
 
 @keyframes spin {
-  0% {rotate: 0deg;}
-  100% {rotate: 360deg;}
+  0% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: 360deg;
+  }
 }
 
 .move-cloud {
@@ -555,11 +599,16 @@ progress {
 }
 
 @keyframes move-cloud {
-  0% {background-position-x: 0;}
-  100% {background-position-x: -100vw;}
+  0% {
+    background-position-x: 0;
+  }
+
+  100% {
+    background-position-x: -100vw;
+  }
 }
 
-#pause-overlay > div {
+#pause-overlay>div {
   padding: var(--grid-gap);
   display: flex;
   align-items: center;
@@ -569,4 +618,128 @@ progress {
 
 #pause-overlay details {
   font-size: 0.3em;
+}
+
+input[type=range].slider {
+  --percent: 100%;
+  width: 100%;
+  margin: 5.2px 0;
+  background-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  accent-color: #3f2c20;
+}
+
+input[type=range].slider:focus {
+  outline: none;
+}
+
+input[type=range].slider::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, var(--text-color) var(--percent), var(--text-color-light) var(--percent));
+  border: 0;
+  width: 100%;
+  height: 1em;
+  cursor: pointer;
+}
+
+input[type=range].slider:focus::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, var(--text-color) var(--percent), var(--text-color-light) var(--percent));
+  border: 0;
+  width: 100%;
+  height: 1em;
+  cursor: pointer;
+}
+
+input[type=range].slider::-ms-track {
+  background: linear-gradient(to right, var(--text-color) var(--percent), var(--text-color-light) var(--percent));
+  border: 0;
+  width: 100%;
+  height: 1em;
+  cursor: pointer;
+}
+
+input[type=range].slider::-ms-fill-upper {
+  background: linear-gradient(to right, var(--text-color) var(--percent), var(--text-color-light) var(--percent));
+  border: 0;
+  width: 100%;
+  height: 1em;
+  cursor: pointer;
+}
+
+input[type=range].slider::-ms-fill-lower {
+  background: linear-gradient(to right, var(--text-color) var(--percent), var(--text-color-light) var(--percent));
+  border: 0;
+  width: 100%;
+  height: 1em;
+  cursor: pointer;
+}
+
+input[type=range].slider::-moz-range-track {
+  background: linear-gradient(to right, var(--text-color) var(--percent), var(--text-color-light) var(--percent));
+  border: 0;
+  width: 100%;
+  height: 1em;
+  cursor: pointer;
+}
+
+input[type=range].slider::-ms-track {
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range].slider::-moz-range-thumb {
+  background-image: url("Assets/UI/Icons/Slider.svg") !important;
+  background-size: contain;
+  background-repeat: no-repeat !important;
+  width: 2em;
+  height: 2em;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+/*
+  -webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%); */
+}
+
+input[type=range].slider::-ms-thumb {
+  background-image: url("Assets/UI/Icons/Slider.svg") !important;
+  background-size: contain;
+  background-repeat: no-repeat !important;
+  width: 2em;
+  height: 2em;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  /* -webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  margin-top: 0px; */
+} 
+
+input[type=range].slider::-webkit-slider-thumb {
+  background-image: url("Assets/UI/Icons/Slider.svg") !important;
+  background-repeat: no-repeat !important;
+  margin-top: -5.2px;
+  background-size: contain;
+  width: 2em;
+  height: 2em;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  /*
+  -webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%); */
+}
+
+
+/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
+how to remove the virtical space around the range input in IE*/
+@supports (-ms-ime-align:auto) {
+
+  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
+  input[type=range].slider {
+    margin: 0;
+    /*Edge starts the margin from the thumb, not the track as other browsers do*/
+  }
 }

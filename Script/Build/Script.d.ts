@@ -76,6 +76,7 @@ declare namespace Script {
     export function randomArrayElement<T>(_array: Array<T>): T | undefined;
     export function randomRange(min?: number, max?: number): number;
     export function randomString(length: number): string;
+    export function capitalize(s: string): string;
     export {};
 }
 declare namespace Script {

@@ -391,6 +391,10 @@ var Script;
         return result;
     }
     Script.randomString = randomString;
+    function capitalize(s) {
+        return s.charAt(0).toLocaleUpperCase() + s.slice(1);
+    }
+    Script.capitalize = capitalize;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -453,13 +457,15 @@ var Script;
             const id = Script.randomString(10);
             const element = Script.createElementAdvanced("label", { classes: ["settings-number-wrapper", "settings-label"], innerHTML: `<span class="settings-number-label settings-label-text">${_setting.name}</span>`, attributes: [["for", id]] });
             const input = Script.createElementAdvanced("input", {
-                classes: ["settings-number-input", "settings-input"],
+                classes: ["settings-number-input", "settings-input", "slider"],
                 attributes: [["type", "range"], ["value", _setting.value.toString()], ["name", id], ["min", _setting.min.toString()], ["max", _setting.max.toString()], ["step", _setting.step.toString()]],
                 id
             });
             element.appendChild(input);
-            input.addEventListener("change", () => {
+            input.addEventListener("input", () => {
                 _setting.value = Number(input.value);
+                const percent = _setting.value / (_setting.max - _setting.min) * 100;
+                input.style.setProperty("--percent", `${percent}%`);
             });
             return element;
         }
@@ -479,6 +485,11 @@ var Script;
         AUDIO_CHANNEL[AUDIO_CHANNEL["EUMLING"] = 1] = "EUMLING";
         AUDIO_CHANNEL[AUDIO_CHANNEL["ENVIRONMENT"] = 2] = "ENVIRONMENT";
     })(AUDIO_CHANNEL = Script.AUDIO_CHANNEL || (Script.AUDIO_CHANNEL = {}));
+    const enumToName = new Map([
+        [AUDIO_CHANNEL.MASTER, "Gesamtlautstärke"],
+        [AUDIO_CHANNEL.EUMLING, "Eumlinge"],
+        [AUDIO_CHANNEL.ENVIRONMENT, "Umgebung"],
+    ]);
     class AudioManager {
         static { this.Instance = new AudioManager(); }
         constructor() {
@@ -496,7 +507,7 @@ var Script;
                 else {
                     this.gainNodes[channel].connect(this.gainNodes[AUDIO_CHANNEL.MASTER]);
                 }
-                let setting = { type: "number", max: 1, min: 0, name: AUDIO_CHANNEL[channel], step: 0.01, value: 1 };
+                let setting = { type: "number", max: 1, min: 0, name: enumToName.get(channel), step: 0.01, value: 1 };
                 setting = Script.Settings.proxySetting(setting, (_old, _new) => { AudioManager.setChannelVolume(channel, _new); });
                 settingCategory.settings.push(setting);
             }
