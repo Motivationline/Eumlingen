@@ -44,7 +44,7 @@ namespace Script {
             for (let i: number = 0; i < 4; i++) {
                 let trait = traitInfo.get(traits[i]);
                 if (trait) {
-                    traitsDiv.innerHTML += `<div class="eumling-trait"><img src="Images/${trait.image}" /><span>${trait.name}</span></div>`
+                    traitsDiv.innerHTML += `<div class="eumling-trait"><img src="Assets/UI/Traits/${trait.image}" /><span>${trait.name}</span></div>`
                 } else {
                     traitsDiv.innerHTML += `<div class="eumling-trait empty"></div>`;
                 }

@@ -130,6 +130,7 @@ namespace Script {
   window.addEventListener("load", init);
   function init() {
     document.getElementById("start").addEventListener("click", startViewport);
+    document.getElementById("enableGizmos").addEventListener("click", () => {viewport.gizmosEnabled = !viewport.gizmosEnabled});
     document.getElementById("eumlingSpawn").addEventListener("click", () => {
       viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     })

@@ -291,6 +291,7 @@ var Script;
     window.addEventListener("load", init);
     function init() {
         document.getElementById("start").addEventListener("click", startViewport);
+        document.getElementById("enableGizmos").addEventListener("click", () => { Script.viewport.gizmosEnabled = !Script.viewport.gizmosEnabled; });
         document.getElementById("eumlingSpawn").addEventListener("click", () => {
             Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
         });
@@ -1162,14 +1163,14 @@ var Script;
         TRAIT[TRAIT["PATIENCE"] = 7] = "PATIENCE";
     })(TRAIT = Script.TRAIT || (Script.TRAIT = {}));
     Script.traitInfo = new Map([
-        [TRAIT.ANIMAL_LOVER, { image: "placeholder.png", name: "Tierlieb" }],
-        [TRAIT.ARTISTIC, { image: "placeholder.png", name: "Künstlerisch" }],
-        [TRAIT.BODY_STRENGTH, { image: "placeholder.png", name: "Körperkraft" }],
-        [TRAIT.FINE_MOTOR_SKILLS, { image: "placeholder.png", name: "Feinmotorisch" }],
-        [TRAIT.NATURE_CONNECTION, { image: "placeholder.png", name: "Naturverbunden" }],
-        [TRAIT.ORGANIZED, { image: "placeholder.png", name: "Organisiert" }],
-        [TRAIT.PATIENCE, { image: "placeholder.png", name: "Geduldig" }],
-        [TRAIT.SOCIAL, { image: "placeholder.png", name: "Sozial" }],
+        [TRAIT.ANIMAL_LOVER, { image: "Trait_Tierliebe.svg", name: "Tierlieb" }],
+        [TRAIT.ARTISTIC, { image: "Trait_Künstlerisch.svg", name: "Künstlerisch" }],
+        [TRAIT.BODY_STRENGTH, { image: "Trait_Körperkraft.svg", name: "Körperkraft" }],
+        [TRAIT.FINE_MOTOR_SKILLS, { image: "Trait_Feinmotorisch.svg", name: "Feinmotorisch" }],
+        [TRAIT.NATURE_CONNECTION, { image: "Trait_Naturverbunden.svg", name: "Naturverbunden" }],
+        [TRAIT.ORGANIZED, { image: "Trait_Organisiert.svg", name: "Organisiert" }],
+        [TRAIT.PATIENCE, { image: "Trait_Geduld.svg", name: "Geduldig" }],
+        [TRAIT.SOCIAL, { image: "Trait_Sozial.svg", name: "Sozial" }],
     ]);
 })(Script || (Script = {}));
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
@@ -1218,7 +1219,7 @@ var Script;
             for (let i = 0; i < 4; i++) {
                 let trait = Script.traitInfo.get(traits[i]);
                 if (trait) {
-                    traitsDiv.innerHTML += `<div class="eumling-trait"><img src="Images/${trait.image}" /><span>${trait.name}</span></div>`;
+                    traitsDiv.innerHTML += `<div class="eumling-trait"><img src="Assets/UI/Traits/${trait.image}" /><span>${trait.name}</span></div>`;
                 }
                 else {
                     traitsDiv.innerHTML += `<div class="eumling-trait empty"></div>`;
@@ -1608,11 +1609,12 @@ var Script;
 var Script;
 (function (Script) {
     const achievements = [
-        // { title: "", description: "", icon: "", reward: 100, checkCompleted(_e) { return true; }, },
+        // { title: "Titel", description: "Beschreibung", icon: "placeholder.svg", reward: 100, checkCompleted(_e) { return true; }, },
+        // { title: "Titel", description: "Beschreibung", icon: "placeholder.svg", reward: 10, checkCompleted(_e) { return true; }, },
         {
             title: "Das passt ja gar nicht",
             description: "Weise einen Eumling einer Station zu, die mit keiner Eigenschaft übereinstimmt.",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 10,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "assignEumling")
@@ -1625,7 +1627,7 @@ var Script;
         {
             title: "Könnte klappen",
             description: "Weise einen Eumling einer Station zu, die mit einer Eigenschaft übereinstimmt.",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 15,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait")
@@ -1638,7 +1640,7 @@ var Script;
         {
             title: "Perfect Match",
             description: "Weise einen Eumling einer Station zu, die mit zwei Eigenschaften übereinstimmt.",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 20,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait")
@@ -1651,7 +1653,7 @@ var Script;
         {
             title: "Umschulung",
             description: "Ein Eumling entwickelt eine Eigenschaft an einer eigentlich unpassenden Station",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 10,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "eumlingDevelopTrait")
@@ -1662,7 +1664,7 @@ var Script;
         {
             title: "Treue Mitarbeit",
             description: "Ein Eumling arbeitet für mindestens 10 Minuten durchgängig an derselben Station",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 15,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "eumlingWorking")
@@ -1675,7 +1677,7 @@ var Script;
         {
             title: "Allrounder",
             description: "Ein Eumling hat 4 Eigenschaften.",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 20,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "eumlingDevelopTrait")
@@ -1688,7 +1690,7 @@ var Script;
         {
             title: "Gefunden!",
             description: "Finde alle 3 Eumling-Statuen",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 10,
             secret: true,
             checkCompleted: function (_e) {
@@ -1700,35 +1702,46 @@ var Script;
     ];
     Script.maxAchievablePoints = achievements.reduce((prev, curr) => prev + curr.reward, 0);
     function popupAchievement(_a) {
-        const div = document.createElement("div");
-        div.innerHTML = `
-        <span class="achievement-title">${_a.title}</span>
-        <span class="achievement-description">${_a.description}</span>
-        <span class="achievement-reward"><img src="Images/point.svg">+${_a.reward}</span>`;
-        div.classList.add("achievement-popup");
-        document.getElementById("achievement-overlay").appendChild(div);
-        let timeout = setTimeout(() => {
-            div.remove();
-        }, 10000);
-        div.addEventListener("click", () => {
-            div.remove();
-            clearTimeout(timeout);
+        const div = Script.createElementAdvanced("div", {
+            innerHTML: `
+            <span class="achievement-title">${_a.title}</span>
+            <span class="achievement-description">${_a.description}</span>
+            <span class="achievement-reward"><img src="Assets/UI/Icons/Currency.svg">+${_a.reward}</span>`,
+            classes: ["achievement-popup", "stone-tablet"]
         });
+        document.getElementById("achievement-overlay").appendChild(div);
+        let timeout = setTimeout(removeAchievementPopup, Math.max(10000, _a.reward * 20));
+        div.addEventListener("click", removeAchievementPopup);
+        function removeAchievementPopup() {
+            div.removeEventListener("click", removeAchievementPopup);
+            clearTimeout(timeout);
+            div.style.animation = "none";
+            requestAnimationFrame(() => {
+                div.style.animation = "achievement-in 1s backwards reverse ease";
+                div.addEventListener("animationend", () => {
+                    div.remove();
+                });
+            });
+        }
         return div;
     }
     function createFlyingPoints(_div, _amt) {
-        _div.addEventListener("animationend", async () => {
+        _div.addEventListener("animationend", flyingPointCreation);
+        _div.addEventListener("animationcancel", addPoints);
+        async function flyingPointCreation() {
+            _div.removeEventListener("animationcancel", addPoints);
+            _div.removeEventListener("animationend", flyingPointCreation);
             let rect = _div.getBoundingClientRect();
-            let targetRect = document.getElementById("game-info-wrapper").getBoundingClientRect();
+            // let targetRect = document.getElementById("game-info-wrapper").getBoundingClientRect();
             for (let i = 0; i < _amt; i++) {
                 let img = Script.createElementAdvanced("img", { classes: ["flying-point", "no-interact"] });
-                img.src = "Images/point.svg";
-                img.style.left = rect.x + rect.width * Math.random() + "px";
+                img.src = "Assets/UI/Icons/SingleCurrency.svg";
+                img.style.left = rect.x + rect.width + rect.width * Math.random() + "px";
                 img.style.top = rect.y + rect.height * Math.random() + "px";
                 document.body.appendChild(img);
                 setTimeout(() => {
-                    img.style.left = targetRect.left + "px";
-                    img.style.top = targetRect.top + "px";
+                    img.style.left = "0";
+                    img.style.top = "100vh";
                     setTimeout(() => {
                         Script.GameData.addPoints(1);
                         img.remove();
@@ -1736,21 +1749,23 @@ var Script;
                 }, 1000);
                 await Script.waitMS(20);
             }
-        });
-        _div.addEventListener("animationcancel", () => { Script.GameData.addPoints(_amt); });
+        }
+        function addPoints() {
+            Script.GameData.addPoints(_amt);
+        }
     }
     function updateAchievementList() {
         const list = document.getElementById("achievement-list");
         let newElements = [];
         for (let a of achievements) {
             const div = Script.createElementAdvanced("div", {
-                classes: ["achievement"],
+                classes: ["achievement", "stone-tablet"],
                 innerHTML: `
-                <span class="achievement-icon"> <img src="Images/${a.icon}"/></span>
+                <span class="achievement-icon"> <img src="Assets/UI/Achievements/${a.icon}"/></span>
                 <span class="achievement-title">${a.secret ? "???" : a.title}</span>
                 <div class="achievement-divider"></div>
                 <span class="achievement-description">${a.secret ? "???" : a.description}</span>
-                <span class="achievement-reward"><img src="Images/point.svg">+${a.reward}</span>`
+                <span class="achievement-reward"><img src="Assets/UI/Icons/Currency.svg">+${a.reward}</span>`
             });
             if (a.achieved)
                 div.classList.add("achieved");
@@ -2294,21 +2309,21 @@ var Script;
             {
                 id: CATEGORY.NATURE,
                 name: "Natur",
-                img: "placeholder.png",
+                img: "placeholder.svg",
                 subcategories: [
-                    { id: SUBCATEGORY.ANIMALS, img: "placeholder.png", name: "Tierwirtschaft", preferredTraits: [Script.TRAIT.ANIMAL_LOVER, Script.TRAIT.SOCIAL] },
-                    { id: SUBCATEGORY.FARMING, img: "placeholder.png", name: "Landwirtschaft", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.GARDENING, img: "placeholder.png", name: "Gartenbau", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ARTISTIC] },
+                    { id: SUBCATEGORY.ANIMALS, img: "placeholder.svg", name: "Tierwirtschaft", preferredTraits: [Script.TRAIT.ANIMAL_LOVER, Script.TRAIT.SOCIAL] },
+                    { id: SUBCATEGORY.FARMING, img: "placeholder.svg", name: "Landwirtschaft", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.GARDENING, img: "placeholder.svg", name: "Gartenbau", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ARTISTIC] },
                 ]
             },
             {
                 id: CATEGORY.CRAFT,
                 name: "Handwerk",
-                img: "placeholder.png",
+                img: "placeholder.svg",
                 subcategories: [
-                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "placeholder.png", name: "Rohstoffgewinnung", preferredTraits: [Script.TRAIT.BODY_STRENGTH, Script.TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.PRODUCTION, img: "placeholder.png", name: "Produktion", preferredTraits: [Script.TRAIT.FINE_MOTOR_SKILLS, Script.TRAIT.PATIENCE] },
-                    { id: SUBCATEGORY.PROCESSING, img: "placeholder.png", name: "Verarbeitung", preferredTraits: [Script.TRAIT.ARTISTIC, Script.TRAIT.FINE_MOTOR_SKILLS] },
+                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "placeholder.svg", name: "Rohstoffgewinnung", preferredTraits: [Script.TRAIT.BODY_STRENGTH, Script.TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.PRODUCTION, img: "placeholder.svg", name: "Produktion", preferredTraits: [Script.TRAIT.FINE_MOTOR_SKILLS, Script.TRAIT.PATIENCE] },
+                    { id: SUBCATEGORY.PROCESSING, img: "placeholder.svg", name: "Verarbeitung", preferredTraits: [Script.TRAIT.ARTISTIC, Script.TRAIT.FINE_MOTOR_SKILLS] },
                 ]
             },
         ]; }
@@ -2349,7 +2364,7 @@ var Script;
             for (let opt of _options) {
                 const div = document.createElement("div");
                 div.classList.add("workbench-option", "button");
-                div.innerHTML = `<img src="Images/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`;
+                div.innerHTML = `<img src="Assets/UI/Workbench/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`;
                 newOptions.push(div);
                 div.addEventListener("click", () => {
                     this.setCategory(opt.id);
@@ -2367,7 +2382,7 @@ var Script;
             for (let cat of categories) {
                 if (!cat)
                     continue;
-                info.innerHTML += `<div class="workbench-category"><img src="Images/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
+                info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Workbench/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
             }
             overlay.querySelector("progress").value = this.buildProgress;
             let deconstructBtn = overlay.querySelector("#workbench-deconstruct");

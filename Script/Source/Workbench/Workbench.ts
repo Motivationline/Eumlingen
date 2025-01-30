@@ -37,21 +37,21 @@ namespace Script {
             {
                 id: CATEGORY.NATURE,
                 name: "Natur",
-                img: "placeholder.png",
+                img: "placeholder.svg",
                 subcategories: [
-                    { id: SUBCATEGORY.ANIMALS, img: "placeholder.png", name: "Tierwirtschaft", preferredTraits: [TRAIT.ANIMAL_LOVER, TRAIT.SOCIAL] },
-                    { id: SUBCATEGORY.FARMING, img: "placeholder.png", name: "Landwirtschaft", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.GARDENING, img: "placeholder.png", name: "Gartenbau", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ARTISTIC] },
+                    { id: SUBCATEGORY.ANIMALS, img: "placeholder.svg", name: "Tierwirtschaft", preferredTraits: [TRAIT.ANIMAL_LOVER, TRAIT.SOCIAL] },
+                    { id: SUBCATEGORY.FARMING, img: "placeholder.svg", name: "Landwirtschaft", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.GARDENING, img: "placeholder.svg", name: "Gartenbau", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ARTISTIC] },
                 ]
             },
             {
                 id: CATEGORY.CRAFT,
                 name: "Handwerk",
-                img: "placeholder.png",
+                img: "placeholder.svg",
                 subcategories: [
-                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "placeholder.png", name: "Rohstoffgewinnung", preferredTraits: [TRAIT.BODY_STRENGTH, TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.PRODUCTION, img: "placeholder.png", name: "Produktion", preferredTraits: [TRAIT.FINE_MOTOR_SKILLS, TRAIT.PATIENCE] },
-                    { id: SUBCATEGORY.PROCESSING, img: "placeholder.png", name: "Verarbeitung", preferredTraits: [TRAIT.ARTISTIC, TRAIT.FINE_MOTOR_SKILLS] },
+                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "placeholder.svg", name: "Rohstoffgewinnung", preferredTraits: [TRAIT.BODY_STRENGTH, TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.PRODUCTION, img: "placeholder.svg", name: "Produktion", preferredTraits: [TRAIT.FINE_MOTOR_SKILLS, TRAIT.PATIENCE] },
+                    { id: SUBCATEGORY.PROCESSING, img: "placeholder.svg", name: "Verarbeitung", preferredTraits: [TRAIT.ARTISTIC, TRAIT.FINE_MOTOR_SKILLS] },
                 ]
             },
         ]
@@ -104,7 +104,7 @@ namespace Script {
             for (let opt of _options) {
                 const div = document.createElement("div");
                 div.classList.add("workbench-option", "button");
-                div.innerHTML = `<img src="Images/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`
+                div.innerHTML = `<img src="Assets/UI/Workbench/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`
                 newOptions.push(div);
                 div.addEventListener("click", () => {
                     this.setCategory(opt.id);
@@ -124,7 +124,7 @@ namespace Script {
             info.innerHTML = "";
             for (let cat of categories) {
                 if (!cat) continue;
-                info.innerHTML += `<div class="workbench-category"><img src="Images/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`
+                info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Workbench/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`
             }
 
             overlay.querySelector("progress").value = this.buildProgress;

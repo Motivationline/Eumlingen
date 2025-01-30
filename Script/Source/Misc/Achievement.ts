@@ -16,11 +16,12 @@ namespace Script {
     }
 
     const achievements: Achievement[] = [
-        // { title: "", description: "", icon: "", reward: 100, checkCompleted(_e) { return true; }, },
+        // { title: "Titel", description: "Beschreibung", icon: "placeholder.svg", reward: 100, checkCompleted(_e) { return true; }, },
+        // { title: "Titel", description: "Beschreibung", icon: "placeholder.svg", reward: 10, checkCompleted(_e) { return true; }, },
         {
             title: "Das passt ja gar nicht",
             description: "Weise einen Eumling einer Station zu, die mit keiner Eigenschaft übereinstimmt.",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 10,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "assignEumling") return false;
@@ -31,7 +32,7 @@ namespace Script {
         {
             title: "Könnte klappen",
             description: "Weise einen Eumling einer Station zu, die mit einer Eigenschaft übereinstimmt.",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 15,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait") return false;
@@ -42,7 +43,7 @@ namespace Script {
         {
             title: "Perfect Match",
             description: "Weise einen Eumling einer Station zu, die mit zwei Eigenschaften übereinstimmt.",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 20,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait") return false;
@@ -53,7 +54,7 @@ namespace Script {
         {
             title: "Umschulung",
             description: "Ein Eumling entwickelt eine Eigenschaft an einer eigentlich unpassenden Station",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 10,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "eumlingDevelopTrait") return false;
@@ -63,7 +64,7 @@ namespace Script {
         {
             title: "Treue Mitarbeit",
             description: "Ein Eumling arbeitet für mindestens 10 Minuten durchgängig an derselben Station",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 15,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "eumlingWorking") return false;
@@ -74,7 +75,7 @@ namespace Script {
         {
             title: "Allrounder",
             description: "Ein Eumling hat 4 Eigenschaften.",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 20,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "eumlingDevelopTrait") return false;
@@ -85,7 +86,7 @@ namespace Script {
         {
             title: "Gefunden!",
             description: "Finde alle 3 Eumling-Statuen",
-            icon: "placeholder.png",
+            icon: "placeholder.svg",
             reward: 10,
             secret: true,
             checkCompleted: function (_e): boolean {
@@ -99,40 +100,52 @@ namespace Script {
     export const maxAchievablePoints: number = achievements.reduce((prev, curr) => prev + curr.reward, 0)
 
     function popupAchievement(_a: Achievement): HTMLElement {
-        const div = document.createElement("div");
-        div.innerHTML = `
-        <span class="achievement-title">${_a.title}</span>
-        <span class="achievement-description">${_a.description}</span>
-        <span class="achievement-reward"><img src="Images/point.svg">+${_a.reward}</span>`;
-
-        div.classList.add("achievement-popup");
+        const div = createElementAdvanced("div", {
+            innerHTML: `
+            <span class="achievement-title">${_a.title}</span>
+            <span class="achievement-description">${_a.description}</span>
+            <span class="achievement-reward"><img src="Assets/UI/Icons/Currency.svg">+${_a.reward}</span>`,
+            classes: ["achievement-popup", "stone-tablet"]
+        })
 
         document.getElementById("achievement-overlay").appendChild(div);
 
-        let timeout = setTimeout(() => {
-            div.remove();
-        }, 10000)
-        div.addEventListener("click", () => {
-            div.remove();
+        let timeout = setTimeout(removeAchievementPopup, Math.max(10000, _a.reward * 20));
+        div.addEventListener("click", removeAchievementPopup);
+
+        function removeAchievementPopup() {
+            div.removeEventListener("click", removeAchievementPopup);
             clearTimeout(timeout);
-        })
+            div.style.animation = "none";
+            requestAnimationFrame(()=>{
+                div.style.animation = "achievement-in 1s backwards reverse ease";
+                div.addEventListener("animationend", () => {
+                    div.remove();
+                })
+            })
+        }
         return div;
 
     }
 
     function createFlyingPoints(_div: HTMLElement, _amt: number) {
-        _div.addEventListener("animationend", async () => {
+        _div.addEventListener("animationend", flyingPointCreation)
+        _div.addEventListener("animationcancel", addPoints);
+        
+        async function flyingPointCreation() {
+            _div.removeEventListener("animationcancel", addPoints);
+            _div.removeEventListener("animationend", flyingPointCreation);
             let rect = _div.getBoundingClientRect();
-            let targetRect = document.getElementById("game-info-wrapper").getBoundingClientRect();
+            // let targetRect = document.getElementById("game-info-wrapper").getBoundingClientRect();
             for (let i = 0; i < _amt; i++) {
                 let img = createElementAdvanced("img", { classes: ["flying-point", "no-interact"] });
-                img.src = "Images/point.svg";
-                img.style.left = rect.x + rect.width * Math.random() + "px";
+                img.src = "Assets/UI/Icons/SingleCurrency.svg";
+                img.style.left = rect.x + rect.width + rect.width * Math.random() + "px";
                 img.style.top = rect.y + rect.height * Math.random() + "px";
                 document.body.appendChild(img);
                 setTimeout(() => {
-                    img.style.left = targetRect.left + "px";
-                    img.style.top = targetRect.top + "px";
+                    img.style.left = "0";
+                    img.style.top = "100vh";
                     setTimeout(() => {
                         GameData.addPoints(1);
                         img.remove();
@@ -140,8 +153,11 @@ namespace Script {
                 }, 1000)
                 await waitMS(20);
             }
-        })
-        _div.addEventListener("animationcancel", () => { GameData.addPoints(_amt) });
+        }
+
+        function addPoints(){
+            GameData.addPoints(_amt)
+        }
     }
 
     function updateAchievementList() {
@@ -150,13 +166,13 @@ namespace Script {
         let newElements: HTMLElement[] = [];
         for (let a of achievements) {
             const div = createElementAdvanced("div", {
-                classes: ["achievement"],
+                classes: ["achievement", "stone-tablet"],
                 innerHTML: `
-                <span class="achievement-icon"> <img src="Images/${a.icon}"/></span>
+                <span class="achievement-icon"> <img src="Assets/UI/Achievements/${a.icon}"/></span>
                 <span class="achievement-title">${a.secret ? "???" : a.title}</span>
                 <div class="achievement-divider"></div>
                 <span class="achievement-description">${a.secret ? "???" : a.description}</span>
-                <span class="achievement-reward"><img src="Images/point.svg">+${a.reward}</span>`
+                <span class="achievement-reward"><img src="Assets/UI/Icons/Currency.svg">+${a.reward}</span>`
             });
             if (a.achieved) div.classList.add("achieved");
             newElements.push(div);

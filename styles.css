@@ -21,7 +21,7 @@ body {
   overflow: hidden;
   --grid-gap: min(1rem, 10vh, 10vw);
   --border-radius: 1rem;
-  --font-size: min(3em, 7.5vh);
+  --font-size: min(3rem, 7.5vh);
 
   --text-color: #3f2c20;
   --text-color-light: #c5925a;
@@ -96,14 +96,7 @@ div.close-button {
   z-index: 1;
   top: var(--grid-gap);
   right: var(--grid-gap);
-  font-size: 3rem;
-  width: 2em;
-  height: 2em;
-}
-
-div.close-button>img {
-  width: 1em;
-  height: 1em;
+  font-size: var(--font-size);
 }
 
 .interactable {
@@ -207,6 +200,16 @@ button {
   align-items: center;
 }
 
+.button.icon {
+  width: 2em;
+  height: 2em;
+}
+
+.button.icon>img {
+  width: 1em;
+  height: 1em;
+}
+
 #game-overlay {
   display: flex;
   place-items: end;
@@ -290,8 +293,8 @@ button {
   align-items: end;
   padding: var(--grid-gap);
   gap: var(--grid-gap);
-  right: 0;
-  bottom: 0;
+  left: 0;
+  top: calc(var(--font-size) * 2 + var(--grid-gap) * 2);
   position: absolute;
 }
 
@@ -308,8 +311,6 @@ button {
 
 .achievement,
 .achievement-popup {
-  background-color: white;
-  border-radius: var(--border-radius);
   padding: var(--grid-gap);
   gap: var(--grid-gap);
   display: grid;
@@ -330,12 +331,14 @@ button {
   position: relative;
   cursor: pointer;
   animation: achievement-in 1s forwards ease;
+  border-image-outset: 0 0 0 4rem;
 }
 
 .achievement-title {
   grid-area: title;
   font-weight: bold;
   text-align: left;
+  font-size: larger;
 }
 
 .achievement-description {
@@ -359,18 +362,20 @@ button {
   flex-direction: column;
   align-items: center;
   height: 100%;
+  aspect-ratio: 1;
+  width: 4em;
 }
 
 .achievement-icon img {
   object-fit: contain;
-  max-height: 100%;
+  height: 100%;
 }
 
 .achievement-divider {
   border-radius: var(--border-radius);
   width: 0.3em;
   height: 100%;
-  background-color: black;
+  background-color: var(--text-color);
 }
 
 .achievement-progress-wrapper {
@@ -378,16 +383,18 @@ button {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(0deg, rgba(120, 120, 120, 1) 29%, rgba(119, 119, 119, 0) 100%);
   height: 20vh;
   display: flex;
   padding: var(--grid-gap);
   gap: var(--grid-gap);
+  font-size: var(--font-size);
+  border-image-outset: 0 4rem 4rem 4rem;
 }
 
 .achievement-points-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  /* gap: var(--grid-gap); */
   justify-content: center;
   align-items: center;
 }
@@ -409,11 +416,12 @@ button {
 .achievement-progress-bar {
   width: 100%;
   /* background: red; */
-  --fill-color: lightgray;
+  --fill-color: var(--text-color);
+  filter: drop-shadow(3px 3px 1px var(--text-color-heading));
 }
 
 .achievement-progress-bar-now {
-  --fill-color: black;
+  --fill-color: var(--text-color-light);
   width: 0%;
   transition: width 1s ease-out;
 }
@@ -445,7 +453,7 @@ button {
 
 @keyframes achievement-in {
   0% {
-    left: 100%
+    left: -100%
   }
 
   100% {
@@ -461,12 +469,14 @@ progress {
   position: absolute;
   top: var(--grid-gap);
   right: var(--grid-gap);
+  font-size: var(--font-size);
 }
 
 #achievement-button {
   position: absolute;
-  bottom: var(--grid-gap);
-  right: var(--grid-gap);
+  top: var(--grid-gap);
+  left: var(--grid-gap);
+  font-size: var(--font-size);
 }
 
 #game-info-wrapper {
@@ -495,7 +505,8 @@ progress {
   transition-timing-function: cubic-bezier(.42, -0.01, .71, -0.24);
   animation: scaleUp 0.5s;
   animation-timing-function: linear(0, 0.402 7.4%, 0.711 15.3%, 0.929 23.7%, 1.008 28.2%, 1.067 33%, 1.099 36.9%, 1.12 41%, 1.13 45.4%, 1.13 50.1%, 1.111 58.5%, 1.019 83.2%, 1.004 91.3%, 1);
-  filter: invert(31%) sepia(15%) saturate(2169%) hue-rotate(53deg) brightness(100%) contrast(88%);
+  width: 1em;
+  height: 1em;
 }
 
 @keyframes scaleUp {
@@ -517,16 +528,20 @@ progress {
   position: absolute;
 }
 
+
 .popover>div:first-child {
   position: relative;
+  min-width: 33%;
+}
 
+.stone-tablet,
+.popover>div:first-child {
   border-image-source: url("Assets/UI/MainMenu/PopUp.svg");
   border-image-slice: 8% fill;
   border-image-repeat: stretch;
   border-image-width: 4rem;
 
   background-color: transparent;
-  min-width: 33%;
 }
 
 .popover>div:first-child div.close-button {
@@ -578,8 +593,8 @@ progress {
   height: 2em;
   width: 2em;
   animation: alternate;
-  border: 3px solid black;
-  border-bottom-color: white;
+  border: 0.5em solid var(--text-color);
+  border-bottom-color: var(--text-color-light);
   border-radius: 50%;
   animation: spin 1s infinite linear;
 }
@@ -697,7 +712,7 @@ input[type=range].slider::-moz-range-thumb {
   background: transparent;
   border: 0;
   cursor: pointer;
-/*
+  /*
   -webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
   clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%); */
 }
@@ -714,7 +729,7 @@ input[type=range].slider::-ms-thumb {
   /* -webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
   clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
   margin-top: 0px; */
-} 
+}
 
 input[type=range].slider::-webkit-slider-thumb {
   background-image: url("Assets/UI/Icons/Slider.svg") !important;

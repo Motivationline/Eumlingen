@@ -15,13 +15,13 @@ namespace Script {
         image: string,
     }
     export const traitInfo: Map<TRAIT, TraitData> = new Map<TRAIT, TraitData>([
-        [TRAIT.ANIMAL_LOVER, {image: "placeholder.png", name: "Tierlieb"}],
-        [TRAIT.ARTISTIC, {image: "placeholder.png", name: "Künstlerisch"}],
-        [TRAIT.BODY_STRENGTH, {image: "placeholder.png", name: "Körperkraft"}],
-        [TRAIT.FINE_MOTOR_SKILLS, {image: "placeholder.png", name: "Feinmotorisch"}],
-        [TRAIT.NATURE_CONNECTION, {image: "placeholder.png", name: "Naturverbunden"}],
-        [TRAIT.ORGANIZED, {image: "placeholder.png", name: "Organisiert"}],
-        [TRAIT.PATIENCE, {image: "placeholder.png", name: "Geduldig"}],
-        [TRAIT.SOCIAL, {image: "placeholder.png", name: "Sozial"}],
+        [TRAIT.ANIMAL_LOVER, {image: "Trait_Tierliebe.svg", name: "Tierlieb"}],
+        [TRAIT.ARTISTIC, {image: "Trait_Künstlerisch.svg", name: "Künstlerisch"}],
+        [TRAIT.BODY_STRENGTH, {image: "Trait_Körperkraft.svg", name: "Körperkraft"}],
+        [TRAIT.FINE_MOTOR_SKILLS, {image: "Trait_Feinmotorisch.svg", name: "Feinmotorisch"}],
+        [TRAIT.NATURE_CONNECTION, {image: "Trait_Naturverbunden.svg", name: "Naturverbunden"}],
+        [TRAIT.ORGANIZED, {image: "Trait_Organisiert.svg", name: "Organisiert"}],
+        [TRAIT.PATIENCE, {image: "Trait_Geduld.svg", name: "Geduldig"}],
+        [TRAIT.SOCIAL, {image: "Trait_Sozial.svg", name: "Sozial"}],
     ])
 }
