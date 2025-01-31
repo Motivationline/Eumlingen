@@ -46,7 +46,7 @@ canvas#game-canvas {
 
 canvas#eumling-canvas {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - var(--grid-gap) * 2);
   border-radius: var(--border-radius);
 }
 
@@ -297,9 +297,7 @@ button {
 }
 
 .eumling-trait {
-  border-radius: var(--border-radius);
   padding: 0.75em;
-  background-color: white;
   text-align: center;
   display: grid;
   place-items: center;
@@ -308,7 +306,7 @@ button {
 }
 
 .eumling-trait.empty {
-  background-color: rgba(255, 255, 255, 0.2);
+  opacity: 0.25;
 }
 
 .workbench-option img,
@@ -316,6 +314,8 @@ button {
   object-fit: contain;
   height: 100%;
   width: 100%;
+  min-width: 0;
+  min-height: 0;
 }
 
 #achievement-overlay {
