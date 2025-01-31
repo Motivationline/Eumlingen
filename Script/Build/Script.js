@@ -2411,7 +2411,7 @@ var Script;
         }
         fillUpgradeOverlayWithInfo(_title, _options) {
             const overlay = document.getElementById("workbench-upgrade-overlay");
-            const title = overlay.querySelector("h2");
+            const title = overlay.querySelector(".workbench-options-title");
             const options = overlay.querySelector("div#workbench-options-wrapper");
             title.innerText = _title;
             let newOptions = [];
@@ -2433,10 +2433,15 @@ var Script;
             const info = overlay.querySelector("div#workbench-info-categories");
             let categories = [Workbench.getCategoryFromId(this.category), Workbench.getSubcategoryFromId(this.subcategory)];
             info.innerHTML = "";
+            let categoryCounter = 0;
             for (let cat of categories) {
                 if (!cat)
                     continue;
+                if (categoryCounter > 0) {
+                    info.innerHTML += `<div class="workbench-category-divider"></div>`;
+                }
                 info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Stationen/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
+                categoryCounter++;
             }
             let deconstructBtn = overlay.querySelector("#workbench-deconstruct");
             let deconstructBtn2 = deconstructBtn.cloneNode(true);

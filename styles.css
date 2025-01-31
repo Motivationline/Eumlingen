@@ -219,10 +219,7 @@ button {
 
 #workbench-upgrade-overlay-wrapper,
 #workbench-info-overlay-wrapper {
-  height: 100vh;
-  width: 100vw;
   padding: var(--grid-gap);
-  padding-top: 5rem;
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-areas: "title" "options";
@@ -242,11 +239,13 @@ button {
   display: flex;
   gap: var(--grid-gap);
   justify-content: center;
+  align-items: center;
 }
 
 #workbench-options-title {
   grid-area: title;
   text-align: center;
+  margin: 0.5em;
 }
 
 .workbench-option,
@@ -258,10 +257,25 @@ button {
   align-items: center;
   height: 50vh;
   width: 30vw;
+  padding: 1em;
+}
+
+.workbench-category {
+  filter: brightness(0) saturate(100%) invert(46%) sepia(11%) saturate(189%) hue-rotate(321deg) brightness(88%) contrast(81%);;
+}
+.workbench-category:last-of-type {
+  filter: brightness(0) saturate(100%) invert(22%) sepia(2%) saturate(2096%) hue-rotate(321deg) brightness(106%) contrast(85%);
 }
 
 .workbench-category>img {
-  max-height: 100%;
+  max-height: calc(100% - 1em);
+}
+
+.workbench-category-divider {
+  font-size: var(--font-size);
+  width: 5em;
+  height: 0.5em;
+  background-color: #726c6b;
 }
 
 #eumling-info-wrapper {

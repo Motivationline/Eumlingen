@@ -96,7 +96,7 @@ namespace Script {
 
         private fillUpgradeOverlayWithInfo(_title: string, _options: BaseCategory[]): HTMLElement {
             const overlay = document.getElementById("workbench-upgrade-overlay");
-            const title = overlay.querySelector("h2");
+            const title = <HTMLElement>overlay.querySelector(".workbench-options-title");
             const options = overlay.querySelector("div#workbench-options-wrapper");
 
             title.innerText = _title;
@@ -123,9 +123,14 @@ namespace Script {
 
             let categories = [Workbench.getCategoryFromId(this.category), Workbench.getSubcategoryFromId(this.subcategory)];
             info.innerHTML = "";
+            let categoryCounter: number = 0;
             for (let cat of categories) {
                 if (!cat) continue;
+                if(categoryCounter > 0){
+                    info.innerHTML += `<div class="workbench-category-divider"></div>`
+                }
                 info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Stationen/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`
+                categoryCounter++;
             }
 
             let deconstructBtn = overlay.querySelector("#workbench-deconstruct");
