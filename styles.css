@@ -156,6 +156,7 @@ div.start-background {
   position: absolute;
   bottom: 0;
   transition: left 10s linear;
+  max-height: 30%;
 }
 
 .start-background-eumling.reverse {
@@ -225,6 +226,10 @@ button {
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-areas: "title" "options";
+  font-size: var(--font-size);
+  /* place-items: center; */
+  justify-content: center;
+  text-align: center;
 }
 
 #workbench-info-overlay-wrapper {
@@ -236,7 +241,7 @@ button {
 #workbench-info-categories {
   display: flex;
   gap: var(--grid-gap);
-  align-content: center;
+  justify-content: center;
 }
 
 #workbench-options-title {
@@ -251,12 +256,19 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 50vh;
+  width: 30vw;
+}
+
+.workbench-category>img {
+  max-height: 100%;
 }
 
 #eumling-info-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-size: min(var(--font-size), 5vw);
 }
 
 #eumling-traits {
@@ -266,13 +278,19 @@ button {
   gap: var(--grid-gap);
 }
 
+#eumling-name-wrapper {
+  margin-top: 1em;
+}
+
 .eumling-trait {
   border-radius: var(--border-radius);
-  padding: var(--grid-gap);
+  padding: 0.75em;
   background-color: white;
   text-align: center;
   display: grid;
   place-items: center;
+  max-width: 33vw;
+  max-height: 33vh;
 }
 
 .eumling-trait.empty {
@@ -282,15 +300,15 @@ button {
 .workbench-option img,
 .eumling-trait img {
   object-fit: contain;
-  height: 20vh;
-  width: 30vw;
+  height: 100%;
+  width: 100%;
 }
 
 #achievement-overlay {
   display: flex;
   flex-direction: column;
   justify-content: right;
-  align-items: end;
+  align-items: start;
   padding: var(--grid-gap);
   gap: var(--grid-gap);
   left: 0;
@@ -326,8 +344,12 @@ button {
   opacity: 1;
 }
 
+.achievement.achieved .achievement-reward {
+  opacity: 0.2;
+}
+
 .achievement-popup {
-  grid-template-areas: "title reward" "description reward";
+  grid-template-areas: "title icon" "description icon";
   position: relative;
   cursor: pointer;
   animation: achievement-in 1s forwards ease;
@@ -389,6 +411,8 @@ button {
   gap: var(--grid-gap);
   font-size: var(--font-size);
   border-image-outset: 0 4rem 4rem 4rem;
+  --totalPoints: 100;
+  --pointsUntilEumling: 20;
 }
 
 .achievement-points-wrapper {
@@ -406,32 +430,34 @@ button {
 .achievement-progress-bar-wrapper {
   --width: 90vw;
   width: var(--width);
-  --totalPoints: 100;
-  --pointsUntilEumling: 20;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
+  filter: drop-shadow(1px 1px 1px var(--text-color-heading));
 }
 
 .achievement-progress-bar {
   width: 100%;
   /* background: red; */
   --fill-color: var(--text-color);
-  filter: drop-shadow(3px 3px 1px var(--text-color-heading));
+  height: 10vh;
 }
 
-.achievement-progress-bar-now {
+.achievement-progress-bar-now,
+.achievement-progress-bar-plus {
   --fill-color: var(--text-color-light);
   width: 0%;
   transition: width 1s ease-out;
+  height: 10vh;
 }
 
 .achievement-progress-bar,
 .achievement-progress-bar-now {
   height: 10vh;
-  background: linear-gradient(to right, var(--fill-color) 99.9%, transparent 99.9%), radial-gradient(circle at 95% 50%, var(--fill-color) 5%, transparent 5%);
-  background-position: 0 50%, 0 50%;
-  background-size: 100% 5px, calc(var(--pointsUntilEumling) / var(--totalPoints) * var(--width)) 100%;
+  background: linear-gradient(to right, var(--fill-color) 99.9%, transparent 99.9%), linear-gradient(to right, transparent 99%, var(--fill-color) 99%, var(--fill-color) 100%, transparent 100%);
+  background-position: 0 75%, 0 78%;
+  background-size: 100% 5px, calc(var(--pointsUntilEumling) / var(--totalPoints) * var(--width)) 20%;
   background-repeat: no-repeat, repeat-x;
 }
 
@@ -449,6 +475,19 @@ button {
 
 #achievement-progress-overlay.hide .achievement-progress-wrapper {
   bottom: -20vh;
+}
+
+.eumling-plus-icon {
+  --eumlingAmount: calc(var(--totalPoints) / var(--pointsUntilEumling));
+  position: absolute;
+  height: 10vh;
+  --width: calc(10vh * 69 / 80);
+  width: var(--width);
+  left: calc(100% - 100% / var(--eumlingAmount) * var(--id) - var(--width) / 2);
+}
+
+.eumling-plus-icon.reached {
+  filter: brightness(0) saturate(100%) invert(61%) sepia(54%) saturate(382%) hue-rotate(351deg) brightness(91%) contrast(86%);
 }
 
 @keyframes achievement-in {
@@ -505,8 +544,8 @@ progress {
   transition-timing-function: cubic-bezier(.42, -0.01, .71, -0.24);
   animation: scaleUp 0.5s;
   animation-timing-function: linear(0, 0.402 7.4%, 0.711 15.3%, 0.929 23.7%, 1.008 28.2%, 1.067 33%, 1.099 36.9%, 1.12 41%, 1.13 45.4%, 1.13 50.1%, 1.111 58.5%, 1.019 83.2%, 1.004 91.3%, 1);
-  width: 1em;
-  height: 1em;
+  width: 3em;
+  height: 3em;
 }
 
 @keyframes scaleUp {
@@ -535,6 +574,7 @@ progress {
 }
 
 .stone-tablet,
+.eumling-trait,
 .popover>div:first-child {
   border-image-source: url("Assets/UI/MainMenu/PopUp.svg");
   border-image-slice: 8% fill;

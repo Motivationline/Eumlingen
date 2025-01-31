@@ -53,6 +53,7 @@ namespace Script {
         document.getElementById("button-main-menu").addEventListener("click", openMainMenu);
         document.getElementById("start-game").addEventListener("click", removeTopLayer);
         GameData.updateDisplays();
+        GameData.setupProgressBar();
     });
 
     document.addEventListener("gameLoaded", () => {

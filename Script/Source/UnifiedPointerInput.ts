@@ -28,7 +28,7 @@ namespace Script {
     export interface UnifiedPointerEvent {
         pointer: Pointer,
     }
-    const timeUntilLongClickMS = 500;
+    const timeUntilLongClickMS = 200;
     const maxDistanceForLongClick = 100;
     export class UnifiedPointerInput extends EventTarget {
         private pointers: Map<number, Pointer> = new Map();

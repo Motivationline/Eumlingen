@@ -86,7 +86,7 @@ var Script;
         /** A pointer is pressed/touched for a longer time. */
         EVENT_POINTER["LONG"] = "pointerlong";
     })(EVENT_POINTER = Script.EVENT_POINTER || (Script.EVENT_POINTER = {}));
-    const timeUntilLongClickMS = 500;
+    const timeUntilLongClickMS = 200;
     const maxDistanceForLongClick = 100;
     class UnifiedPointerInput extends EventTarget {
         constructor() {
@@ -1373,7 +1373,11 @@ var Script;
                         break;
                     case STATE.FALL:
                         {
+                            let prevYVelocity = this.velocity.y;
                             this.velocity.y -= Script.gravity * deltaTimeSeconds;
+                            if (prevYVelocity >= 0 && this.velocity.y <= 0) {
+                                Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "thrownEumlingTopPosition", data: { y: this.node.mtxWorld.translation.y } } }));
+                            }
                             if (this.node.mtxWorld.translation.x + this.velocity.x * deltaTimeSeconds < this.walkArea.minX ||
                                 this.node.mtxWorld.translation.x + this.velocity.x * deltaTimeSeconds > this.walkArea.maxX) {
                                 this.velocity.x = 0;
@@ -1547,6 +1551,10 @@ var Script;
         let _classSuper = Script.UpdateScriptComponent;
         var EumlingWork = class extends _classSuper {
             static { _classThis = this; }
+            constructor() {
+                super(...arguments);
+                this.totalWorkTime = 0;
+            }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
@@ -1600,6 +1608,8 @@ var Script;
                 if (!this.workbench)
                     return;
                 this.workbench.work(this.node, _timeMS);
+                this.totalWorkTime += _timeMS;
+                Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "eumlingWorking", data: { workTime: this.totalWorkTime } } }));
             }
         };
         return EumlingWork = _classThis;
@@ -1609,12 +1619,12 @@ var Script;
 var Script;
 (function (Script) {
     const achievements = [
-        // { title: "Titel", description: "Beschreibung", icon: "placeholder.svg", reward: 100, checkCompleted(_e) { return true; }, },
+        // { title: "Titel", description: "Beschreibung mit mehr blabla als die andere", icon: "placeholder.svg", reward: 10, checkCompleted(_e) { return true; }, },
         // { title: "Titel", description: "Beschreibung", icon: "placeholder.svg", reward: 10, checkCompleted(_e) { return true; }, },
         {
             title: "Das passt ja gar nicht",
             description: "Weise einen Eumling einer Station zu, die mit keiner Eigenschaft übereinstimmt.",
-            icon: "placeholder.svg",
+            icon: "Achievement_Passt_nicht.svg",
             reward: 10,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "assignEumling")
@@ -1627,7 +1637,7 @@ var Script;
         {
             title: "Könnte klappen",
             description: "Weise einen Eumling einer Station zu, die mit einer Eigenschaft übereinstimmt.",
-            icon: "placeholder.svg",
+            icon: "Achievement_Koennte_klappen.svg",
             reward: 15,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait")
@@ -1640,7 +1650,7 @@ var Script;
         {
             title: "Perfect Match",
             description: "Weise einen Eumling einer Station zu, die mit zwei Eigenschaften übereinstimmt.",
-            icon: "placeholder.svg",
+            icon: "Achievement_Perfect_Match.svg",
             reward: 20,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait")
@@ -1651,9 +1661,20 @@ var Script;
             }
         },
         {
+            title: "Neuanfang",
+            description: "Reiße eine Arbeitsstation ab",
+            icon: "Achievement_Neuanfang.svg",
+            reward: 10,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "deconstructWorkbench")
+                    return false;
+                return true;
+            }
+        },
+        {
             title: "Umschulung",
             description: "Ein Eumling entwickelt eine Eigenschaft an einer eigentlich unpassenden Station",
-            icon: "placeholder.svg",
+            icon: "Achievement_Umschulung.svg",
             reward: 10,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "eumlingDevelopTrait")
@@ -1663,13 +1684,13 @@ var Script;
         },
         {
             title: "Treue Mitarbeit",
-            description: "Ein Eumling arbeitet für mindestens 10 Minuten durchgängig an derselben Station",
-            icon: "placeholder.svg",
+            description: "Lass einen Eumling für insgesamt 4 Minuten arbeiten",
+            icon: "Achievement_Treue_Mitarbeit.svg",
             reward: 15,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "eumlingWorking")
                     return false;
-                if (_e.detail.data.workTime > 10 * 60 * 1000)
+                if (_e.detail.data.workTime > 4 * 60 * 1000)
                     return true;
                 return false;
             }
@@ -1677,7 +1698,7 @@ var Script;
         {
             title: "Allrounder",
             description: "Ein Eumling hat 4 Eigenschaften.",
-            icon: "placeholder.svg",
+            icon: "Achievement_Allrounder.svg",
             reward: 20,
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "eumlingDevelopTrait")
@@ -1688,9 +1709,22 @@ var Script;
             }
         },
         {
+            title: "Bis zur Unendlichkeit!",
+            description: "Schmeiß einen Eumling bis zur Unendlichkeit, und noch ein bisschen weiter",
+            icon: "Achievement_Unendlichkeit.svg",
+            reward: 10,
+            checkCompleted: function (_e) {
+                if (_e.detail.type !== "thrownEumlingTopPosition")
+                    return false;
+                if (_e.detail.data.y > 6.5)
+                    return true;
+                return false;
+            }
+        },
+        {
             title: "Gefunden!",
             description: "Finde alle 3 Eumling-Statuen",
-            icon: "placeholder.svg",
+            icon: "Achievement_Statuen.svg",
             reward: 10,
             secret: true,
             checkCompleted: function (_e) {
@@ -1706,7 +1740,7 @@ var Script;
             innerHTML: `
             <span class="achievement-title">${_a.title}</span>
             <span class="achievement-description">${_a.description}</span>
-            <span class="achievement-reward"><img src="Assets/UI/Icons/Currency.svg">+${_a.reward}</span>`,
+            <span class="achievement-icon"><img src="Assets/UI/Achievements/${_a.icon}"></span>`,
             classes: ["achievement-popup", "stone-tablet"]
         });
         document.getElementById("achievement-overlay").appendChild(div);
@@ -1736,7 +1770,7 @@ var Script;
             for (let i = 0; i < _amt; i++) {
                 let img = Script.createElementAdvanced("img", { classes: ["flying-point", "no-interact"] });
                 img.src = "Assets/UI/Icons/SingleCurrency.svg";
-                img.style.left = rect.x + rect.width + rect.width * Math.random() + "px";
+                img.style.left = rect.x + rect.width * Math.random() + "px";
                 img.style.top = rect.y + rect.height * Math.random() + "px";
                 document.body.appendChild(img);
                 setTimeout(() => {
@@ -1812,7 +1846,11 @@ var Script;
             const newEumlingAmt = Math.floor(this.#totalPoints / this.#pointsPerEumling) + 1;
             const eumlingsToSpawn = newEumlingAmt - this.#unlockedEumlings;
             for (let i = 0; i < eumlingsToSpawn; i++) {
+                let eumlingToRemove = Script.maxAchievablePoints / this.#pointsPerEumling - this.#unlockedEumlings;
                 this.#unlockedEumlings++;
+                document.querySelectorAll(`.eumling-plus-icon[data-id="${eumlingToRemove}"]`).forEach(element => {
+                    element.classList.add("reached");
+                });
                 setTimeout(() => {
                     Script.viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
                 }, 100 * i);
@@ -1828,16 +1866,29 @@ var Script;
                 this.displayProgressBarOverlay();
         }
         static updateProgressBar() {
-            let wrappers = document.querySelectorAll(".achievement-progress-bar-wrapper");
-            wrappers.forEach(wrapper => {
-                wrapper.style.setProperty("--totalPoints", Script.maxAchievablePoints.toString());
-                wrapper.style.setProperty("--pointsUntilEumling", this.#pointsPerEumling.toString());
-            });
             const progress = this.#totalPoints / Script.maxAchievablePoints;
             const elements = document.querySelectorAll(".achievement-progress-bar-now");
             elements.forEach(element => {
                 element.style.width = progress * 100 + "%";
             });
+        }
+        static setupProgressBar() {
+            let wrappers = document.querySelectorAll(".achievement-progress-wrapper");
+            wrappers.forEach(wrapper => {
+                wrapper.style.setProperty("--totalPoints", Script.maxAchievablePoints.toString());
+                wrapper.style.setProperty("--pointsUntilEumling", this.#pointsPerEumling.toString());
+                this.addEumlingIconsToProgressBar(wrapper);
+            });
+        }
+        static addEumlingIconsToProgressBar(_wrapper) {
+            _wrapper.querySelectorAll(".eumling-plus-icon").forEach(e => e.remove());
+            let wrapper = _wrapper.querySelector(".achievement-progress-bar-wrapper");
+            const maxEumlingAmt = Script.maxAchievablePoints / this.#pointsPerEumling;
+            for (let i = 0; i < maxEumlingAmt; i++) {
+                let img = Script.createElementAdvanced("img", { classes: ["eumling-plus-icon"], attributes: [["style", `--id: ${i};`], ["src", "Assets/UI/Icons/EumlingIcon.svg"]] });
+                img.dataset.id = i.toString();
+                wrapper.appendChild(img);
+            }
         }
         static displayProgressBarOverlay() {
             const overlay = document.getElementById("achievement-progress-overlay");
@@ -2039,6 +2090,7 @@ var Script;
         document.getElementById("button-main-menu").addEventListener("click", openMainMenu);
         document.getElementById("start-game").addEventListener("click", removeTopLayer);
         Script.GameData.updateDisplays();
+        Script.GameData.setupProgressBar();
     });
     document.addEventListener("gameLoaded", () => {
         document.getElementById("start-loading").classList.add("hidden");
@@ -2294,36 +2346,38 @@ var Script;
         constructor() {
             super(...arguments);
             this.buildSpeed = 1 / 10;
-            this.traitUnlockChancePerSecond = 1 / 60;
+            this.timeUntilNewTraitRange = [20000, 90000];
             this.category = undefined;
             this.subcategory = undefined;
             this.buildProgress = 0;
             this.fittingTraits = 0;
             this.startWorkTime = 0;
+            this.timeUntilNewTrait = Infinity;
             this.deconstruct = () => {
                 this.resetAll();
                 Script.removeTopLayer();
+                Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "deconstructWorkbench", data: { workbench: this } } }));
             };
         }
         static { this.categories = [
             {
                 id: CATEGORY.NATURE,
                 name: "Natur",
-                img: "placeholder.svg",
+                img: "Station_Natur.svg",
                 subcategories: [
-                    { id: SUBCATEGORY.ANIMALS, img: "placeholder.svg", name: "Tierwirtschaft", preferredTraits: [Script.TRAIT.ANIMAL_LOVER, Script.TRAIT.SOCIAL] },
-                    { id: SUBCATEGORY.FARMING, img: "placeholder.svg", name: "Landwirtschaft", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.GARDENING, img: "placeholder.svg", name: "Gartenbau", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ARTISTIC] },
+                    { id: SUBCATEGORY.ANIMALS, img: "Station_Tierwirtschaft.svg", name: "Tierwirtschaft", preferredTraits: [Script.TRAIT.ANIMAL_LOVER, Script.TRAIT.SOCIAL] },
+                    { id: SUBCATEGORY.FARMING, img: "Station_Landwirtschaft.svg", name: "Landwirtschaft", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.GARDENING, img: "Station_Gartenbau.svg", name: "Gartenbau", preferredTraits: [Script.TRAIT.NATURE_CONNECTION, Script.TRAIT.ARTISTIC] },
                 ]
             },
             {
                 id: CATEGORY.CRAFT,
                 name: "Handwerk",
-                img: "placeholder.svg",
+                img: "Station_Handwerk.svg",
                 subcategories: [
-                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "placeholder.svg", name: "Rohstoffgewinnung", preferredTraits: [Script.TRAIT.BODY_STRENGTH, Script.TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.PRODUCTION, img: "placeholder.svg", name: "Produktion", preferredTraits: [Script.TRAIT.FINE_MOTOR_SKILLS, Script.TRAIT.PATIENCE] },
-                    { id: SUBCATEGORY.PROCESSING, img: "placeholder.svg", name: "Verarbeitung", preferredTraits: [Script.TRAIT.ARTISTIC, Script.TRAIT.FINE_MOTOR_SKILLS] },
+                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "Station_Rohstoffgewinnung.svg", name: "Rohstoffgewinnung", preferredTraits: [Script.TRAIT.BODY_STRENGTH, Script.TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.PRODUCTION, img: "Station_Produktion.svg", name: "Produktion", preferredTraits: [Script.TRAIT.FINE_MOTOR_SKILLS, Script.TRAIT.PATIENCE] },
+                    { id: SUBCATEGORY.PROCESSING, img: "Station_Verarbeitung.svg", name: "Verarbeitung", preferredTraits: [Script.TRAIT.ARTISTIC, Script.TRAIT.FINE_MOTOR_SKILLS] },
                 ]
             },
         ]; }
@@ -2364,7 +2418,7 @@ var Script;
             for (let opt of _options) {
                 const div = document.createElement("div");
                 div.classList.add("workbench-option", "button");
-                div.innerHTML = `<img src="Assets/UI/Workbench/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`;
+                div.innerHTML = `<img src="Assets/UI/Stationen/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`;
                 newOptions.push(div);
                 div.addEventListener("click", () => {
                     this.setCategory(opt.id);
@@ -2382,9 +2436,8 @@ var Script;
             for (let cat of categories) {
                 if (!cat)
                     continue;
-                info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Workbench/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
+                info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Stationen/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`;
             }
-            overlay.querySelector("progress").value = this.buildProgress;
             let deconstructBtn = overlay.querySelector("#workbench-deconstruct");
             let deconstructBtn2 = deconstructBtn.cloneNode(true);
             deconstructBtn.replaceWith(deconstructBtn2);
@@ -2436,7 +2489,7 @@ var Script;
                 }
             }
             if (this.assignee) {
-                Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "eumlingWorking", data: { workTime: ƒ.Time.game.get() - this.startWorkTime } } }));
+                Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "eumlingWorkingAtWorkbench", data: { workTime: ƒ.Time.game.get() - this.startWorkTime } } }));
                 if (this.fittingTraits < 2) {
                     this.attemptToTeachNewTrait(_timeMS);
                 }
@@ -2449,7 +2502,8 @@ var Script;
             let data = this.assignee.getComponent(Script.EumlingData);
             if (data.traits.size >= 4)
                 return;
-            if (Math.random() > (_timeMS / 1000) * this.traitUnlockChancePerSecond)
+            this.timeUntilNewTrait -= _timeMS;
+            if (this.timeUntilNewTrait > 0)
                 return;
             let requiredTraits = [...Workbench.getSubcategoryFromId(this.subcategory).preferredTraits];
             Script.shuffleArray(requiredTraits);
@@ -2463,9 +2517,14 @@ var Script;
             Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "eumlingDevelopTrait", data: { fittingTraits: this.fittingTraits, traits: data.traits, eumling: this.assignee } } }));
             const ew = this.assignee.getComponent(Script.EumlingWork);
             ew.updateWorkAnimation(ew.getWorkAnimation(this.fittingTraits));
+            this.setTimeUntilNewTrait();
+        }
+        setTimeUntilNewTrait() {
+            this.timeUntilNewTrait = Script.randomRange(this.timeUntilNewTraitRange[0], this.timeUntilNewTraitRange[1]);
         }
         assignNewEumling(_eumling) {
             this.unassignEumling();
+            this.setTimeUntilNewTrait();
             this.assignee = _eumling;
             this.startWorkTime = ƒ.Time.game.get();
             this.fittingTraits = 0;

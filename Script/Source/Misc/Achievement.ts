@@ -1,7 +1,43 @@
 namespace Script {
-    export interface GlobalEventData {
+    import ƒ = FudgeCore;
+    export type GlobalEventData = GlobalEventEumlingWorking | GlobalEventEumlingWorkingAtWorkbench | GlobalEventEumlingDevelopTrait | GlobalEventEumlingAssign | GlobalEventEumlingUnassign | GlobalEventDeconstructWorkbech | GlobalEventClickStatue | GlobalEventThrownEumlingTop;
+
+    interface GlobalEventBase {
         type: string,
         data: any,
+    }
+
+    interface GlobalEventEumlingWorking extends GlobalEventBase {
+        type: "eumlingWorking",
+        data: { workTime: number },
+    }
+    interface GlobalEventEumlingWorkingAtWorkbench extends GlobalEventBase {
+        type: "eumlingWorkingAtWorkbench",
+        data: { workTime: number },
+    }
+    interface GlobalEventEumlingDevelopTrait extends GlobalEventBase {
+        type: "eumlingDevelopTrait",
+        data: { fittingTraits: number, traits: Set<TRAIT>, eumling: ƒ.Node },
+    }
+    interface GlobalEventEumlingAssign extends GlobalEventBase {
+        type: "assignEumling",
+        data: { fittingTraits: number },
+    }
+    interface GlobalEventEumlingUnassign extends GlobalEventBase {
+        type: "unassignEumling",
+        data: { workTime: number },
+    }
+    interface GlobalEventDeconstructWorkbech extends GlobalEventBase {
+        type: "deconstructWorkbench",
+        data: { workbench: Workbench },
+    }
+    interface GlobalEventClickStatue extends GlobalEventBase {
+        type: "clickStatue",
+        data: { statue: ƒ.Node },
+    }
+    interface GlobalEventThrownEumlingTop extends GlobalEventBase {
+        type: "thrownEumlingTopPosition",
+        data: { y: number },
     }
 
     interface Achievement {
@@ -16,12 +52,12 @@ namespace Script {
     }
 
     const achievements: Achievement[] = [
-        // { title: "Titel", description: "Beschreibung", icon: "placeholder.svg", reward: 100, checkCompleted(_e) { return true; }, },
+        // { title: "Titel", description: "Beschreibung mit mehr blabla als die andere", icon: "placeholder.svg", reward: 10, checkCompleted(_e) { return true; }, },
         // { title: "Titel", description: "Beschreibung", icon: "placeholder.svg", reward: 10, checkCompleted(_e) { return true; }, },
         {
             title: "Das passt ja gar nicht",
             description: "Weise einen Eumling einer Station zu, die mit keiner Eigenschaft übereinstimmt.",
-            icon: "placeholder.svg",
+            icon: "Achievement_Passt_nicht.svg",
             reward: 10,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "assignEumling") return false;
@@ -32,7 +68,7 @@ namespace Script {
         {
             title: "Könnte klappen",
             description: "Weise einen Eumling einer Station zu, die mit einer Eigenschaft übereinstimmt.",
-            icon: "placeholder.svg",
+            icon: "Achievement_Koennte_klappen.svg",
             reward: 15,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait") return false;
@@ -43,7 +79,7 @@ namespace Script {
         {
             title: "Perfect Match",
             description: "Weise einen Eumling einer Station zu, die mit zwei Eigenschaften übereinstimmt.",
-            icon: "placeholder.svg",
+            icon: "Achievement_Perfect_Match.svg",
             reward: 20,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "assignEumling" && _e.detail.type !== "eumlingDevelopTrait") return false;
@@ -52,9 +88,19 @@ namespace Script {
             }
         },
         {
+            title: "Neuanfang",
+            description: "Reiße eine Arbeitsstation ab",
+            icon: "Achievement_Neuanfang.svg",
+            reward: 10,
+            checkCompleted: function (_e): boolean {
+                if (_e.detail.type !== "deconstructWorkbench") return false;
+                return true;
+            }
+        },
+        {
             title: "Umschulung",
             description: "Ein Eumling entwickelt eine Eigenschaft an einer eigentlich unpassenden Station",
-            icon: "placeholder.svg",
+            icon: "Achievement_Umschulung.svg",
             reward: 10,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "eumlingDevelopTrait") return false;
@@ -63,19 +109,19 @@ namespace Script {
         },
         {
             title: "Treue Mitarbeit",
-            description: "Ein Eumling arbeitet für mindestens 10 Minuten durchgängig an derselben Station",
-            icon: "placeholder.svg",
+            description: "Lass einen Eumling für insgesamt 4 Minuten arbeiten",
+            icon: "Achievement_Treue_Mitarbeit.svg",
             reward: 15,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "eumlingWorking") return false;
-                if (_e.detail.data.workTime > 10 * 60 * 1000) return true;
+                if (_e.detail.data.workTime > 4 * 60 * 1000) return true;
                 return false;
             }
         },
         {
             title: "Allrounder",
             description: "Ein Eumling hat 4 Eigenschaften.",
-            icon: "placeholder.svg",
+            icon: "Achievement_Allrounder.svg",
             reward: 20,
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "eumlingDevelopTrait") return false;
@@ -84,9 +130,20 @@ namespace Script {
             }
         },
         {
+            title: "Bis zur Unendlichkeit!",
+            description: "Schmeiß einen Eumling bis zur Unendlichkeit, und noch ein bisschen weiter",
+            icon: "Achievement_Unendlichkeit.svg",
+            reward: 10,
+            checkCompleted: function (_e): boolean {
+                if (_e.detail.type !== "thrownEumlingTopPosition") return false;
+                if (_e.detail.data.y > 6.5) return true;
+                return false;
+            }
+        },
+        {
             title: "Gefunden!",
             description: "Finde alle 3 Eumling-Statuen",
-            icon: "placeholder.svg",
+            icon: "Achievement_Statuen.svg",
             reward: 10,
             secret: true,
             checkCompleted: function (_e): boolean {
@@ -104,7 +161,7 @@ namespace Script {
             innerHTML: `
             <span class="achievement-title">${_a.title}</span>
             <span class="achievement-description">${_a.description}</span>
-            <span class="achievement-reward"><img src="Assets/UI/Icons/Currency.svg">+${_a.reward}</span>`,
+            <span class="achievement-icon"><img src="Assets/UI/Achievements/${_a.icon}"></span>`,
             classes: ["achievement-popup", "stone-tablet"]
         })
 
@@ -117,7 +174,7 @@ namespace Script {
             div.removeEventListener("click", removeAchievementPopup);
             clearTimeout(timeout);
             div.style.animation = "none";
-            requestAnimationFrame(()=>{
+            requestAnimationFrame(() => {
                 div.style.animation = "achievement-in 1s backwards reverse ease";
                 div.addEventListener("animationend", () => {
                     div.remove();
@@ -131,7 +188,7 @@ namespace Script {
     function createFlyingPoints(_div: HTMLElement, _amt: number) {
         _div.addEventListener("animationend", flyingPointCreation)
         _div.addEventListener("animationcancel", addPoints);
-        
+
         async function flyingPointCreation() {
             _div.removeEventListener("animationcancel", addPoints);
             _div.removeEventListener("animationend", flyingPointCreation);
@@ -140,7 +197,7 @@ namespace Script {
             for (let i = 0; i < _amt; i++) {
                 let img = createElementAdvanced("img", { classes: ["flying-point", "no-interact"] });
                 img.src = "Assets/UI/Icons/SingleCurrency.svg";
-                img.style.left = rect.x + rect.width + rect.width * Math.random() + "px";
+                img.style.left = rect.x + rect.width * Math.random() + "px";
                 img.style.top = rect.y + rect.height * Math.random() + "px";
                 document.body.appendChild(img);
                 setTimeout(() => {
@@ -155,7 +212,7 @@ namespace Script {
             }
         }
 
-        function addPoints(){
+        function addPoints() {
             GameData.addPoints(_amt)
         }
     }

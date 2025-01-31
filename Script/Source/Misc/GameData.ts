@@ -9,6 +9,7 @@ namespace Script {
         static readonly #pointsPerEumling: number = 20;
         constructor() {
             if (GameData.Instance) return GameData.Instance;
+
         }
 
         static get points(): number {
@@ -22,7 +23,11 @@ namespace Script {
             const newEumlingAmt: number = Math.floor(this.#totalPoints / this.#pointsPerEumling) + 1;
             const eumlingsToSpawn: number = newEumlingAmt - this.#unlockedEumlings;
             for (let i: number = 0; i < eumlingsToSpawn; i++) {
+                let eumlingToRemove = maxAchievablePoints / this.#pointsPerEumling - this.#unlockedEumlings;
                 this.#unlockedEumlings++;
+                document.querySelectorAll(`.eumling-plus-icon[data-id="${eumlingToRemove}"]`).forEach(element => {
+                    element.classList.add("reached");
+                });
                 setTimeout(() => {
                     viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
                 }, 100 * i);
@@ -39,18 +44,33 @@ namespace Script {
                 this.displayProgressBarOverlay();
         }
 
-        static updateProgressBar() {
-            let wrappers = <NodeListOf<HTMLElement>>document.querySelectorAll(".achievement-progress-bar-wrapper");
-            wrappers.forEach(wrapper => {
-                wrapper.style.setProperty("--totalPoints", maxAchievablePoints.toString())
-                wrapper.style.setProperty("--pointsUntilEumling", this.#pointsPerEumling.toString())
-            });
 
+        static updateProgressBar() {
             const progress: number = this.#totalPoints / maxAchievablePoints;
             const elements = <NodeListOf<HTMLDivElement>>document.querySelectorAll(".achievement-progress-bar-now");
             elements.forEach(element => {
                 element.style.width = progress * 100 + "%";
             })
+        }
+
+        static setupProgressBar() {
+            let wrappers = <NodeListOf<HTMLElement>>document.querySelectorAll(".achievement-progress-wrapper");
+            wrappers.forEach(wrapper => {
+                wrapper.style.setProperty("--totalPoints", maxAchievablePoints.toString());
+                wrapper.style.setProperty("--pointsUntilEumling", this.#pointsPerEumling.toString());
+                this.addEumlingIconsToProgressBar(wrapper);
+            });
+        }
+
+        private static addEumlingIconsToProgressBar(_wrapper: HTMLElement) {
+            _wrapper.querySelectorAll(".eumling-plus-icon").forEach(e => e.remove());
+            let wrapper = _wrapper.querySelector(".achievement-progress-bar-wrapper");
+            const maxEumlingAmt = maxAchievablePoints / this.#pointsPerEumling;
+            for (let i: number = 0; i < maxEumlingAmt; i++) {
+                let img = createElementAdvanced("img", { classes: ["eumling-plus-icon"], attributes: [["style", `--id: ${i};`], ["src", "Assets/UI/Icons/EumlingIcon.svg"]] })
+                img.dataset.id = i.toString();
+                wrapper.appendChild(img);
+            }
         }
 
         static displayTimeout: number;

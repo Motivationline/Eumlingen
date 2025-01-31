@@ -113,7 +113,11 @@ namespace Script {
                     break;
                 case STATE.FALL:
                     {
+                        let prevYVelocity = this.velocity.y;
                         this.velocity.y -= gravity * deltaTimeSeconds;
+                        if (prevYVelocity >= 0 && this.velocity.y <= 0) {
+                            globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "thrownEumlingTopPosition", data: { y: this.node.mtxWorld.translation.y } } }));
+                        }
                         if (this.node.mtxWorld.translation.x + this.velocity.x * deltaTimeSeconds < this.walkArea.minX ||
                             this.node.mtxWorld.translation.x + this.velocity.x * deltaTimeSeconds > this.walkArea.maxX) {
                             this.velocity.x = 0;
@@ -197,7 +201,7 @@ namespace Script {
         }
 
         longTap(_pointer: Pointer): void {
-            if(this.transitionOutOfGrown()) return;
+            if (this.transitionOutOfGrown()) return;
             this.setState(STATE.PICKED);
             this.pointer = _pointer;
         }

@@ -338,6 +338,7 @@ declare namespace Script {
         private workbench;
         private moveComp;
         private animator;
+        private totalWorkTime;
         start(_e: CustomEvent<UpdateEvent>): void;
         update(_e: CustomEvent<UpdateEvent>): void;
         unassign(): void;
@@ -348,11 +349,64 @@ declare namespace Script {
     }
 }
 declare namespace Script {
-    interface GlobalEventData {
+    import ƒ = FudgeCore;
+    export type GlobalEventData = GlobalEventEumlingWorking | GlobalEventEumlingWorkingAtWorkbench | GlobalEventEumlingDevelopTrait | GlobalEventEumlingAssign | GlobalEventEumlingUnassign | GlobalEventDeconstructWorkbech | GlobalEventClickStatue | GlobalEventThrownEumlingTop;
+    interface GlobalEventBase {
         type: string;
         data: any;
     }
-    const maxAchievablePoints: number;
+    interface GlobalEventEumlingWorking extends GlobalEventBase {
+        type: "eumlingWorking";
+        data: {
+            workTime: number;
+        };
+    }
+    interface GlobalEventEumlingWorkingAtWorkbench extends GlobalEventBase {
+        type: "eumlingWorkingAtWorkbench";
+        data: {
+            workTime: number;
+        };
+    }
+    interface GlobalEventEumlingDevelopTrait extends GlobalEventBase {
+        type: "eumlingDevelopTrait";
+        data: {
+            fittingTraits: number;
+            traits: Set<TRAIT>;
+            eumling: ƒ.Node;
+        };
+    }
+    interface GlobalEventEumlingAssign extends GlobalEventBase {
+        type: "assignEumling";
+        data: {
+            fittingTraits: number;
+        };
+    }
+    interface GlobalEventEumlingUnassign extends GlobalEventBase {
+        type: "unassignEumling";
+        data: {
+            workTime: number;
+        };
+    }
+    interface GlobalEventDeconstructWorkbech extends GlobalEventBase {
+        type: "deconstructWorkbench";
+        data: {
+            workbench: Workbench;
+        };
+    }
+    interface GlobalEventClickStatue extends GlobalEventBase {
+        type: "clickStatue";
+        data: {
+            statue: ƒ.Node;
+        };
+    }
+    interface GlobalEventThrownEumlingTop extends GlobalEventBase {
+        type: "thrownEumlingTopPosition";
+        data: {
+            y: number;
+        };
+    }
+    export const maxAchievablePoints: number;
+    export {};
 }
 declare namespace Script {
     class GameData {
@@ -364,6 +418,8 @@ declare namespace Script {
         static addPoints(_points: number): void;
         static updateDisplays(showProgressOverlay?: boolean): void;
         static updateProgressBar(): void;
+        static setupProgressBar(): void;
+        private static addEumlingIconsToProgressBar;
         static displayTimeout: number;
         static displayProgressBarOverlay(): void;
         static hideProgressBarOverlay(): void;
@@ -472,13 +528,14 @@ declare namespace Script {
     class Workbench extends UpdateScriptComponent implements Clickable {
         static categories: Category[];
         private readonly buildSpeed;
-        private readonly traitUnlockChancePerSecond;
+        private readonly timeUntilNewTraitRange;
         private category;
         private subcategory;
         private buildProgress;
         private assignee;
         private fittingTraits;
         private startWorkTime;
+        private timeUntilNewTrait;
         start(_e: CustomEvent<UpdateEvent>): void;
         shortTap(_pointer: Pointer): void;
         longTap(_pointer: Pointer): void;
@@ -493,6 +550,7 @@ declare namespace Script {
         get needsAssembly(): boolean;
         work(_eumling: ƒ.Node, _timeMS: number): number;
         private attemptToTeachNewTrait;
+        private setTimeUntilNewTrait;
         private assignNewEumling;
         unassignEumling(): void;
     }

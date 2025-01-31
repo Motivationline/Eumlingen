@@ -37,33 +37,34 @@ namespace Script {
             {
                 id: CATEGORY.NATURE,
                 name: "Natur",
-                img: "placeholder.svg",
+                img: "Station_Natur.svg",
                 subcategories: [
-                    { id: SUBCATEGORY.ANIMALS, img: "placeholder.svg", name: "Tierwirtschaft", preferredTraits: [TRAIT.ANIMAL_LOVER, TRAIT.SOCIAL] },
-                    { id: SUBCATEGORY.FARMING, img: "placeholder.svg", name: "Landwirtschaft", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.GARDENING, img: "placeholder.svg", name: "Gartenbau", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ARTISTIC] },
+                    { id: SUBCATEGORY.ANIMALS, img: "Station_Tierwirtschaft.svg", name: "Tierwirtschaft", preferredTraits: [TRAIT.ANIMAL_LOVER, TRAIT.SOCIAL] },
+                    { id: SUBCATEGORY.FARMING, img: "Station_Landwirtschaft.svg", name: "Landwirtschaft", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.GARDENING, img: "Station_Gartenbau.svg", name: "Gartenbau", preferredTraits: [TRAIT.NATURE_CONNECTION, TRAIT.ARTISTIC] },
                 ]
             },
             {
                 id: CATEGORY.CRAFT,
                 name: "Handwerk",
-                img: "placeholder.svg",
+                img: "Station_Handwerk.svg",
                 subcategories: [
-                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "placeholder.svg", name: "Rohstoffgewinnung", preferredTraits: [TRAIT.BODY_STRENGTH, TRAIT.ORGANIZED] },
-                    { id: SUBCATEGORY.PRODUCTION, img: "placeholder.svg", name: "Produktion", preferredTraits: [TRAIT.FINE_MOTOR_SKILLS, TRAIT.PATIENCE] },
-                    { id: SUBCATEGORY.PROCESSING, img: "placeholder.svg", name: "Verarbeitung", preferredTraits: [TRAIT.ARTISTIC, TRAIT.FINE_MOTOR_SKILLS] },
+                    { id: SUBCATEGORY.MATERIAL_EXTRACTION, img: "Station_Rohstoffgewinnung.svg", name: "Rohstoffgewinnung", preferredTraits: [TRAIT.BODY_STRENGTH, TRAIT.ORGANIZED] },
+                    { id: SUBCATEGORY.PRODUCTION, img: "Station_Produktion.svg", name: "Produktion", preferredTraits: [TRAIT.FINE_MOTOR_SKILLS, TRAIT.PATIENCE] },
+                    { id: SUBCATEGORY.PROCESSING, img: "Station_Verarbeitung.svg", name: "Verarbeitung", preferredTraits: [TRAIT.ARTISTIC, TRAIT.FINE_MOTOR_SKILLS] },
                 ]
             },
         ]
 
         private readonly buildSpeed: number = 1 / 10;
-        private readonly traitUnlockChancePerSecond = 1 / 60;
+        private readonly timeUntilNewTraitRange: [number, number] = [20000, 90000];
         private category: CATEGORY | undefined = undefined;
         private subcategory: SUBCATEGORY | undefined = undefined;
         private buildProgress: number = 0;
         private assignee: ƒ.Node;
         private fittingTraits: number = 0;
         private startWorkTime: number = 0;
+        private timeUntilNewTrait: number = Infinity;
 
         start(_e: CustomEvent<UpdateEvent>): void {
         }
@@ -104,7 +105,7 @@ namespace Script {
             for (let opt of _options) {
                 const div = document.createElement("div");
                 div.classList.add("workbench-option", "button");
-                div.innerHTML = `<img src="Assets/UI/Workbench/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`
+                div.innerHTML = `<img src="Assets/UI/Stationen/${opt.img}" alt="${opt.name}" /><span>${opt.name}</span>`
                 newOptions.push(div);
                 div.addEventListener("click", () => {
                     this.setCategory(opt.id);
@@ -124,23 +125,22 @@ namespace Script {
             info.innerHTML = "";
             for (let cat of categories) {
                 if (!cat) continue;
-                info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Workbench/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`
+                info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Stationen/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`
             }
-
-            overlay.querySelector("progress").value = this.buildProgress;
 
             let deconstructBtn = overlay.querySelector("#workbench-deconstruct");
             let deconstructBtn2 = deconstructBtn.cloneNode(true);
             deconstructBtn.replaceWith(deconstructBtn2);
-            
+
             deconstructBtn2.addEventListener("click", this.deconstruct);
-            
+
             return overlay;
         }
-        
+
         private deconstruct = () => {
             this.resetAll();
             removeTopLayer();
+            globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "deconstructWorkbench", data: { workbench: this } } }));
         }
 
         private setCategory(_id: number) {
@@ -148,14 +148,14 @@ namespace Script {
                 this.category = _id;
             } else if (this.subcategory === undefined) {
                 this.subcategory = _id;
-                this.node.dispatchEvent(new CustomEvent("setVisual", {detail: _id}));
+                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: _id }));
             }
         }
         private resetAll() {
             this.category = this.subcategory = undefined;
             this.buildProgress = 0;
-            
-            this.node.dispatchEvent(new CustomEvent("setVisual", {detail: 0}));
+
+            this.node.dispatchEvent(new CustomEvent("setVisual", { detail: 0 }));
         }
 
         static getCategoryFromId(_id: CATEGORY): Category {
@@ -183,12 +183,12 @@ namespace Script {
                 if (this.buildProgress < 1) {
                     this.buildProgress += this.buildSpeed * _timeMS / 1000;
                 } else {
-                    this.node.dispatchEvent(new CustomEvent("setVisual", {detail: this.category}));
+                    this.node.dispatchEvent(new CustomEvent("setVisual", { detail: this.category }));
                     this.unassignEumling();
                 }
             }
             if (this.assignee) {
-                globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "eumlingWorking", data: { workTime: ƒ.Time.game.get() - this.startWorkTime } } }));
+                globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "eumlingWorkingAtWorkbench", data: { workTime: ƒ.Time.game.get() - this.startWorkTime } } }));
                 if (this.fittingTraits < 2) {
                     this.attemptToTeachNewTrait(_timeMS);
                 }
@@ -200,7 +200,8 @@ namespace Script {
             if (!this.subcategory) return;
             let data = this.assignee.getComponent(EumlingData);
             if (data.traits.size >= 4) return;
-            if (Math.random() > (_timeMS / 1000) * this.traitUnlockChancePerSecond) return;
+            this.timeUntilNewTrait -= _timeMS;
+            if (this.timeUntilNewTrait > 0) return;
             let requiredTraits: TRAIT[] = [...Workbench.getSubcategoryFromId(this.subcategory).preferredTraits];
             shuffleArray(requiredTraits);
             for (let trait of requiredTraits) {
@@ -213,10 +214,16 @@ namespace Script {
             globalEvents.dispatchEvent(new CustomEvent<GlobalEventData>("event", { detail: { type: "eumlingDevelopTrait", data: { fittingTraits: this.fittingTraits, traits: data.traits, eumling: this.assignee } } }));
             const ew = this.assignee.getComponent(EumlingWork)
             ew.updateWorkAnimation(ew.getWorkAnimation(this.fittingTraits));
+            this.setTimeUntilNewTrait();
+        }
+
+        private setTimeUntilNewTrait(){
+            this.timeUntilNewTrait = randomRange(this.timeUntilNewTraitRange[0], this.timeUntilNewTraitRange[1]);
         }
 
         private assignNewEumling(_eumling: ƒ.Node) {
             this.unassignEumling();
+            this.setTimeUntilNewTrait();
             this.assignee = _eumling;
             this.startWorkTime = ƒ.Time.game.get();
 
