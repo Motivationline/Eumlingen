@@ -144,7 +144,11 @@ namespace Script {
                     this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.FALL, 300);
                     break;
                 case STATE.SIT:
-                    this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.SIT, 100);
+                    if(Math.random() < 0.8) {
+                        this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.SIT, 100, EumlingAnimator.ANIMATIONS.SITTING);
+                    } else {
+                        this.animator.transitionToAnimation(EumlingAnimator.ANIMATIONS.LIE_DOWN, 100, EumlingAnimator.ANIMATIONS.LYING_DOWN);
+                    }
                     this.nextSwapTimestamp = now + this.sitTimeMSMin + Math.random() * (this.sitTimeMSMax - this.sitTimeMSMin);
                     break;
                 case STATE.WALK:

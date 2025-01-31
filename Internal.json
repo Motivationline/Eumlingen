@@ -1514,6 +1514,8 @@
               "walk": "AnimationGLTF|2025-01-14T09:33:32.756Z|47103",
               "clickedOn": "AnimationGLTF|2025-01-14T09:33:32.705Z|59264",
               "sit": "AnimationGLTF|2024-11-26T10:12:05.457Z|72466",
+              "lie_down": "AnimationGLTF|2024-11-26T10:12:05.438Z|84941",
+              "lying_down": "AnimationGLTF|2024-11-26T10:12:05.429Z|70191",
               "pick": "AnimationGLTF|2025-01-16T12:50:29.974Z|66904",
               "fall": "AnimationGLTF|2025-01-16T12:50:29.977Z|96548",
               "work_build": "AnimationGLTF|2025-01-20T13:44:22.411Z|76255",
@@ -1975,6 +1977,44 @@
       "url": "Assets\\Stations\\StationPlainHandwerk.glb"
     }
   },
+  "GraphGLTF|2025-01-29T11:41:01.013Z|51474": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-29T11:41:01.013Z|51474",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationBaseNatur.glb"
+    }
+  },
+  "GraphGLTF|2025-01-29T11:40:55.048Z|47583": {
+    "ƒ.GraphGLTF": {
+      "name": "Scene",
+      "active": true,
+      "components": {
+        "ComponentChangeMaterial": [
+          {
+            "Script.ComponentChangeMaterial": {
+              "active": true,
+              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
+            }
+          }
+        ]
+      },
+      "idResource": "GraphGLTF|2025-01-29T11:40:55.048Z|47583",
+      "type": "GraphGLTF",
+      "url": "Assets\\Stations\\StationBaseHandwerk.glb"
+    }
+  },
   "Graph|2025-01-15T14:48:41.922Z|40103": {
     "ƒ.Graph": {
       "name": "Workbench",
@@ -2081,44 +2121,6 @@
       "idResource": "Audio|2025-01-24T14:11:38.052Z|61796",
       "name": "Assets\\Audio\\SFX\\SFX_env_splash_05.ogg",
       "type": "Audio"
-    }
-  },
-  "GraphGLTF|2025-01-29T11:40:55.048Z|47583": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentChangeMaterial": [
-          {
-            "Script.ComponentChangeMaterial": {
-              "active": true,
-              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2025-01-29T11:40:55.048Z|47583",
-      "type": "GraphGLTF",
-      "url": "Assets\\Stations\\StationBaseHandwerk.glb"
-    }
-  },
-  "GraphGLTF|2025-01-29T11:41:01.013Z|51474": {
-    "ƒ.GraphGLTF": {
-      "name": "Scene",
-      "active": true,
-      "components": {
-        "ComponentChangeMaterial": [
-          {
-            "Script.ComponentChangeMaterial": {
-              "active": true,
-              "changeMaterial": "Material|2025-01-09T13:06:46.915Z|96856"
-            }
-          }
-        ]
-      },
-      "idResource": "GraphGLTF|2025-01-29T11:41:01.013Z|51474",
-      "type": "GraphGLTF",
-      "url": "Assets\\Stations\\StationBaseNatur.glb"
     }
   },
   "GraphGLTF|2025-01-29T12:11:58.993Z|69664": {

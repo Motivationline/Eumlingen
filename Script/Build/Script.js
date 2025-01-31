@@ -991,6 +991,12 @@ var Script;
         let _clickedOn_initializers = [];
         let _sit_decorators;
         let _sit_initializers = [];
+        let _sitting_decorators;
+        let _sitting_initializers = [];
+        let _lie_down_decorators;
+        let _lie_down_initializers = [];
+        let _lying_down_decorators;
+        let _lying_down_initializers = [];
         let _pick_decorators;
         let _pick_initializers = [];
         let _fall_decorators;
@@ -1019,6 +1025,9 @@ var Script;
                 this.walk = __runInitializers(this, _walk_initializers, void 0);
                 this.clickedOn = __runInitializers(this, _clickedOn_initializers, void 0);
                 this.sit = __runInitializers(this, _sit_initializers, void 0);
+                this.sitting = __runInitializers(this, _sitting_initializers, void 0);
+                this.lie_down = __runInitializers(this, _lie_down_initializers, void 0);
+                this.lying_down = __runInitializers(this, _lying_down_initializers, void 0);
                 this.pick = __runInitializers(this, _pick_initializers, void 0);
                 this.fall = __runInitializers(this, _fall_initializers, void 0);
                 this.work_build = __runInitializers(this, _work_build_initializers, void 0);
@@ -1032,7 +1041,8 @@ var Script;
                 this.activeAnimation = EumlingAnimator.ANIMATIONS.IDLE;
                 this.animations = new Map();
                 this.offsets = new Map();
-                this.timeout = undefined;
+                this.timeoutTransition = undefined;
+                this.timeoutOverlay = undefined;
             }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
@@ -1040,6 +1050,9 @@ var Script;
                 _walk_decorators = [ƒ.serialize(ƒ.Animation)];
                 _clickedOn_decorators = [ƒ.serialize(ƒ.Animation)];
                 _sit_decorators = [ƒ.serialize(ƒ.Animation)];
+                _sitting_decorators = [ƒ.serialize(ƒ.Animation)];
+                _lie_down_decorators = [ƒ.serialize(ƒ.Animation)];
+                _lying_down_decorators = [ƒ.serialize(ƒ.Animation)];
                 _pick_decorators = [ƒ.serialize(ƒ.Animation)];
                 _fall_decorators = [ƒ.serialize(ƒ.Animation)];
                 _work_build_decorators = [ƒ.serialize(ƒ.Animation)];
@@ -1054,6 +1067,9 @@ var Script;
                 __esDecorate(null, null, _walk_decorators, { kind: "field", name: "walk", static: false, private: false, access: { has: obj => "walk" in obj, get: obj => obj.walk, set: (obj, value) => { obj.walk = value; } }, metadata: _metadata }, _walk_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _clickedOn_decorators, { kind: "field", name: "clickedOn", static: false, private: false, access: { has: obj => "clickedOn" in obj, get: obj => obj.clickedOn, set: (obj, value) => { obj.clickedOn = value; } }, metadata: _metadata }, _clickedOn_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _sit_decorators, { kind: "field", name: "sit", static: false, private: false, access: { has: obj => "sit" in obj, get: obj => obj.sit, set: (obj, value) => { obj.sit = value; } }, metadata: _metadata }, _sit_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _sitting_decorators, { kind: "field", name: "sitting", static: false, private: false, access: { has: obj => "sitting" in obj, get: obj => obj.sitting, set: (obj, value) => { obj.sitting = value; } }, metadata: _metadata }, _sitting_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _lie_down_decorators, { kind: "field", name: "lie_down", static: false, private: false, access: { has: obj => "lie_down" in obj, get: obj => obj.lie_down, set: (obj, value) => { obj.lie_down = value; } }, metadata: _metadata }, _lie_down_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _lying_down_decorators, { kind: "field", name: "lying_down", static: false, private: false, access: { has: obj => "lying_down" in obj, get: obj => obj.lying_down, set: (obj, value) => { obj.lying_down = value; } }, metadata: _metadata }, _lying_down_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _pick_decorators, { kind: "field", name: "pick", static: false, private: false, access: { has: obj => "pick" in obj, get: obj => obj.pick, set: (obj, value) => { obj.pick = value; } }, metadata: _metadata }, _pick_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _fall_decorators, { kind: "field", name: "fall", static: false, private: false, access: { has: obj => "fall" in obj, get: obj => obj.fall, set: (obj, value) => { obj.fall = value; } }, metadata: _metadata }, _fall_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _work_build_decorators, { kind: "field", name: "work_build", static: false, private: false, access: { has: obj => "work_build" in obj, get: obj => obj.work_build, set: (obj, value) => { obj.work_build = value; } }, metadata: _metadata }, _work_build_initializers, _instanceExtraInitializers);
@@ -1075,6 +1091,9 @@ var Script;
                 this.animations.set(EumlingAnimator.ANIMATIONS.WALK, new ƒ.AnimationNodeAnimation(this.walk));
                 this.animations.set(EumlingAnimator.ANIMATIONS.CLICKED_ON, new ƒ.AnimationNodeAnimation(this.clickedOn, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
                 this.animations.set(EumlingAnimator.ANIMATIONS.SIT, new ƒ.AnimationNodeAnimation(this.sit, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
+                this.animations.set(EumlingAnimator.ANIMATIONS.SITTING, new ƒ.AnimationNodeAnimation(this.sitting));
+                this.animations.set(EumlingAnimator.ANIMATIONS.LIE_DOWN, new ƒ.AnimationNodeAnimation(this.lie_down, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
+                this.animations.set(EumlingAnimator.ANIMATIONS.LYING_DOWN, new ƒ.AnimationNodeAnimation(this.lying_down));
                 this.animations.set(EumlingAnimator.ANIMATIONS.PICKED, new ƒ.AnimationNodeAnimation(this.pick));
                 this.animations.set(EumlingAnimator.ANIMATIONS.FALL, new ƒ.AnimationNodeAnimation(this.fall));
                 this.animations.set(EumlingAnimator.ANIMATIONS.WORK_BUILD, new ƒ.AnimationNodeAnimation(this.work_build));
@@ -1094,24 +1113,33 @@ var Script;
                 importedScene.addComponent(this.cmpAnim);
                 this.setupEvents();
             }
-            transitionToAnimation(_anim, _time = 300) {
+            transitionToAnimation(_anim, _time = 300, _animToPlayIfFirstEnds) {
                 let anim = this.animations.get(_anim);
                 if (!anim)
                     return;
                 this.animPlaying.transit(anim, _time);
                 this.activeAnimation = _anim;
+                if (this.timeoutTransition !== undefined) {
+                    this.timeoutTransition.clear();
+                    this.timeoutTransition = undefined;
+                }
+                if (anim.playmode === ƒ.ANIMATION_PLAYMODE.PLAY_ONCE && _animToPlayIfFirstEnds) {
+                    this.timeoutTransition = new ƒ.Timer(ƒ.Time.game, anim.animation.totalTime, 1, () => {
+                        this.transitionToAnimation(_animToPlayIfFirstEnds);
+                    });
+                }
             }
             overlayAnimation(_anim, _time = 100) {
                 let anim = this.animations.get(_anim);
                 if (!anim)
                     return;
                 this.animOverlay.transit(anim, _time);
-                if (this.timeout !== undefined) {
-                    this.timeout.clear();
-                    this.timeout = undefined;
+                if (this.timeoutOverlay !== undefined) {
+                    this.timeoutOverlay.clear();
+                    this.timeoutOverlay = undefined;
                 }
-                this.timeout = new ƒ.Timer(ƒ.Time.game, anim.animation.totalTime, 1, () => {
-                    this.timeout = undefined;
+                this.timeoutOverlay = new ƒ.Timer(ƒ.Time.game, anim.animation.totalTime, 1, () => {
+                    this.timeoutOverlay = undefined;
                     this.animOverlay.transit(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY), 100);
                 });
             }
@@ -1142,10 +1170,13 @@ var Script;
             ANIMATIONS[ANIMATIONS["PICKED"] = 4] = "PICKED";
             ANIMATIONS[ANIMATIONS["FALL"] = 5] = "FALL";
             ANIMATIONS[ANIMATIONS["SIT"] = 6] = "SIT";
-            ANIMATIONS[ANIMATIONS["WORK_BUILD"] = 7] = "WORK_BUILD";
-            ANIMATIONS[ANIMATIONS["WORK_BAD"] = 8] = "WORK_BAD";
-            ANIMATIONS[ANIMATIONS["WORK_NORMAL"] = 9] = "WORK_NORMAL";
-            ANIMATIONS[ANIMATIONS["WORK_GOOD"] = 10] = "WORK_GOOD";
+            ANIMATIONS[ANIMATIONS["SITTING"] = 7] = "SITTING";
+            ANIMATIONS[ANIMATIONS["LIE_DOWN"] = 8] = "LIE_DOWN";
+            ANIMATIONS[ANIMATIONS["LYING_DOWN"] = 9] = "LYING_DOWN";
+            ANIMATIONS[ANIMATIONS["WORK_BUILD"] = 10] = "WORK_BUILD";
+            ANIMATIONS[ANIMATIONS["WORK_BAD"] = 11] = "WORK_BAD";
+            ANIMATIONS[ANIMATIONS["WORK_NORMAL"] = 12] = "WORK_NORMAL";
+            ANIMATIONS[ANIMATIONS["WORK_GOOD"] = 13] = "WORK_GOOD";
         })(ANIMATIONS = EumlingAnimator.ANIMATIONS || (EumlingAnimator.ANIMATIONS = {}));
     })(EumlingAnimator = Script.EumlingAnimator || (Script.EumlingAnimator = {}));
 })(Script || (Script = {}));
@@ -1404,7 +1435,12 @@ var Script;
                         this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.FALL, 300);
                         break;
                     case STATE.SIT:
-                        this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.SIT, 100);
+                        if (Math.random() < 0.8) {
+                            this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.SIT, 100, Script.EumlingAnimator.ANIMATIONS.SITTING);
+                        }
+                        else {
+                            this.animator.transitionToAnimation(Script.EumlingAnimator.ANIMATIONS.LIE_DOWN, 100, Script.EumlingAnimator.ANIMATIONS.LYING_DOWN);
+                        }
                         this.nextSwapTimestamp = now + this.sitTimeMSMin + Math.random() * (this.sitTimeMSMax - this.sitTimeMSMin);
                         break;
                     case STATE.WALK:
@@ -1519,6 +1555,7 @@ var Script;
     class EumlingSpawner extends Script.UpdateScriptComponent {
         constructor() {
             super(...arguments);
+            this.eumlingAmount = 0;
             this.spawn = async () => {
                 console.log("spawn eumling");
                 let wa = this.node.getComponent(Script.WalkableArea);
@@ -1526,8 +1563,12 @@ var Script;
                     return;
                 let newPos = wa.getPositionInside();
                 let instance = await ƒ.Project.createGraphInstance(this.eumling);
+                if (this.eumlingAmount === 0) {
+                    newPos = new ƒ.Vector3(-7, 0, 0);
+                }
                 instance.mtxLocal.translation = ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation);
                 this.node.appendChild(instance);
+                this.eumlingAmount++;
             };
         }
         start(_e) {

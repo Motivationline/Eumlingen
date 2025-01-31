@@ -211,6 +211,9 @@ declare namespace Script {
         walk: ƒ.Animation;
         clickedOn: ƒ.Animation;
         sit: ƒ.Animation;
+        sitting: ƒ.Animation;
+        lie_down: ƒ.Animation;
+        lying_down: ƒ.Animation;
         pick: ƒ.Animation;
         fall: ƒ.Animation;
         work_build: ƒ.Animation;
@@ -228,8 +231,9 @@ declare namespace Script {
         private animOverlay;
         private cmpAnim;
         prestart(_e: CustomEvent<UpdateEvent>): void;
-        transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
-        private timeout;
+        private timeoutTransition;
+        transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number, _animToPlayIfFirstEnds?: EumlingAnimator.ANIMATIONS): void;
+        private timeoutOverlay;
         overlayAnimation(_anim: EumlingAnimator.ANIMATIONS, _time?: number): void;
         getOffset(_anim: EumlingAnimator.ANIMATIONS): ƒ.Vector3;
         private setupEvents;
@@ -243,10 +247,13 @@ declare namespace Script {
             PICKED = 4,
             FALL = 5,
             SIT = 6,
-            WORK_BUILD = 7,
-            WORK_BAD = 8,
-            WORK_NORMAL = 9,
-            WORK_GOOD = 10
+            SITTING = 7,
+            LIE_DOWN = 8,
+            LYING_DOWN = 9,
+            WORK_BUILD = 10,
+            WORK_BAD = 11,
+            WORK_NORMAL = 12,
+            WORK_GOOD = 13
         }
     }
 }
@@ -329,6 +336,7 @@ declare namespace Script {
 declare namespace Script {
     class EumlingSpawner extends UpdateScriptComponent {
         private eumling;
+        private eumlingAmount;
         start(_e: CustomEvent<UpdateEvent>): void;
         spawn: () => Promise<void>;
     }

@@ -12,6 +12,12 @@ namespace Script {
         @ƒ.serialize(ƒ.Animation)
         sit: ƒ.Animation;
         @ƒ.serialize(ƒ.Animation)
+        sitting: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
+        lie_down: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
+        lying_down: ƒ.Animation;
+        @ƒ.serialize(ƒ.Animation)
         pick: ƒ.Animation;
         @ƒ.serialize(ƒ.Animation)
         fall: ƒ.Animation;
@@ -46,6 +52,9 @@ namespace Script {
             this.animations.set(EumlingAnimator.ANIMATIONS.WALK, new ƒ.AnimationNodeAnimation(this.walk));
             this.animations.set(EumlingAnimator.ANIMATIONS.CLICKED_ON, new ƒ.AnimationNodeAnimation(this.clickedOn, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
             this.animations.set(EumlingAnimator.ANIMATIONS.SIT, new ƒ.AnimationNodeAnimation(this.sit, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
+            this.animations.set(EumlingAnimator.ANIMATIONS.SITTING, new ƒ.AnimationNodeAnimation(this.sitting));
+            this.animations.set(EumlingAnimator.ANIMATIONS.LIE_DOWN, new ƒ.AnimationNodeAnimation(this.lie_down, { playmode: ƒ.ANIMATION_PLAYMODE.PLAY_ONCE }));
+            this.animations.set(EumlingAnimator.ANIMATIONS.LYING_DOWN, new ƒ.AnimationNodeAnimation(this.lying_down));
             this.animations.set(EumlingAnimator.ANIMATIONS.PICKED, new ƒ.AnimationNodeAnimation(this.pick));
             this.animations.set(EumlingAnimator.ANIMATIONS.FALL, new ƒ.AnimationNodeAnimation(this.fall));
             this.animations.set(EumlingAnimator.ANIMATIONS.WORK_BUILD, new ƒ.AnimationNodeAnimation(this.work_build));
@@ -70,24 +79,34 @@ namespace Script {
             this.setupEvents();
         }
 
-        public transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time: number = 300) {
+        private timeoutTransition: ƒ.Timer = undefined;
+        public transitionToAnimation(_anim: EumlingAnimator.ANIMATIONS, _time: number = 300, _animToPlayIfFirstEnds?: EumlingAnimator.ANIMATIONS) {
             let anim = this.animations.get(_anim);
             if (!anim) return;
             this.animPlaying.transit(anim, _time);
             this.activeAnimation = _anim;
+            if (this.timeoutTransition !== undefined) {
+                this.timeoutTransition.clear();
+                this.timeoutTransition = undefined;
+            }
+            if (anim.playmode === ƒ.ANIMATION_PLAYMODE.PLAY_ONCE && _animToPlayIfFirstEnds) {
+                this.timeoutTransition = new ƒ.Timer(ƒ.Time.game, anim.animation.totalTime, 1, () => {
+                    this.transitionToAnimation(_animToPlayIfFirstEnds);
+                });
+            }
         }
 
-        private timeout: ƒ.Timer = undefined;
+        private timeoutOverlay: ƒ.Timer = undefined;
         public overlayAnimation(_anim: EumlingAnimator.ANIMATIONS, _time: number = 100) {
             let anim = this.animations.get(_anim);
             if (!anim) return;
             this.animOverlay.transit(anim, _time);
-            if (this.timeout !== undefined) {
-                this.timeout.clear();
-                this.timeout = undefined;
+            if (this.timeoutOverlay !== undefined) {
+                this.timeoutOverlay.clear();
+                this.timeoutOverlay = undefined;
             }
-            this.timeout = new ƒ.Timer(ƒ.Time.game, anim.animation.totalTime, 1, () => {
-                this.timeout = undefined;
+            this.timeoutOverlay = new ƒ.Timer(ƒ.Time.game, anim.animation.totalTime, 1, () => {
+                this.timeoutOverlay = undefined;
                 this.animOverlay.transit(this.animations.get(EumlingAnimator.ANIMATIONS.EMPTY), 100);
 
             })
@@ -118,6 +137,9 @@ namespace Script {
             PICKED,
             FALL,
             SIT,
+            SITTING,
+            LIE_DOWN,
+            LYING_DOWN,
             WORK_BUILD,
             WORK_BAD,
             WORK_NORMAL,
