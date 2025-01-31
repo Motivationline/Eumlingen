@@ -126,7 +126,7 @@ namespace Script {
             let categoryCounter: number = 0;
             for (let cat of categories) {
                 if (!cat) continue;
-                if(categoryCounter > 0){
+                if (categoryCounter > 0) {
                     info.innerHTML += `<div class="workbench-category-divider"></div>`
                 }
                 info.innerHTML += `<div class="workbench-category"><img src="Assets/UI/Stationen/${cat.img}" alt="${cat.name}" /><span>${cat.name}</span></div>`
@@ -151,16 +151,17 @@ namespace Script {
         private setCategory(_id: number) {
             if (this.category === undefined) {
                 this.category = _id;
+                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: { id: this.category, prepare: true } }));
             } else if (this.subcategory === undefined) {
                 this.subcategory = _id;
-                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: _id }));
+                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: { id: _id } }));
             }
         }
         private resetAll() {
             this.category = this.subcategory = undefined;
             this.buildProgress = 0;
 
-            this.node.dispatchEvent(new CustomEvent("setVisual", { detail: 0 }));
+            this.node.dispatchEvent(new CustomEvent("setVisual", { detail: { id: 0 } }));
         }
 
         static getCategoryFromId(_id: CATEGORY): Category {
@@ -188,7 +189,7 @@ namespace Script {
                 if (this.buildProgress < 1) {
                     this.buildProgress += this.buildSpeed * _timeMS / 1000;
                 } else {
-                    this.node.dispatchEvent(new CustomEvent("setVisual", { detail: this.category }));
+                    this.node.dispatchEvent(new CustomEvent("setVisual", { detail: { id: this.category } }));
                     this.unassignEumling();
                 }
             }
@@ -222,7 +223,7 @@ namespace Script {
             this.setTimeUntilNewTrait();
         }
 
-        private setTimeUntilNewTrait(){
+        private setTimeUntilNewTrait() {
             this.timeUntilNewTrait = randomRange(this.timeUntilNewTraitRange[0], this.timeUntilNewTraitRange[1]);
         }
 

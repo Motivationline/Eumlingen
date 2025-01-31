@@ -560,16 +560,18 @@ declare namespace Script {
     class WorkbenchVisuals extends UpdateScriptComponent {
         #private;
         default: ƒ.Graph;
+        nature_prepare: ƒ.Graph;
         nature: ƒ.Graph;
         nature_animals: ƒ.Graph;
         nature_farming: ƒ.Graph;
         nature_gardening: ƒ.Graph;
+        craft_prepare: ƒ.Graph;
         craft: ƒ.Graph;
         craft_mat_extr: ƒ.Graph;
         craft_production: ƒ.Graph;
         craft_processing: ƒ.Graph;
         start(_e: CustomEvent<UpdateEvent>): void;
         private hndSetVisual;
-        setVisual(_id: number): Promise<void>;
+        setVisual(_id: number, _prepare?: boolean): Promise<void>;
     }
 }

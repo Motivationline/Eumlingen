@@ -2452,16 +2452,17 @@ var Script;
         setCategory(_id) {
             if (this.category === undefined) {
                 this.category = _id;
+                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: { id: this.category, prepare: true } }));
             }
             else if (this.subcategory === undefined) {
                 this.subcategory = _id;
-                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: _id }));
+                this.node.dispatchEvent(new CustomEvent("setVisual", { detail: { id: _id } }));
             }
         }
         resetAll() {
             this.category = this.subcategory = undefined;
             this.buildProgress = 0;
-            this.node.dispatchEvent(new CustomEvent("setVisual", { detail: 0 }));
+            this.node.dispatchEvent(new CustomEvent("setVisual", { detail: { id: 0 } }));
         }
         static getCategoryFromId(_id) {
             return this.categories.find(c => c.id === _id);
@@ -2489,7 +2490,7 @@ var Script;
                     this.buildProgress += this.buildSpeed * _timeMS / 1000;
                 }
                 else {
-                    this.node.dispatchEvent(new CustomEvent("setVisual", { detail: this.category }));
+                    this.node.dispatchEvent(new CustomEvent("setVisual", { detail: { id: this.category } }));
                     this.unassignEumling();
                 }
             }
@@ -2566,6 +2567,8 @@ var Script;
         let _instanceExtraInitializers = [];
         let _default_decorators;
         let _default_initializers = [];
+        let _nature_prepare_decorators;
+        let _nature_prepare_initializers = [];
         let _nature_decorators;
         let _nature_initializers = [];
         let _nature_animals_decorators;
@@ -2574,6 +2577,8 @@ var Script;
         let _nature_farming_initializers = [];
         let _nature_gardening_decorators;
         let _nature_gardening_initializers = [];
+        let _craft_prepare_decorators;
+        let _craft_prepare_initializers = [];
         let _craft_decorators;
         let _craft_initializers = [];
         let _craft_mat_extr_decorators;
@@ -2587,37 +2592,45 @@ var Script;
             constructor() {
                 super(...arguments);
                 this.default = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _default_initializers, void 0));
+                this.nature_prepare = __runInitializers(this, _nature_prepare_initializers, void 0);
                 this.nature = __runInitializers(this, _nature_initializers, void 0);
                 this.nature_animals = __runInitializers(this, _nature_animals_initializers, void 0);
                 this.nature_farming = __runInitializers(this, _nature_farming_initializers, void 0);
                 this.nature_gardening = __runInitializers(this, _nature_gardening_initializers, void 0);
+                this.craft_prepare = __runInitializers(this, _craft_prepare_initializers, void 0);
                 this.craft = __runInitializers(this, _craft_initializers, void 0);
                 this.craft_mat_extr = __runInitializers(this, _craft_mat_extr_initializers, void 0);
                 this.craft_production = __runInitializers(this, _craft_production_initializers, void 0);
                 this.craft_processing = __runInitializers(this, _craft_processing_initializers, void 0);
                 this.#graphs = new Map();
+                this.#graphsPrepare = new Map();
                 this.#nodes = new Map();
+                this.#nodesPrepare = new Map();
                 this.hndSetVisual = (_e) => {
                     // using setTimeout because it's a workaround for https://github.com/hs-furtwangen/FUDGE/issues/56
-                    setTimeout(() => { this.setVisual(_e.detail); }, 0);
+                    setTimeout(() => { this.setVisual(_e.detail.id, _e.detail.prepare); }, 0);
                 };
             }
             static {
                 const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
                 _default_decorators = [ƒ.serialize(ƒ.Graph)];
+                _nature_prepare_decorators = [ƒ.serialize(ƒ.Graph)];
                 _nature_decorators = [ƒ.serialize(ƒ.Graph)];
                 _nature_animals_decorators = [ƒ.serialize(ƒ.Graph)];
                 _nature_farming_decorators = [ƒ.serialize(ƒ.Graph)];
                 _nature_gardening_decorators = [ƒ.serialize(ƒ.Graph)];
+                _craft_prepare_decorators = [ƒ.serialize(ƒ.Graph)];
                 _craft_decorators = [ƒ.serialize(ƒ.Graph)];
                 _craft_mat_extr_decorators = [ƒ.serialize(ƒ.Graph)];
                 _craft_production_decorators = [ƒ.serialize(ƒ.Graph)];
                 _craft_processing_decorators = [ƒ.serialize(ƒ.Graph)];
                 __esDecorate(null, null, _default_decorators, { kind: "field", name: "default", static: false, private: false, access: { has: obj => "default" in obj, get: obj => obj.default, set: (obj, value) => { obj.default = value; } }, metadata: _metadata }, _default_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _nature_prepare_decorators, { kind: "field", name: "nature_prepare", static: false, private: false, access: { has: obj => "nature_prepare" in obj, get: obj => obj.nature_prepare, set: (obj, value) => { obj.nature_prepare = value; } }, metadata: _metadata }, _nature_prepare_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _nature_decorators, { kind: "field", name: "nature", static: false, private: false, access: { has: obj => "nature" in obj, get: obj => obj.nature, set: (obj, value) => { obj.nature = value; } }, metadata: _metadata }, _nature_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _nature_animals_decorators, { kind: "field", name: "nature_animals", static: false, private: false, access: { has: obj => "nature_animals" in obj, get: obj => obj.nature_animals, set: (obj, value) => { obj.nature_animals = value; } }, metadata: _metadata }, _nature_animals_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _nature_farming_decorators, { kind: "field", name: "nature_farming", static: false, private: false, access: { has: obj => "nature_farming" in obj, get: obj => obj.nature_farming, set: (obj, value) => { obj.nature_farming = value; } }, metadata: _metadata }, _nature_farming_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _nature_gardening_decorators, { kind: "field", name: "nature_gardening", static: false, private: false, access: { has: obj => "nature_gardening" in obj, get: obj => obj.nature_gardening, set: (obj, value) => { obj.nature_gardening = value; } }, metadata: _metadata }, _nature_gardening_initializers, _instanceExtraInitializers);
+                __esDecorate(null, null, _craft_prepare_decorators, { kind: "field", name: "craft_prepare", static: false, private: false, access: { has: obj => "craft_prepare" in obj, get: obj => obj.craft_prepare, set: (obj, value) => { obj.craft_prepare = value; } }, metadata: _metadata }, _craft_prepare_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _craft_decorators, { kind: "field", name: "craft", static: false, private: false, access: { has: obj => "craft" in obj, get: obj => obj.craft, set: (obj, value) => { obj.craft = value; } }, metadata: _metadata }, _craft_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _craft_mat_extr_decorators, { kind: "field", name: "craft_mat_extr", static: false, private: false, access: { has: obj => "craft_mat_extr" in obj, get: obj => obj.craft_mat_extr, set: (obj, value) => { obj.craft_mat_extr = value; } }, metadata: _metadata }, _craft_mat_extr_initializers, _instanceExtraInitializers);
                 __esDecorate(null, null, _craft_production_decorators, { kind: "field", name: "craft_production", static: false, private: false, access: { has: obj => "craft_production" in obj, get: obj => obj.craft_production, set: (obj, value) => { obj.craft_production = value; } }, metadata: _metadata }, _craft_production_initializers, _instanceExtraInitializers);
@@ -2628,7 +2641,9 @@ var Script;
                 __runInitializers(_classThis, _classExtraInitializers);
             }
             #graphs;
+            #graphsPrepare;
             #nodes;
+            #nodesPrepare;
             start(_e) {
                 this.#graphs.set(0, this.default);
                 this.#graphs.set(Script.CATEGORY.NATURE, this.nature);
@@ -2639,18 +2654,33 @@ var Script;
                 this.#graphs.set(Script.SUBCATEGORY.MATERIAL_EXTRACTION, this.craft_mat_extr);
                 this.#graphs.set(Script.SUBCATEGORY.PROCESSING, this.craft_processing);
                 this.#graphs.set(Script.SUBCATEGORY.PRODUCTION, this.craft_production);
+                this.#graphsPrepare.set(Script.CATEGORY.NATURE, this.nature_prepare);
+                this.#graphsPrepare.set(Script.CATEGORY.CRAFT, this.craft_prepare);
                 // using setTimeout because it's a workaround for https://github.com/hs-furtwangen/FUDGE/issues/56
                 setTimeout(() => { this.setVisual(0); }, 0);
                 this.node.addEventListener("setVisual", this.hndSetVisual);
             }
-            async setVisual(_id) {
-                let graph = this.#graphs.get(_id);
-                if (!graph)
-                    return;
-                let node = this.#nodes.get(_id);
-                if (!node) {
-                    node = await ƒ.Project.createGraphInstance(graph);
-                    this.#nodes.set(_id, node);
+            async setVisual(_id, _prepare = false) {
+                let node;
+                if (_prepare) {
+                    let graph = this.#graphsPrepare.get(_id);
+                    if (!graph)
+                        return;
+                    node = this.#nodesPrepare.get(_id);
+                    if (!node) {
+                        node = await ƒ.Project.createGraphInstance(graph);
+                        this.#nodesPrepare.set(_id, node);
+                    }
+                }
+                else {
+                    let graph = this.#graphs.get(_id);
+                    if (!graph)
+                        return;
+                    node = this.#nodes.get(_id);
+                    if (!node) {
+                        node = await ƒ.Project.createGraphInstance(graph);
+                        this.#nodes.set(_id, node);
+                    }
                 }
                 this.node.removeAllChildren();
                 this.node.appendChild(node);
