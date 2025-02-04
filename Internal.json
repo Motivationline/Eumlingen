@@ -1559,7 +1559,8 @@
         "EumlingData": [
           {
             "Script.EumlingData": {
-              "active": true
+              "active": true,
+              "shinelingTexture": "TextureImage|2025-02-04T10:26:11.018Z|63273"
             }
           }
         ],

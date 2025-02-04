@@ -278,17 +278,25 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    class EumlingData extends UpdateScriptComponent implements Clickable {
+    enum EUMLING_SKIN {
+        DEFAULT = 0,
+        SHINELING = 1
+    }
+    export class EumlingData extends UpdateScriptComponent implements Clickable {
         #private;
         static names: string[];
-        traits: Set<TRAIT>;
-        nameDisplay: ƒ.ComponentText;
+        static skins: Map<EUMLING_SKIN, ƒ.Material>;
+        shinelingTexture: ƒ.Texture;
+        get traits(): Set<TRAIT>;
         start(_e: CustomEvent<UpdateEvent>): void;
+        private initMaterials;
         get name(): string;
         set name(_name: string);
+        setSkin(_skin?: EUMLING_SKIN): void;
         shortTap(_pointer: Pointer): void;
         private showSelf;
     }
+    export {};
 }
 declare namespace Script {
     import ƒ = FudgeCore;

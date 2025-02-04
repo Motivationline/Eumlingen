@@ -1238,55 +1238,106 @@ var Script;
 /// <reference path="../Eumlings/Traits.ts" />
 (function (Script) {
     var ƒ = FudgeCore;
-    class EumlingData extends Script.UpdateScriptComponent {
-        constructor() {
-            super(...arguments);
-            this.#name = "";
-            this.traits = new Set();
-        }
-        static { this.names = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst", "Aluni", "Lyraen", "Nivrel", "Elvaris", "Sylin", "Veyla", "Auren", "Liriel", "Riva", "Moraen", "Tynel", "Lymra", "Ondis", "Floren", "Nymra", "Aeris", "Erya", "Thyra", "Nyra", "Velin", "Fenya", "Arion", "Sylva", "Caelis", "Plenna", "Quira", "Lumel", "Flimra", "Vonae", "Tivra", "Elna", "Myrel"]; }
-        #name;
-        start(_e) {
-            while (this.traits.size < 2) {
-                this.traits.add(Script.randomEnum(Script.TRAIT));
+    let EUMLING_SKIN;
+    (function (EUMLING_SKIN) {
+        EUMLING_SKIN[EUMLING_SKIN["DEFAULT"] = 0] = "DEFAULT";
+        EUMLING_SKIN[EUMLING_SKIN["SHINELING"] = 1] = "SHINELING";
+    })(EUMLING_SKIN || (EUMLING_SKIN = {}));
+    let EumlingData = (() => {
+        var _a;
+        let _classDecorators = [(_a = ƒ).serialize.bind(_a)];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        let _classSuper = Script.UpdateScriptComponent;
+        let _instanceExtraInitializers = [];
+        let _shinelingTexture_decorators;
+        let _shinelingTexture_initializers = [];
+        var EumlingData = class extends _classSuper {
+            static { _classThis = this; }
+            constructor() {
+                super(...arguments);
+                this.#name = (__runInitializers(this, _instanceExtraInitializers), "");
+                this.#traits = new Set();
+                this.shinelingTexture = __runInitializers(this, _shinelingTexture_initializers, void 0);
             }
-            this.nameDisplay = this.node.getChildrenByName("Name")[0].getComponent(ƒ.ComponentText);
-            this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
-        }
-        get name() {
-            return this.#name;
-        }
-        set name(_name) {
-            this.#name = _name;
-            this.nameDisplay.texture.text = this.#name;
-        }
-        shortTap(_pointer) {
-            if (this.node.getComponent(Script.EumlingMovement).getState() === Script.STATE.GROWN || _pointer.used) {
-                return;
+            static {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+                _shinelingTexture_decorators = [ƒ.serialize(ƒ.Texture)];
+                __esDecorate(null, null, _shinelingTexture_decorators, { kind: "field", name: "shinelingTexture", static: false, private: false, access: { has: obj => "shinelingTexture" in obj, get: obj => obj.shinelingTexture, set: (obj, value) => { obj.shinelingTexture = value; } }, metadata: _metadata }, _shinelingTexture_initializers, _instanceExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                EumlingData = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             }
-            this.showSelf();
-        }
-        showSelf() {
-            this.node.addComponent(Script.eumlingCamera);
-            Script.eumlingViewport.setBranch(this.node);
-            let infoOverlay = document.getElementById("eumling-upgrade-overlay");
-            infoOverlay.querySelector("#eumling-name").innerText = this.name;
-            let traitsDiv = infoOverlay.querySelector("div#eumling-traits");
-            traitsDiv.innerHTML = "";
-            let traits = Array.from(this.traits.keys());
-            for (let i = 0; i < 4; i++) {
-                let trait = Script.traitInfo.get(traits[i]);
-                if (trait) {
-                    traitsDiv.innerHTML += `<div class="eumling-trait"><img src="Assets/UI/Traits/${trait.image}" /><span>${trait.name}</span></div>`;
+            static { this.names = ["Herbert", "Fritz", "Martin", "Fitzhubert", "Horst", "Aluni", "Lyraen", "Nivrel", "Elvaris", "Sylin", "Veyla", "Auren", "Liriel", "Riva", "Moraen", "Tynel", "Lymra", "Ondis", "Floren", "Nymra", "Aeris", "Erya", "Thyra", "Nyra", "Velin", "Fenya", "Arion", "Sylva", "Caelis", "Plenna", "Quira", "Lumel", "Flimra", "Vonae", "Tivra", "Elna", "Myrel"]; }
+            #name;
+            #traits;
+            #nameDisplay;
+            #cmpMat;
+            static { this.skins = new Map(); }
+            get traits() {
+                return this.#traits;
+            }
+            start(_e) {
+                while (this.#traits.size < 2) {
+                    this.#traits.add(Script.randomEnum(Script.TRAIT));
                 }
-                else {
-                    traitsDiv.innerHTML += `<div class="eumling-trait empty"></div>`;
-                }
+                this.#nameDisplay = this.node.getChildrenByName("Name")[0].getComponent(ƒ.ComponentText);
+                this.name = EumlingData.names[Math.floor(EumlingData.names.length * Math.random())];
+                this.#cmpMat = this.node.getChild(0).getChild(0).getChildrenByName("Retopo")[0].getChildrenByName("Retopo_Primitive0")[0].getComponent(ƒ.ComponentMaterial);
+                this.initMaterials();
             }
-            Script.showLayer(infoOverlay, { onRemove: () => { Script.eumlingCameraActive = false; }, onAdd: () => { Script.eumlingCameraActive = true; } });
-            this.node.getComponent(Script.EumlingAnimator).overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON);
-        }
-    }
+            initMaterials() {
+                if (EumlingData.skins.size > 0)
+                    return;
+                EumlingData.skins.set(EUMLING_SKIN.DEFAULT, this.#cmpMat.material);
+                EumlingData.skins.set(EUMLING_SKIN.SHINELING, new ƒ.Material("shineling", ƒ.ShaderLitTexturedSkin, new ƒ.CoatTextured(new ƒ.Color(1, 1, 1, 1), this.shinelingTexture)));
+            }
+            get name() {
+                return this.#name;
+            }
+            set name(_name) {
+                this.#name = _name;
+                this.#nameDisplay.texture.text = this.#name;
+            }
+            setSkin(_skin = Script.randomEnum(EUMLING_SKIN)) {
+                let material = EumlingData.skins.get(_skin);
+                if (!material)
+                    return;
+                this.#cmpMat.material = material;
+            }
+            shortTap(_pointer) {
+                if (this.node.getComponent(Script.EumlingMovement).getState() === Script.STATE.GROWN || _pointer.used) {
+                    return;
+                }
+                this.showSelf();
+            }
+            showSelf() {
+                this.node.addComponent(Script.eumlingCamera);
+                Script.eumlingViewport.setBranch(this.node);
+                let infoOverlay = document.getElementById("eumling-upgrade-overlay");
+                infoOverlay.querySelector("#eumling-name").innerText = this.name;
+                let traitsDiv = infoOverlay.querySelector("div#eumling-traits");
+                traitsDiv.innerHTML = "";
+                let traits = Array.from(this.#traits.keys());
+                for (let i = 0; i < 4; i++) {
+                    let trait = Script.traitInfo.get(traits[i]);
+                    if (trait) {
+                        traitsDiv.innerHTML += `<div class="eumling-trait"><img src="Assets/UI/Traits/${trait.image}" /><span>${trait.name}</span></div>`;
+                    }
+                    else {
+                        traitsDiv.innerHTML += `<div class="eumling-trait empty"></div>`;
+                    }
+                }
+                Script.showLayer(infoOverlay, { onRemove: () => { Script.eumlingCameraActive = false; }, onAdd: () => { Script.eumlingCameraActive = true; } });
+                this.node.getComponent(Script.EumlingAnimator).overlayAnimation(Script.EumlingAnimator.ANIMATIONS.CLICKED_ON);
+            }
+            static {
+                __runInitializers(_classThis, _classExtraInitializers);
+            }
+        };
+        return EumlingData = _classThis;
+    })();
     Script.EumlingData = EumlingData;
 })(Script || (Script = {}));
 /// <reference path="../Plugins/UpdateScriptComponent.ts" />
@@ -1597,6 +1648,13 @@ var Script;
                 }
                 instance.mtxLocal.translation = ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation);
                 this.node.appendChild(instance);
+                const setRandomSkin = () => {
+                    ƒ.Loop.removeEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, setRandomSkin, { once: true });
+                    instance.getComponent(Script.EumlingData).setSkin();
+                };
+                if (this.eumlingAmount > 0) {
+                    ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, setRandomSkin, { once: true });
+                }
                 this.eumlingAmount++;
             };
         }

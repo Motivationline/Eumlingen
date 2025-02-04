@@ -14,13 +14,22 @@ namespace Script {
             let newPos = wa.getPositionInside();
             let instance = await ƒ.Project.createGraphInstance(this.eumling);
 
-            if(this.eumlingAmount === 0){
+            if (this.eumlingAmount === 0) {
                 newPos = new ƒ.Vector3(-7, 0, 0)
             }
             instance.mtxLocal.translation = ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation);
             this.node.appendChild(instance);
+            const setRandomSkin = () => {
+                ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, setRandomSkin, { once: true });
+                instance.getComponent(EumlingData).setSkin();
+            }
+            if (this.eumlingAmount > 0) {
+                ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, setRandomSkin, { once: true });
+
+            }
             this.eumlingAmount++;
         }
+
 
     }
 }
