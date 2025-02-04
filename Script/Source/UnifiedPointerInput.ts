@@ -9,7 +9,7 @@ namespace Script {
         startTime: number,
         type: string,
         longTapTimeout: number,
-        short: boolean,
+        tapType: "none" | "short" | "long" | "drag",
         used?: boolean,
         ended?: boolean,
     }
@@ -69,8 +69,10 @@ namespace Script {
             if (existingPointer) {
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
-                if (existingPointer.short)
+                if (existingPointer.tapType === "none"){
+                    existingPointer.tapType = "short";
                     this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.SHORT, { detail: { pointer: existingPointer } }));
+                }
                 clearTimeout(existingPointer.longTapTimeout);
                 existingPointer.ended = true;
                 this.pointers.delete(existingPointer.id);
@@ -90,7 +92,7 @@ namespace Script {
                 )
             ) {
                 clearTimeout(existingPointer.longTapTimeout);
-                existingPointer.short = false;
+                existingPointer.tapType = "drag";
             }
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
         }
@@ -108,10 +110,10 @@ namespace Script {
                 startY: _event.clientY,
                 startTime: ƒ.Time.game.get(),
                 type: _event.pointerType,
-                short: true,
+                tapType: "none",
                 longTapTimeout: setTimeout(() => {
                     this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.LONG, { detail: { pointer: pointer } }));
-                    pointer.short = false;
+                    pointer.tapType = "long";
                 }, timeUntilLongClickMS),
             }
             this.pointers.set(pointer.id, pointer);

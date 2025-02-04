@@ -16,6 +16,8 @@ namespace Script {
     viewport = _event.detail;
     // viewport.gizmosEnabled = true;
 
+    upInput.addEventListener(EVENT_POINTER.CHANGE, <EventListener>checkScreenDrag);
+    upInput.addEventListener(EVENT_POINTER.END, <EventListener>endPointer);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
   }
@@ -28,7 +30,7 @@ namespace Script {
     // viewport.draw();
     ƒ.AudioManager.default.update();
 
-    if(!GameData.paused){
+    if (!GameData.paused) {
       if (eumlingCameraActive) {
         eumlingViewport.draw();
       } else {
@@ -37,7 +39,7 @@ namespace Script {
     }
     if (gameMode) {
       // console.log(upInput.pointerList.length);
-      moveCamera(upInput.pointerList);
+      // checkScreenSides(upInput.pointerList);
     }
   }
 
@@ -82,7 +84,7 @@ namespace Script {
     eumlingCamera.clrBackground = new ƒ.Color(1, 1, 1, 0.1);
 
     viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
-    
+
     setupSounds();
 
     document.getElementById("settings-overlay").appendChild(Settings.generateHTML());
@@ -95,49 +97,77 @@ namespace Script {
   const timeUntilFullSpeed: number = 2;
   const cameraAcelleration: number = maxCameraSpeed / timeUntilFullSpeed;
   const cameraBoundaryX: [number, number] = [-8, -2];
-  function moveCamera(_pointers: Pointer[]) {
+
+  function moveCamera(_distance: number) {
+    let currentX = cameraNode.mtxWorld.translation.x;
+    let nextPos = currentX + _distance;
+    if (cameraBoundaryX[0] > nextPos) {
+      _distance = cameraBoundaryX[0] - currentX;
+    }
+    if (cameraBoundaryX[1] < nextPos) {
+      _distance = cameraBoundaryX[1] - currentX;
+    }
+    cameraNode.mtxLocal.translateX(_distance, false);
+  }
+
+  export function checkScreenSides(_pointers: Pointer[]) {
     let speed: number = 0;
     for (let pointer of _pointers) {
       if (pointer.currentX < window.innerWidth * 0.1) {
-        pointer.used = true;
+        // pointer.used = true;
         speed -= 1;
       } else if (pointer.currentX > window.innerWidth * 0.9) {
-        pointer.used = true;
+        // pointer.used = true;
         speed += 1;
       }
     }
-    let timeScale = ƒ.Loop.timeFrameGame / 1000;
     if (speed === 0) {
       currentCameraSpeed = 0;
       return;
     }
+    let timeScale = ƒ.Loop.timeFrameGame / 1000;
 
     currentCameraSpeed = Math.min(maxCameraSpeed, Math.max(0, cameraAcelleration * timeScale + currentCameraSpeed));
-
     let step = speed * currentCameraSpeed * timeScale;
-    let currentX = cameraNode.mtxWorld.translation.x;
-    let nextPos = currentX + step;
-    if (cameraBoundaryX[0] > nextPos) {
-      step = cameraBoundaryX[0] - currentX;
+    moveCamera(step);
+  }
+
+  let startPositions: Map<number, ƒ.Vector3> = new Map();
+  function checkScreenDrag(_e: CustomEvent<UnifiedPointerEvent>) {
+    let pointer = _e.detail.pointer;
+    if (pointer.used) return;
+    if (pointer.tapType !== "drag") return;
+    if (!startPositions.has(pointer.id)) {
+      let ray = viewport.getRayFromClient(new ƒ.Vector2(pointer.startX, pointer.startY));
+      let position = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Z(1));
+      startPositions.set(pointer.id, position);
     }
-    if (cameraBoundaryX[1] < nextPos) {
-      step = cameraBoundaryX[1] - currentX;
-    }
-    cameraNode.mtxLocal.translateX(-step);
+    let startClickPosition = startPositions.get(pointer.id)!;
+
+    let ray = viewport.getRayFromClient(new ƒ.Vector2(pointer.currentX, pointer.currentY));
+    let currentClickPosition = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Z(1));
+
+    let amountToTranslateBy = startClickPosition.x - currentClickPosition.x;
+    console.log(amountToTranslateBy);
+    moveCamera(amountToTranslateBy);
+  }
+
+  function endPointer(_e: CustomEvent<UnifiedPointerEvent>) {
+    startPositions.delete(_e.detail.pointer.id);
   }
 
 
   window.addEventListener("load", init);
   function init() {
     document.getElementById("start").addEventListener("click", startViewport);
-    document.getElementById("enableGizmos").addEventListener("click", () => {viewport.gizmosEnabled = !viewport.gizmosEnabled});
+    document.getElementById("enableGizmos").addEventListener("click", () => { viewport.gizmosEnabled = !viewport.gizmosEnabled });
     document.getElementById("eumlingSpawn").addEventListener("click", () => {
       viewport.getBranch().broadcastEvent(new Event("spawnEumling"));
     })
     spawnEumling();
   }
 
-  function setupSounds(){
+  function setupSounds() {
     ƒ.AudioManager.default.listenTo(viewport.getBranch());
     ƒ.AudioManager.default.listenWith(cameraNode.getComponent(ƒ.ComponentAudioListener));
 

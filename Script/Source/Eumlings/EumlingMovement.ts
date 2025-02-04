@@ -96,6 +96,7 @@ namespace Script {
                         let difference = ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation);
                         this.node.mtxLocal.translate(difference, false);
                         this.velocity.set(difference.x / deltaTimeSeconds, difference.y / deltaTimeSeconds, 0);
+                        checkScreenSides([this.pointer])
                         if (this.pointer.ended) {
                             this.setState(STATE.FALL);
                             if (this.velocity.magnitudeSquared > EumlingMovement.maxVelocity * EumlingMovement.maxVelocity)
@@ -208,6 +209,7 @@ namespace Script {
             if (this.transitionOutOfGrown()) return;
             this.setState(STATE.PICKED);
             this.pointer = _pointer;
+            _pointer.used = true;
         }
 
         private transitionOutOfGrown(): boolean {

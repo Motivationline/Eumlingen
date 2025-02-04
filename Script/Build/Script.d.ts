@@ -17,7 +17,7 @@ declare namespace Script {
         startTime: number;
         type: string;
         longTapTimeout: number;
-        short: boolean;
+        tapType: "none" | "short" | "long" | "drag";
         used?: boolean;
         ended?: boolean;
     }
@@ -57,6 +57,7 @@ declare namespace Script {
     const globalEvents: EventTarget;
     const eumlingCamera: ƒ.ComponentCamera;
     const eumlingViewport: ƒ.Viewport;
+    function checkScreenSides(_pointers: Pointer[]): void;
 }
 declare namespace Script {
     import ƒ = FudgeCore;

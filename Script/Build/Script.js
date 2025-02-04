@@ -105,8 +105,10 @@ var Script;
                 if (existingPointer) {
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
-                    if (existingPointer.short)
+                    if (existingPointer.tapType === "none") {
+                        existingPointer.tapType = "short";
                         this.dispatchEvent(new CustomEvent(EVENT_POINTER.SHORT, { detail: { pointer: existingPointer } }));
+                    }
                     clearTimeout(existingPointer.longTapTimeout);
                     existingPointer.ended = true;
                     this.pointers.delete(existingPointer.id);
@@ -122,7 +124,7 @@ var Script;
                 if (existingPointer.longTapTimeout && (Math.abs(existingPointer.currentX - existingPointer.startX) > maxDistanceForLongClick ||
                     Math.abs(existingPointer.currentY - existingPointer.startY) > maxDistanceForLongClick)) {
                     clearTimeout(existingPointer.longTapTimeout);
-                    existingPointer.short = false;
+                    existingPointer.tapType = "drag";
                 }
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
             };
@@ -159,10 +161,10 @@ var Script;
                 startY: _event.clientY,
                 startTime: ƒ.Time.game.get(),
                 type: _event.pointerType,
-                short: true,
+                tapType: "none",
                 longTapTimeout: setTimeout(() => {
                     this.dispatchEvent(new CustomEvent(EVENT_POINTER.LONG, { detail: { pointer: pointer } }));
-                    pointer.short = false;
+                    pointer.tapType = "long";
                 }, timeUntilLongClickMS),
             };
             this.pointers.set(pointer.id, pointer);
@@ -193,6 +195,8 @@ var Script;
     function start(_event) {
         Script.viewport = _event.detail;
         // viewport.gizmosEnabled = true;
+        Script.upInput.addEventListener(Script.EVENT_POINTER.CHANGE, checkScreenDrag);
+        Script.upInput.addEventListener(Script.EVENT_POINTER.END, endPointer);
         ƒ.Loop.addEventListener("loopFrame" /* ƒ.EVENT.LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -212,7 +216,7 @@ var Script;
         }
         if (gameMode) {
             // console.log(upInput.pointerList.length);
-            moveCamera(Script.upInput.pointerList);
+            // checkScreenSides(upInput.pointerList);
         }
     }
     let cameraNode;
@@ -259,34 +263,60 @@ var Script;
     const timeUntilFullSpeed = 2;
     const cameraAcelleration = maxCameraSpeed / timeUntilFullSpeed;
     const cameraBoundaryX = [-8, -2];
-    function moveCamera(_pointers) {
+    function moveCamera(_distance) {
+        let currentX = cameraNode.mtxWorld.translation.x;
+        let nextPos = currentX + _distance;
+        if (cameraBoundaryX[0] > nextPos) {
+            _distance = cameraBoundaryX[0] - currentX;
+        }
+        if (cameraBoundaryX[1] < nextPos) {
+            _distance = cameraBoundaryX[1] - currentX;
+        }
+        cameraNode.mtxLocal.translateX(_distance, false);
+    }
+    function checkScreenSides(_pointers) {
         let speed = 0;
         for (let pointer of _pointers) {
             if (pointer.currentX < window.innerWidth * 0.1) {
-                pointer.used = true;
+                // pointer.used = true;
                 speed -= 1;
             }
             else if (pointer.currentX > window.innerWidth * 0.9) {
-                pointer.used = true;
+                // pointer.used = true;
                 speed += 1;
             }
         }
-        let timeScale = ƒ.Loop.timeFrameGame / 1000;
         if (speed === 0) {
             currentCameraSpeed = 0;
             return;
         }
+        let timeScale = ƒ.Loop.timeFrameGame / 1000;
         currentCameraSpeed = Math.min(maxCameraSpeed, Math.max(0, cameraAcelleration * timeScale + currentCameraSpeed));
         let step = speed * currentCameraSpeed * timeScale;
-        let currentX = cameraNode.mtxWorld.translation.x;
-        let nextPos = currentX + step;
-        if (cameraBoundaryX[0] > nextPos) {
-            step = cameraBoundaryX[0] - currentX;
+        moveCamera(step);
+    }
+    Script.checkScreenSides = checkScreenSides;
+    let startPositions = new Map();
+    function checkScreenDrag(_e) {
+        let pointer = _e.detail.pointer;
+        if (pointer.used)
+            return;
+        if (pointer.tapType !== "drag")
+            return;
+        if (!startPositions.has(pointer.id)) {
+            let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(pointer.startX, pointer.startY));
+            let position = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Z(1));
+            startPositions.set(pointer.id, position);
         }
-        if (cameraBoundaryX[1] < nextPos) {
-            step = cameraBoundaryX[1] - currentX;
-        }
-        cameraNode.mtxLocal.translateX(-step);
+        let startClickPosition = startPositions.get(pointer.id);
+        let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(pointer.currentX, pointer.currentY));
+        let currentClickPosition = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Z(1));
+        let amountToTranslateBy = startClickPosition.x - currentClickPosition.x;
+        console.log(amountToTranslateBy);
+        moveCamera(amountToTranslateBy);
+    }
+    function endPointer(_e) {
+        startPositions.delete(_e.detail.pointer.id);
     }
     window.addEventListener("load", init);
     function init() {
@@ -1387,6 +1417,7 @@ var Script;
                             let difference = ƒ.Vector3.DIFFERENCE(newPos, this.node.mtxWorld.translation);
                             this.node.mtxLocal.translate(difference, false);
                             this.velocity.set(difference.x / deltaTimeSeconds, difference.y / deltaTimeSeconds, 0);
+                            Script.checkScreenSides([this.pointer]);
                             if (this.pointer.ended) {
                                 this.setState(STATE.FALL);
                                 if (this.velocity.magnitudeSquared > EumlingMovement.maxVelocity * EumlingMovement.maxVelocity)
@@ -1493,6 +1524,7 @@ var Script;
                     return;
                 this.setState(STATE.PICKED);
                 this.pointer = _pointer;
+                _pointer.used = true;
             }
             transitionOutOfGrown() {
                 if (this.state !== STATE.GROWN) {
