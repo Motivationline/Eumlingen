@@ -278,6 +278,12 @@ button {
   background-color: #726c6b;
 }
 
+.workbench-info-text {
+  color: #726c6b;
+  padding: 0 1em;
+  max-width: max(33vw, 100%);
+}
+
 #eumling-info-wrapper {
   display: flex;
   flex-direction: column;

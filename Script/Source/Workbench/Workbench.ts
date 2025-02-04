@@ -82,12 +82,12 @@ namespace Script {
                 overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Kategorie", Workbench.categories);
             } else if (!this.subcategory) {
                 if (this.buildProgress < 1) {
-                    overlay = this.fillInfoOverlayWithInfo();
+                    overlay = this.fillInfoOverlayWithInfo(true);
                 } else {
                     overlay = this.fillUpgradeOverlayWithInfo("Wähle eine Spezialisierung", Workbench.categories.find(c => c.id === this.category).subcategories);
                 }
             } else {
-                overlay = this.fillInfoOverlayWithInfo();
+                overlay = this.fillInfoOverlayWithInfo(false);
             }
 
             if (!overlay) return;
@@ -117,7 +117,7 @@ namespace Script {
             return overlay;
         }
 
-        private fillInfoOverlayWithInfo(): HTMLElement {
+        private fillInfoOverlayWithInfo(_base: boolean): HTMLElement {
             const overlay = document.getElementById("workbench-info-overlay");
             const info = overlay.querySelector("div#workbench-info-categories");
 
@@ -138,6 +138,14 @@ namespace Script {
             deconstructBtn.replaceWith(deconstructBtn2);
 
             deconstructBtn2.addEventListener("click", this.deconstruct);
+
+            if (_base) {
+                document.getElementById("workbench-info-text-base").classList.remove("hidden");
+                document.getElementById("workbench-info-text-expanded").classList.add("hidden");
+            } else {
+                document.getElementById("workbench-info-text-base").classList.add("hidden");
+                document.getElementById("workbench-info-text-expanded").classList.remove("hidden");
+            }
 
             return overlay;
         }
