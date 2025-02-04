@@ -159,6 +159,19 @@
                 ]
               }
             ]
+          },
+          {
+            "name": "Skins",
+            "entries": [
+              {
+                "name": "Shineling",
+                "entries": [
+                  {
+                    "idResource": "TextureImage|2025-02-04T10:26:11.018Z|63273"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },

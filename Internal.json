@@ -2336,5 +2336,17 @@
         }
       }
     }
+  },
+  "TextureImage|2025-02-04T10:26:11.018Z|63273": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Textures\\Shineling\\MatEumling_Base_color.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2025-02-04T10:26:11.018Z|63273",
+        "name": "Assets\\Textures\\Shineling\\MatEumling_Base_color.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
+    }
   }
 }
