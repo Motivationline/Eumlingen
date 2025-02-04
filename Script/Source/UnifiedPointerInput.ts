@@ -34,7 +34,6 @@ namespace Script {
         private pointers: Map<number, Pointer> = new Map();
 
         initialize(_element: HTMLElement): void {
-            console.log("init");
             _element.addEventListener("pointerdown", <EventListener>this.hndPointerDown);
             _element.addEventListener("pointerup", <EventListener>this.hndPointerUp);
             _element.addEventListener("pointercancel", <EventListener>this.hndPointerUp);
@@ -57,9 +56,8 @@ namespace Script {
 
 
         private hndPointerDown = (_event: PointerEvent) => {
-            let existingPointer = this.getPointer(_event.pointerId);
-            if (!existingPointer)
-                existingPointer = this.createPointerFromPointer(_event);
+            this.hndPointerUp(_event);
+            let existingPointer = this.createPointerFromPointer(_event);
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
             this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
             // console.log("pointer down");
@@ -69,7 +67,7 @@ namespace Script {
             if (existingPointer) {
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                 this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.END, { detail: { pointer: existingPointer } }));
-                if (existingPointer.tapType === "none"){
+                if (existingPointer.tapType === "none") {
                     existingPointer.tapType = "short";
                     this.dispatchEvent(new CustomEvent<UnifiedPointerEvent>(EVENT_POINTER.SHORT, { detail: { pointer: existingPointer } }));
                 }
@@ -125,6 +123,7 @@ namespace Script {
         private preventDefaults(_e: Event) {
             _e.preventDefault();
             _e.stopPropagation();
+            console.log(_e.type);
         }
 
         public get pointerList(): Pointer[] {

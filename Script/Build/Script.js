@@ -93,9 +93,8 @@ var Script;
             super(...arguments);
             this.pointers = new Map();
             this.hndPointerDown = (_event) => {
-                let existingPointer = this.getPointer(_event.pointerId);
-                if (!existingPointer)
-                    existingPointer = this.createPointerFromPointer(_event);
+                this.hndPointerUp(_event);
+                let existingPointer = this.createPointerFromPointer(_event);
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.CHANGE, { detail: { pointer: existingPointer } }));
                 this.dispatchEvent(new CustomEvent(EVENT_POINTER.START, { detail: { pointer: existingPointer } }));
                 // console.log("pointer down");
@@ -130,7 +129,6 @@ var Script;
             };
         }
         initialize(_element) {
-            console.log("init");
             _element.addEventListener("pointerdown", this.hndPointerDown);
             _element.addEventListener("pointerup", this.hndPointerUp);
             _element.addEventListener("pointercancel", this.hndPointerUp);
@@ -174,6 +172,7 @@ var Script;
         preventDefaults(_e) {
             _e.preventDefault();
             _e.stopPropagation();
+            console.log(_e.type);
         }
         get pointerList() {
             return Array.from(this.pointers, ([, pointer]) => (pointer));
@@ -1520,11 +1519,11 @@ var Script;
                 }
             }
             longTap(_pointer) {
+                _pointer.used = true;
                 if (this.transitionOutOfGrown())
                     return;
                 this.setState(STATE.PICKED);
                 this.pointer = _pointer;
-                _pointer.used = true;
             }
             transitionOutOfGrown() {
                 if (this.state !== STATE.GROWN) {
@@ -2461,6 +2460,7 @@ var Script;
         }
         longTap(_pointer) {
             this.displayWorkbenchInfo();
+            _pointer.used = true;
         }
         displayWorkbenchInfo() {
             let overlay;

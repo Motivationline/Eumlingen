@@ -74,6 +74,7 @@ namespace Script {
         }
         longTap(_pointer: Pointer): void {
             this.displayWorkbenchInfo();
+            _pointer.used = true;
         }
 
         private displayWorkbenchInfo() {

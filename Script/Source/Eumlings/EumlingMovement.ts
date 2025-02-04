@@ -206,10 +206,10 @@ namespace Script {
         }
 
         longTap(_pointer: Pointer): void {
+            _pointer.used = true;
             if (this.transitionOutOfGrown()) return;
             this.setState(STATE.PICKED);
             this.pointer = _pointer;
-            _pointer.used = true;
         }
 
         private transitionOutOfGrown(): boolean {
