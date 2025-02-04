@@ -148,7 +148,6 @@ namespace Script {
     let currentClickPosition = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Z(1));
 
     let amountToTranslateBy = startClickPosition.x - currentClickPosition.x;
-    console.log(amountToTranslateBy);
     moveCamera(amountToTranslateBy);
   }
 

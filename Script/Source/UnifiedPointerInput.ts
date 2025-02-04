@@ -123,7 +123,6 @@ namespace Script {
         private preventDefaults(_e: Event) {
             _e.preventDefault();
             _e.stopPropagation();
-            console.log(_e.type);
         }
 
         public get pointerList(): Pointer[] {

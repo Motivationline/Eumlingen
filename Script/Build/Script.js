@@ -172,7 +172,6 @@ var Script;
         preventDefaults(_e) {
             _e.preventDefault();
             _e.stopPropagation();
-            console.log(_e.type);
         }
         get pointerList() {
             return Array.from(this.pointers, ([, pointer]) => (pointer));
@@ -311,7 +310,6 @@ var Script;
         let ray = Script.viewport.getRayFromClient(new ƒ.Vector2(pointer.currentX, pointer.currentY));
         let currentClickPosition = ray.intersectPlane(ƒ.Vector3.ZERO(), ƒ.Vector3.Z(1));
         let amountToTranslateBy = startClickPosition.x - currentClickPosition.x;
-        console.log(amountToTranslateBy);
         moveCamera(amountToTranslateBy);
     }
     function endPointer(_e) {
