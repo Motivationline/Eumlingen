@@ -444,6 +444,12 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
+    class Monument extends ƒ.Component implements Clickable {
+        shortTap(_pointer: Pointer): void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     class ComponentChangeMaterial extends ƒ.ComponentScript {
         static readonly iSubclass: number;
         changeMaterial: ƒ.Material;

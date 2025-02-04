@@ -146,9 +146,12 @@ namespace Script {
             icon: "Achievement_Statuen.svg",
             reward: 10,
             secret: true,
+            persistentData: new Set(),
             checkCompleted: function (_e): boolean {
                 if (_e.detail.type !== "clickStatue") return false;
-
+                let data: Set<ƒ.Node> = (<Achievement>this).persistentData;
+                data.add(_e.detail.data.statue);
+                if (data.size >= 3) return true;
                 return false;
             }
         },
@@ -226,9 +229,9 @@ namespace Script {
                 classes: ["achievement", "stone-tablet"],
                 innerHTML: `
                 <span class="achievement-icon"> <img src="Assets/UI/Achievements/${a.icon}"/></span>
-                <span class="achievement-title">${a.secret ? "???" : a.title}</span>
+                <span class="achievement-title">${a.secret && !a.achieved ? "???" : a.title}</span>
                 <div class="achievement-divider"></div>
-                <span class="achievement-description">${a.secret ? "???" : a.description}</span>
+                <span class="achievement-description">${a.secret && !a.achieved ? "???" : a.description}</span>
                 <span class="achievement-reward"><img src="Assets/UI/Icons/Currency.svg">+${a.reward}</span>`
             });
             if (a.achieved) div.classList.add("achieved");

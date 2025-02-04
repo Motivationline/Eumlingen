@@ -1797,9 +1797,14 @@ var Script;
             icon: "Achievement_Statuen.svg",
             reward: 10,
             secret: true,
+            persistentData: new Set(),
             checkCompleted: function (_e) {
                 if (_e.detail.type !== "clickStatue")
                     return false;
+                let data = this.persistentData;
+                data.add(_e.detail.data.statue);
+                if (data.size >= 3)
+                    return true;
                 return false;
             }
         },
@@ -1866,9 +1871,9 @@ var Script;
                 classes: ["achievement", "stone-tablet"],
                 innerHTML: `
                 <span class="achievement-icon"> <img src="Assets/UI/Achievements/${a.icon}"/></span>
-                <span class="achievement-title">${a.secret ? "???" : a.title}</span>
+                <span class="achievement-title">${a.secret && !a.achieved ? "???" : a.title}</span>
                 <div class="achievement-divider"></div>
-                <span class="achievement-description">${a.secret ? "???" : a.description}</span>
+                <span class="achievement-description">${a.secret && !a.achieved ? "???" : a.description}</span>
                 <span class="achievement-reward"><img src="Assets/UI/Icons/Currency.svg">+${a.reward}</span>`
             });
             if (a.achieved)
@@ -2042,6 +2047,16 @@ var Script;
         return picks.map((p) => p.node);
     }
     Script.findAllPickedObjectsUsingPickSphere = findAllPickedObjectsUsingPickSphere;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class Monument extends ƒ.Component {
+        shortTap(_pointer) {
+            Script.globalEvents.dispatchEvent(new CustomEvent("event", { detail: { type: "clickStatue", data: { statue: this.node } } }));
+        }
+    }
+    Script.Monument = Monument;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -2346,7 +2361,7 @@ var Script;
                 return this.#radiusSquared;
             }
             get mtxPick() {
-                return this.node.mtxWorld.clone.translate(this.offset, true).scale(ƒ.Vector3.ONE(this.radius * 2));
+                return this.node.mtxWorld.clone.translate(this.offset, true).scale(ƒ.Vector3.ONE(Math.max(this.radius * 2, 0.000001)));
             }
             drawGizmos(_cmpCamera) {
                 ƒ.Gizmos.drawWireSphere(this.mtxPick, ƒ.Color.CSS("red"));

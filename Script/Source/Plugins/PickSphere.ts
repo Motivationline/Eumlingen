@@ -30,7 +30,7 @@ namespace Script {
         offset: ƒ.Vector3 = new ƒ.Vector3();
 
         get mtxPick(): ƒ.Matrix4x4 {
-            return this.node.mtxWorld.clone.translate(this.offset, true).scale(ƒ.Vector3.ONE(this.radius * 2));
+            return this.node.mtxWorld.clone.translate(this.offset, true).scale(ƒ.Vector3.ONE(Math.max(this.radius * 2, 0.000001)));
         }
 
         drawGizmos(_cmpCamera?: ƒ.ComponentCamera): void {
