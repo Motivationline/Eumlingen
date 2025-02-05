@@ -916,6 +916,36 @@
                           }
                         ]
                       }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "W3",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[3.759429693222046, 0, 2.5278162956237793]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "idSource": "Graph|2025-01-15T14:48:41.922Z|40103"
+                            }
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -1522,6 +1552,18 @@
       "type": "AnimationGLTF",
       "url": "Assets\\EumlingV1.glb",
       "events": {}
+    }
+  },
+  "TextureImage|2025-02-04T10:26:11.018Z|63273": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Textures\\Shineling\\MatEumling_Base_color.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2025-02-04T10:26:11.018Z|63273",
+        "name": "Assets\\Textures\\Shineling\\MatEumling_Base_color.png",
+        "mipmap": "CRISP",
+        "wrap": "REPEAT"
+      }
     }
   },
   "Graph|2024-12-19T13:00:19.847Z|01650": {
@@ -2335,18 +2377,6 @@
             }
           }
         }
-      }
-    }
-  },
-  "TextureImage|2025-02-04T10:26:11.018Z|63273": {
-    "ƒ.TextureImage": {
-      "url": "Assets\\Textures\\Shineling\\MatEumling_Base_color.png",
-      "type": "TextureImage",
-      "Texture": {
-        "idResource": "TextureImage|2025-02-04T10:26:11.018Z|63273",
-        "name": "Assets\\Textures\\Shineling\\MatEumling_Base_color.png",
-        "mipmap": "CRISP",
-        "wrap": "REPEAT"
       }
     }
   }
