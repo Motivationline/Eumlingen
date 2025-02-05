@@ -4,14 +4,14 @@
     "start_url": "/index.html",
     "icons": [
         {
-            "src": "Assets/UI/Icons/EumlingIcon.svg",
+            "src": "Assets/favicons/android-chrome-512x512.png",
             "sizes": "192x192",
-            "type": "image/svg+xml"
+            "type": "image/png"
         },
         {
-            "src": "Assets/UI/Icons/EumlingIcon.svg",
+            "src": "Assets/favicons/android-chrome-512x512.png",
             "sizes": "512x512",
-            "type": "image/svg+xml"
+            "type": "image/png"
         }
     ],
     "display": "standalone",
