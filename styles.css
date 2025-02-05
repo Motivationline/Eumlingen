@@ -832,7 +832,7 @@ how to remove the virtical space around the range input in IE*/
     right: var(--grid-gap);
     bottom: var(--grid-gap);
     font-size: var(--font-size);
-    display: block;
+    display: inherit;
   }
 }
 
