@@ -2229,6 +2229,7 @@ var Script;
         });
         document.getElementById("achievement-button").addEventListener("click", () => { showLayer(document.getElementById("achievement-screen-overlay")); });
         document.getElementById("pause-button").addEventListener("click", pauseGame);
+        document.getElementById("fullscreen-button").addEventListener("click", fullscreen);
         document.querySelectorAll(".button-settings").forEach(e => e.addEventListener("click", openSettings));
         document.getElementById("button-main-menu").addEventListener("click", openMainMenu);
         document.getElementById("start-game").addEventListener("click", removeTopLayer);
@@ -2300,6 +2301,9 @@ var Script;
         }
     }
     Script.spawnEumling = spawnEumling;
+    function fullscreen() {
+        document.documentElement.requestFullscreen();
+    }
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
