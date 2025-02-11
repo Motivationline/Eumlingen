@@ -105,11 +105,13 @@ namespace Script {
     }
 
     let spawnTimeout: number;
+    let currentEumlingLoadCounter: number = 0;
+    const maxEumlingLoadCounter: number = 5;
     export function spawnEumling() {
-        if(spawnTimeout) clearTimeout(spawnTimeout);
+        if (spawnTimeout) clearTimeout(spawnTimeout);
         const screen = document.getElementById("start-screen-background");
         const fromLeft: boolean = Math.random() > 0.5;
-        const img = createElementAdvanced("img", { classes: ["start-background-eumling"], attributes: [["src", "Assets/UI/MainMenu/EumlingWalk.png?" + Date.now()]] });
+        const img = createElementAdvanced("img", { classes: ["start-background-eumling"], attributes: [["src", "Assets/UI/MainMenu/EumlingWalk.png?" + (currentEumlingLoadCounter++ % maxEumlingLoadCounter)], ["alt", ""]] });
         img.style.left = fromLeft ? "-250px" : "100vw";
         img.style.transitionDuration = randomRange(5, 15) + "s";
         screen.appendChild(img);
@@ -118,12 +120,12 @@ namespace Script {
         spawnTimeout = setTimeout(spawnEumling, randomRange(1000, 7000));
         img.addEventListener("transitionend", removeEumling);
         img.addEventListener("transitioncancel", removeEumling);
-        function removeEumling(){
+        function removeEumling() {
             img.remove();
         }
     }
 
     function fullscreen() {
-      document.documentElement.requestFullscreen();
+        document.documentElement.requestFullscreen();
     }
 }

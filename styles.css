@@ -5,6 +5,7 @@
 @font-face {
   font-family: "ChelaOne";
   src: url(Assets/UI/ChelaOne-Regular.ttf);
+  font-display: swap;
 }
 
 * {

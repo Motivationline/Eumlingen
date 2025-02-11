@@ -2280,12 +2280,14 @@ var Script;
         });
     }
     let spawnTimeout;
+    let currentEumlingLoadCounter = 0;
+    const maxEumlingLoadCounter = 5;
     function spawnEumling() {
         if (spawnTimeout)
             clearTimeout(spawnTimeout);
         const screen = document.getElementById("start-screen-background");
         const fromLeft = Math.random() > 0.5;
-        const img = Script.createElementAdvanced("img", { classes: ["start-background-eumling"], attributes: [["src", "Assets/UI/MainMenu/EumlingWalk.png?" + Date.now()]] });
+        const img = Script.createElementAdvanced("img", { classes: ["start-background-eumling"], attributes: [["src", "Assets/UI/MainMenu/EumlingWalk.png?" + (currentEumlingLoadCounter++ % maxEumlingLoadCounter)], ["alt", ""]] });
         img.style.left = fromLeft ? "-250px" : "100vw";
         img.style.transitionDuration = Script.randomRange(5, 15) + "s";
         screen.appendChild(img);
