@@ -1,7 +1,6 @@
 {
     "name": "Die Eumlinge",
     "description": "Ein Spiel über Eumlinge",
-    "start_url": "/index.html",
     "icons": [
         {
             "src": "Assets/favicons/android-chrome-512x512.png",
