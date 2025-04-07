@@ -194,7 +194,7 @@
                     "fieldOfView": 35,
                     "direction": "diagonal",
                     "near": 0.1,
-                    "far": 2000,
+                    "far": 114,
                     "aspect": 1.1468531468531469,
                     "pivot": {
                       "translation": "[0, 0, 0]",
